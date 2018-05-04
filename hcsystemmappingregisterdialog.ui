@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>hcSystemMappingRegisterDialog</class>
+ <widget class="QDialog" name="hcSystemMappingRegisterDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>650</width>
+    <height>210</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_13">
+     <item>
+      <widget class="QComboBox" name="devicceIdComboBox"/>
+     </item>
+     <item>
+      <widget class="QComboBox" name="phaseComboBox">
+       <item>
+        <property name="text">
+         <string>主缆电流实时值</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>主缆电流报警值</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>A相电流实时值</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>A相电流报警值</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>A相温度实时值</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>A相温度报警值</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>B相电流实时值</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>B相电流报警值</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>B相温度实时值</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>B相温度报警值</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>C相电流实时值</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>C相电流报警值</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>C相温度实时值</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>C相温度报警值</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>N相电流实时值</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>N相电流报警值</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>N相温度实时值</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>N相温度报警值</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="hcIdLineEdit"/>
+     </item>
+     <item>
+      <widget class="QPushButton" name="systemMappingSetPushButton">
+       <property name="text">
+        <string>设置</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="systemMappingDeletePushButton">
+       <property name="text">
+        <string>删除</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QTableWidget" name="systemMappingShowTableWidget"/>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

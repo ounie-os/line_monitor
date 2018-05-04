@@ -1,0 +1,35 @@
+#include <windows.h>
+IDI_ICON1	ICON	DISCARDABLE	"test.ico"
+VS_VERSION_INFO VERSIONINFO
+    FILEVERSION 0,1,4,0227
+    PRODUCTVERSION 0,1,4,0227
+	FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+	FILEFLAGS VS_FF_DEBUG
+#else
+	FILEFLAGS 0x0L
+#endif
+	FILEOS VOS__WINDOWS32
+	FILETYPE VFT_DLL
+	FILESUBTYPE 0x0L
+	BEGIN
+		BLOCK "StringFileInfo"
+		BEGIN
+			BLOCK "000404b0"
+			BEGIN
+                VALUE "CompanyName", "武汉朗开智能科技有限公司\0"
+                VALUE "FileDescription", "\0"
+                VALUE "FileVersion", "0,1,4,0227\0"
+				VALUE "LegalCopyright", "\0"
+                VALUE "OriginalFilename", "CableMonitor.exe\0"
+                VALUE "ProductName", "CableMonitor\0"
+                VALUE "ProductVersion", "0,1,4,0227\0"
+			END
+		END
+		BLOCK "VarFileInfo"
+		BEGIN
+			VALUE "Translation", 0x0004, 1200
+		END
+	END
+/* End of Version info */
+
