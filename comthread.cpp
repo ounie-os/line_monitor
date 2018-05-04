@@ -115,6 +115,7 @@ void comThread::run()
 
 void comThread::comReadSlot()
 {
+#if 0
     if(this->comPort->bytesAvailable() > 0)
     {
         ushort crc16 = 0;
@@ -173,6 +174,44 @@ void comThread::comReadSlot()
 //            emit this->receiveDataFromDevice(this->readBufferArray);
 //            this->readBufferArray.clear();
 //        }
+    }
+#endif /* 0 */
+    if(this->comPort->bytesAvailable() > 0)
+    {
+        ushort crc16 = 0;
+        uchar  len   = 0;
+        QByteArray data = this->comPort->readAll();
+        this->readBufferArray.append(data);
+        if((0xAA != this->readBufferArray.at(0)) && (0xAA != (uchar)this->readBufferArray.at(1))
+            && (0x55 != (uchar)this->readBufferArray.at(2)) && (0x55 != (uchar)this->readBufferArray.at(3))) {
+            this->readBufferArray.clear();
+        }
+        if(this->readBufferArray.length() >= 18)
+        {
+            len = this->readBufferArray.at(4);
+            //if(this->readBufferArray.length() >= (7+len))
+            {
+                qDebug()<<"485端口接收数据："+myHelper::ByteArrayToHexStr(this->readBufferArray);
+                if((0x5A == (uchar)this->readBufferArray.at(len - 1)) && 0xA5 == (uchar)this->readBufferArray.at(len - 2)
+                    && (0x5A == (uchar)this->readBufferArray.at(len - 3)) && (0xA5 == (uchar)this->readBufferArray.at(len - 4)))
+                {
+                    uchar *dataTmp = (uchar *)this->readBufferArray.data();
+                    //crc16 = ((uchar)this->readBufferArray.at(4+len)<<8)|((uchar)this->readBufferArray.at(5+len));
+                    //if(crc16 == myHelper::crc16(&dataTmp[4],len))
+                    {
+                        //if(this->readBufferArray.at(18) == MainCable_RT)
+                        {
+                            //if(CNT_COM >0)
+                            {
+                                //CNT_COM--;
+                            }
+                        }
+                        emit this->receiveDataFromDevice(this->readBufferArray);
+                    }
+                }
+                this->readBufferArray.clear();
+            }
+        }
     }
 }
 

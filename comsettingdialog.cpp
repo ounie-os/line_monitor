@@ -72,6 +72,9 @@ void comSettingDialog::setupComSetting(comSetting *setting)
     case BAUD19200:
         this->ui->buadRateComboBox->setCurrentIndex(6);
         break;
+    case BAUD57600:
+        this->ui->buadRateComboBox->setCurrentIndex(7);
+        break;
     default:
         break;
     }
@@ -152,7 +155,11 @@ void comSettingDialog::comSettingSavePushButtonClickedSlot()
             this->_setting->setBaud(BAUD9600);
             break;
         case 6:
-            this->_setting->setBaud(BAUD19200);
+            //this->_setting->setBaud(BAUD19200);
+            this->_setting->setBaud(BAUD57600);
+            break;
+        case 7:
+            this->_setting->setBaud(BAUD57600);
             break;
         default:
             this->_setting->setBaud(BAUD9600);

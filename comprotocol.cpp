@@ -449,6 +449,7 @@ QByteArray comProtocol::assembleAlarmData1RequestFrame(deviceIdType devid)
 
 QByteArray comProtocol::assembleRtDataRequestFrame(deviceIdType devid)
 {
+#if 0
     QByteArray frameArray;
     QByteArray messageArray;
 
@@ -480,6 +481,88 @@ QByteArray comProtocol::assembleRtDataRequestFrame(deviceIdType devid)
     frameArray.append((char)0xAA);
 
     return frameArray;
+#endif /* 0 */
+
+    QByteArray frameArray;
+    QByteArray messageArray;
+
+    messageArray.append((char)0x81);
+    messageArray.append((char)0xA0);
+    
+    messageArray.append((char)0x38);
+    messageArray.append((char)0x04);
+    messageArray.append((char)0x11);
+    messageArray.append((char)0x40);
+    
+    messageArray.append((char)0x00);
+    messageArray.append((char)0x00);
+    messageArray.append((char)0x00);
+    messageArray.append((char)0x00);
+    
+    messageArray.append((char)0x01);
+    messageArray.append((char)0x00);
+    
+    messageArray.append((char)0x00);
+    messageArray.append((char)0x00);
+    
+    messageArray.append((char)0xff);
+    messageArray.append((char)0xff);
+    messageArray.append((char)0xff);
+    messageArray.append((char)0xff);
+    messageArray.append((char)0x12);
+    messageArray.append((char)0x34);
+    messageArray.append((char)0x56);
+    messageArray.append((char)0x78);
+    messageArray.append((char)0x05);
+    messageArray.append((char)0x00);
+    messageArray.append((char)0x00);
+    messageArray.append((char)0x00);
+    messageArray.append((char)0x00);
+    messageArray.append((char)0x00);
+    messageArray.append((char)0x00);
+    messageArray.append((char)0x00);
+    messageArray.append((char)0x00);
+    messageArray.append((char)0x00);
+    messageArray.append((char)0x00);
+    messageArray.append((char)0x00);
+    messageArray.append((char)0x00);
+    messageArray.append((char)0x00);
+    messageArray.append((char)0x00);
+    messageArray.append((char)0x00);
+    messageArray.append((char)0x00);
+    messageArray.append((char)0x00);
+    messageArray.append((char)0x00);
+    messageArray.append((char)0x00);
+    messageArray.append((char)0x00);
+    messageArray.append((char)0x00);
+    messageArray.append((char)0x00);
+    messageArray.append((char)0x00);
+    messageArray.append((char)0x00);
+    messageArray.append((char)0x00);
+    messageArray.append((char)0x00);
+    messageArray.append((char)0x00);
+    uint16_t crc = crc16((uint8_t*)messageArray.constData(), messageArray.length());
+
+    frameArray.append(0xAA);
+    frameArray.append(0xAA);
+    frameArray.append(0x55);
+    frameArray.append(0x55);
+
+    uint16_t msglen = messageArray.length();
+    frameArray.append((char)0x40);
+    frameArray.append((char)0x00);
+    frameArray.append(messageArray);
+    frameArray.append((char)0x8f);
+    frameArray.append((char)0x38);
+    frameArray.append((char)0xe8);
+    frameArray.append((char)0x58);
+    frameArray.append((char)0xA5);
+    frameArray.append((char)0x5A);
+    frameArray.append((char)0xA5);
+    frameArray.append((char)0x5A);
+
+    return frameArray;
+
 }
 
 QByteArray comProtocol::assembleStatisticalDataRequestFrame(deviceIdType devid)

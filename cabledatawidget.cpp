@@ -1475,7 +1475,9 @@ void CableDataWidget::sendData_slot()
         this->autogetDataFlag = false;
         this->sendDataFrame(comProtocol::assembleRtDataRequestFrame(this->deviceID.getDeviceId()));
 //        myHelper::Delay_MSec(100);
+#if 0
         this->sendDataFrame(comProtocol::assembleReadRTDataRequestFrame(this->deviceID.getDeviceId()));
+#endif /* 0 */
     }else if(this->autogetAlarmDataFlag ==true)
     {
         this->autogetAlarmDataFlag = false;
