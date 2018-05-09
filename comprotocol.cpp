@@ -116,10 +116,10 @@ bool comProtocol::frameCheck(uint8_t *frame, int frameLen, int *msgLen, messageT
     int msgCnt = 5;
     devid->firstId = (frame[msgCnt] << 24) | (frame[msgCnt + 1] << 16) | (frame[msgCnt + 2] << 8) | (frame[msgCnt + 3]);
     msgCnt += 4;
-    devid->secondId = (frame[msgCnt] << 24) | (frame[msgCnt + 1] << 16) | (frame[msgCnt + 2]<< 8) | (frame[msgCnt + 3]);
-    msgCnt += 4;
-    devid->thirdId = (frame[msgCnt] << 24) | (frame[msgCnt + 1] << 16) | (frame[msgCnt + 2]<< 8) | (frame[msgCnt + 3]);
-    msgCnt += 4;
+    //devid->secondId = (frame[msgCnt] << 24) | (frame[msgCnt + 1] << 16) | (frame[msgCnt + 2]<< 8) | (frame[msgCnt + 3]);
+    //msgCnt += 4;
+    //devid->thirdId = (frame[msgCnt] << 24) | (frame[msgCnt + 1] << 16) | (frame[msgCnt + 2]<< 8) | (frame[msgCnt + 3]);
+    //msgCnt += 4;
     return true;
 }
 
@@ -143,10 +143,10 @@ QList<electricCableMetaData> comProtocol::analysisDataMessage(uint8_t *message, 
     deviceIdType devid;
     devid.firstId = (message[msgCnt] << 24) | (message[msgCnt + 1] << 16) | (message[msgCnt + 2] << 8) | (message[msgCnt + 3]);
     msgCnt += 4;
-    devid.secondId = (message[msgCnt] << 24) | (message[msgCnt + 1] << 16) | (message[msgCnt + 2]<< 8) | (message[msgCnt + 3]);
-    msgCnt += 4;
-    devid.thirdId = (message[msgCnt] << 24) | (message[msgCnt + 1] << 16) | (message[msgCnt + 2]<< 8) | (message[msgCnt + 3]);
-    msgCnt += 4;
+    //devid.secondId = (message[msgCnt] << 24) | (message[msgCnt + 1] << 16) | (message[msgCnt + 2]<< 8) | (message[msgCnt + 3]);
+    //msgCnt += 4;
+    //devid.thirdId = (message[msgCnt] << 24) | (message[msgCnt + 1] << 16) | (message[msgCnt + 2]<< 8) | (message[msgCnt + 3]);
+    //msgCnt += 4;
     *deviceId = devid;
 
     int dataNum = message[msgCnt];
@@ -213,10 +213,10 @@ configType comProtocol::analysisConfigMessage(uint8_t *message, int msgLen, devi
     deviceIdType devid;
     devid.firstId = (message[msgCnt] << 24) | (message[msgCnt + 1] << 16) | (message[msgCnt + 2] << 8) | (message[msgCnt + 3]);
     msgCnt += 4;
-    devid.secondId = (message[msgCnt] << 24) | (message[msgCnt + 1] << 16) | (message[msgCnt + 2]<< 8) | (message[msgCnt + 3]);
-    msgCnt += 4;
-    devid.thirdId = (message[msgCnt] << 24) | (message[msgCnt + 1] << 16) | (message[msgCnt + 2]<< 8) | (message[msgCnt + 3]);
-    msgCnt += 4;
+    //devid.secondId = (message[msgCnt] << 24) | (message[msgCnt + 1] << 16) | (message[msgCnt + 2]<< 8) | (message[msgCnt + 3]);
+    //msgCnt += 4;
+    //devid.thirdId = (message[msgCnt] << 24) | (message[msgCnt + 1] << 16) | (message[msgCnt + 2]<< 8) | (message[msgCnt + 3]);
+    //msgCnt += 4;
     *deviceId = devid;
     int dataNum = message[msgCnt];
     msgCnt++;
@@ -329,10 +329,10 @@ bool comProtocol::analysisHeartBeatMessage(uint8_t *message, int msgLen, deviceI
     deviceIdType devid;
     devid.firstId = (message[msgCnt] << 24) | (message[msgCnt + 1] << 16) | (message[msgCnt + 2] << 8) | (message[msgCnt + 3]);
     msgCnt += 4;
-    devid.secondId = (message[msgCnt] << 24) | (message[msgCnt + 1] << 16) | (message[msgCnt + 2]<< 8) | (message[msgCnt + 3]);
-    msgCnt += 4;
-    devid.thirdId = (message[msgCnt] << 24) | (message[msgCnt + 1] << 16) | (message[msgCnt + 2]<< 8) | (message[msgCnt + 3]);
-    msgCnt += 4;
+    //devid.secondId = (message[msgCnt] << 24) | (message[msgCnt + 1] << 16) | (message[msgCnt + 2]<< 8) | (message[msgCnt + 3]);
+    //msgCnt += 4;
+    //devid.thirdId = (message[msgCnt] << 24) | (message[msgCnt + 1] << 16) | (message[msgCnt + 2]<< 8) | (message[msgCnt + 3]);
+    //msgCnt += 4;
     *deviceId = devid;
 
     return true;
@@ -1431,4 +1431,41 @@ QByteArray comProtocol::assembleSetCurChangerateCycleFrame(deviceIdType devid, f
     frameArray.append((char)0xAA);
 
     return frameArray;
+}
+
+uint comProtocol::getRunTime(uint8_t *message, int msgLen)
+{
+    int rum_time_in_seconds = 0;
+
+    rum_time_in_seconds = (message[0] << 24) | (message[1] << 16) | (message[2] << 8) | message[3];
+
+    qDebug() << "运行时间秒数： " << rum_time_in_seconds;
+
+    return rum_time_in_seconds;
+}
+
+float comProtocol::getUpsVoltage(uint8_t *message, int msgLen)
+{
+    int voltage_hex = 0;
+    float voltage_float = 0;
+
+    voltage_hex = (message[0] << 8) | message[1];
+    voltage_float = (float)(voltage_hex) / 1000;
+
+    qDebug() << "UPS电压： " << voltage_float;
+
+    return voltage_float;
+}
+
+float comProtocol::getDeviceTemp(uint8_t *message, int msgLen)
+{
+    int temp_hex = 0;
+    float temp_float = 0;
+
+    temp_hex = (message[0] << 8) | message[1];
+    temp_float = ((float)temp_hex) / 10 - 273.1;
+
+    qDebug() << "环境温度： " << temp_float;
+
+    return temp_float;
 }

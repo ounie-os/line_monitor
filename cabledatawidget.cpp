@@ -319,6 +319,7 @@ QString CableDataWidget::getClientIP()
  * \param data
  * 接受设备数据
  */
+#if 0
 void CableDataWidget::receiveDataFromDevice(QByteArray data)
 {
     if(data.mid(5,12) == this->deviceID.getDeviceId().toByteArray())
@@ -773,6 +774,95 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
 
     }
     //接受到的数据需要匹配地址
+}
+#endif /* 0 */
+
+#define FRAME_HEAD_OFFSET (0) // 帧头
+#define FRAME_OPTIME_OFFSET (25) // 运行时间
+#define FRAME_UPSVOL_OFFSET (29) // UPS电压
+#define FRAME_ENVTEMP_OFFSET (31) // 环境温度
+#define FRAME_GROUND_CURRENT_A_OFFSET (33) // A相接地电流
+#define FRAME_GROUND_CURRENT_B_OFFSET (37) // B相接地电流
+#define FRAME_GROUND_CURRENT_C_OFFSET (41) // C相接地电流
+#define FRAME_CONNECTOR_TEMP_A_OFFSET (61) // A相接头温度
+#define FRAME_CONNECTOR_TEMP_B_OFFSET (71) // B相接头温度
+#define FRAME_CONNECTOR_TEMP_C_OFFSET (81) // C相接头温度
+#define FRAME_A_X_AXIS_OFFSET (55) // A轴X姿态数据
+#define FRAME_A_Y_AXIS_OFFSET (57) // A轴Y姿态数据
+#define FRAME_A_Z_AXIS_OFFSET (59) // A轴Z姿态数据
+#define FRAME_B_X_AXIS_OFFSET (65) // B轴X姿态数据
+#define FRAME_B_Y_AXIS_OFFSET (67) // B轴Y姿态数据
+#define FRAME_B_Z_AXIS_OFFSET (69) // B轴Z姿态数据
+#define FRAME_C_X_AXIS_OFFSET (75) // C轴X姿态数据
+#define FRAME_C_Y_AXIS_OFFSET (77) // C轴Y姿态数据
+#define FRAME_C_Z_AXIS_OFFSET (79) // C轴Z姿态数据
+
+void CableDataWidget::receiveDataFromDevice(QByteArray data)
+{
+    if(data.mid(20,4) == this->deviceID.getDeviceId().toByteArray())
+    {
+        union {uint uint_ground_current_A; float ground_current_A; }; //A相接地电流
+        union {uint uint_ground_current_B; float ground_current_B; }; //B相接地电流
+        union {uint uint_ground_current_C; float ground_current_C; }; //C相接地电流
+
+        float connector_temp_A = 0; //A相接头温度
+        float connector_temp_B = 0; //B相接头温度
+        float connector_temp_C = 0; //C相接头温度
+
+        int a_x_axis = 0;
+        int a_y_axis = 0;
+        int a_z_axis = 0;
+        int b_x_axis = 0;
+        int b_y_axis = 0;
+        int b_z_axis = 0;
+        int c_x_axis = 0;
+        int c_y_axis = 0;
+        int c_z_axis = 0;
+
+        uchar *data_tmp = (uchar *)data.data();
+        uint frame_head = data_tmp[FRAME_HEAD_OFFSET] | (data_tmp[FRAME_HEAD_OFFSET+1]<<8) | (data_tmp[FRAME_HEAD_OFFSET+2]<<16) | (data_tmp[FRAME_HEAD_OFFSET+3] << 24);
+        if ((frame_head == 0x5555aaaa) && (data.length() > 200)) // 帧头匹配
+        {
+            comProtocol::getRunTime(&data_tmp[FRAME_OPTIME_OFFSET], 4); // 获取运行时间
+            comProtocol::getUpsVoltage(&data_tmp[FRAME_UPSVOL_OFFSET], 2); // 获取UPS电压
+            comProtocol::getDeviceTemp(&data_tmp[FRAME_ENVTEMP_OFFSET], 2); // 获取环境温度
+
+            uint_ground_current_A = data_tmp[FRAME_GROUND_CURRENT_A_OFFSET] | (data_tmp[FRAME_GROUND_CURRENT_A_OFFSET+1] << 8) | (data_tmp[FRAME_GROUND_CURRENT_A_OFFSET+2] << 16) | (data_tmp[FRAME_GROUND_CURRENT_A_OFFSET+3] << 24);
+            qDebug() << "A相接地电流： " << ground_current_A;
+            uint_ground_current_B = data_tmp[FRAME_GROUND_CURRENT_B_OFFSET] | (data_tmp[FRAME_GROUND_CURRENT_B_OFFSET+1] << 8) | (data_tmp[FRAME_GROUND_CURRENT_B_OFFSET+2] << 16) | (data_tmp[FRAME_GROUND_CURRENT_B_OFFSET+3] << 24);
+            qDebug() << "B相接地电流： " << ground_current_B;
+            uint_ground_current_C = data_tmp[FRAME_GROUND_CURRENT_C_OFFSET] | (data_tmp[FRAME_GROUND_CURRENT_C_OFFSET+1] << 8) | (data_tmp[FRAME_GROUND_CURRENT_C_OFFSET+2] << 16) | (data_tmp[FRAME_GROUND_CURRENT_C_OFFSET+3] << 24);
+            qDebug() << "C相接地电流： " << ground_current_C;
+
+            connector_temp_A = (float)(((data_tmp[FRAME_CONNECTOR_TEMP_A_OFFSET] << 8) | data_tmp[FRAME_CONNECTOR_TEMP_A_OFFSET+1]) - 2731) / 10;
+            qDebug() << "A相接头温度： " << connector_temp_A;
+            connector_temp_B = (float)(((data_tmp[FRAME_CONNECTOR_TEMP_B_OFFSET] << 8) | data_tmp[FRAME_CONNECTOR_TEMP_B_OFFSET+1]) - 2731) / 10;
+            qDebug() << "B相接头温度： " << connector_temp_B;
+            connector_temp_C = (float)(((data_tmp[FRAME_CONNECTOR_TEMP_C_OFFSET] << 8) | data_tmp[FRAME_CONNECTOR_TEMP_C_OFFSET+1]) - 2731) / 10;
+            qDebug() << "C相接头温度： " << connector_temp_C;
+
+            a_x_axis = ((data_tmp[FRAME_A_X_AXIS_OFFSET] << 8) | data_tmp[FRAME_A_X_AXIS_OFFSET+1]) - 16000; //A相X轴姿态
+            qDebug() << "A相X轴姿态： " << a_x_axis;
+            a_y_axis = ((data_tmp[FRAME_A_Y_AXIS_OFFSET] << 8) | data_tmp[FRAME_A_Y_AXIS_OFFSET+1]) - 16000; //A相Y轴姿态
+            qDebug() << "A相Y轴姿态： " << a_y_axis;
+            a_z_axis = ((data_tmp[FRAME_A_Z_AXIS_OFFSET] << 8) | data_tmp[FRAME_A_Z_AXIS_OFFSET+1]) - 16000; //A相Z轴姿态
+            qDebug() << "A相Z轴姿态： " << a_z_axis;
+            b_x_axis = ((data_tmp[FRAME_B_X_AXIS_OFFSET] << 8) | data_tmp[FRAME_B_X_AXIS_OFFSET+1]) - 16000; //B相X轴姿态
+            qDebug() << "B相X轴姿态： " << b_x_axis;
+            b_y_axis = ((data_tmp[FRAME_B_Y_AXIS_OFFSET] << 8) | data_tmp[FRAME_B_Y_AXIS_OFFSET+1]) - 16000; //B相Y轴姿态
+            qDebug() << "B相Y轴姿态： " << b_y_axis;
+            b_z_axis = ((data_tmp[FRAME_B_Z_AXIS_OFFSET] << 8) | data_tmp[FRAME_B_Z_AXIS_OFFSET+1]) - 16000; //B相Z轴姿态
+            qDebug() << "B相Z轴姿态： " << b_z_axis;
+            c_x_axis = ((data_tmp[FRAME_C_X_AXIS_OFFSET] << 8) | data_tmp[FRAME_C_X_AXIS_OFFSET+1]) - 16000; //C相X轴姿态
+            qDebug() << "C相X轴姿态： " << c_x_axis;
+            c_y_axis = ((data_tmp[FRAME_C_Y_AXIS_OFFSET] << 8) | data_tmp[FRAME_C_Y_AXIS_OFFSET+1]) - 16000; //C相Y轴姿态
+            qDebug() << "C相Y轴姿态： " << c_y_axis;
+            c_z_axis = ((data_tmp[FRAME_C_Z_AXIS_OFFSET] << 8) | data_tmp[FRAME_C_Z_AXIS_OFFSET+1]) - 16000; //C相Z轴姿态
+            qDebug() << "C相Z轴姿态： " << c_z_axis;
+            //this->ui->tableWidget->item(0,0)->setText(QString::number(ground_current_A, 'f', 3)+" A");
+
+        }
+    }
 }
 /*!
  * \brief CableDataWidget::upData_UI

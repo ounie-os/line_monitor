@@ -614,7 +614,7 @@ void MonitorMainWindow::receiveDataFromDevice_slot(QByteArray data)
 {
     if(data.length()>18)
     {
-        QByteArray dataTmp = data.mid(5,12);
+        QByteArray dataTmp = data.mid(8,4);
         CableMonitorDevice deviceId;
         if(cableMonitorsTable->contains(dataTmp))
         {
@@ -634,10 +634,12 @@ void MonitorMainWindow::receiveDataFromDevice_slot(QByteArray data)
             QTreeWidgetItem *deviceItem = this->cableMonitorItemTable->value(deviceId.getDeviceId().toByteArray());
             this->cableMonitorWidgetTable->value(deviceItem)->setBlindFlag(flag_485);
         }
+#if 0
         if((uchar)data.at(4) == 0x81)
         {
             emit signal_send_data_to_remote_server(data);
         }
+#endif /* 0 */
         emit receiveDataToDevice_signal(data);
 
     }

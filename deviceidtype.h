@@ -10,8 +10,10 @@ public:
     ~deviceIdType();
 
     quint32 firstId;
+#if 0
     quint32 secondId;
     quint32 thirdId;
+#endif /* 0 */
 
     bool operator ==(const deviceIdType &id) const;
     bool operator !=(const deviceIdType &id) const;

@@ -25,6 +25,10 @@ public:
 
     static int getFrameLength(uint8_t *frame, int framelen);
 
+    static uint getRunTime(uint8_t *message, int msgLen);
+    static float getUpsVoltage(uint8_t *message, int msgLen);
+    static float getDeviceTemp(uint8_t *message, int msgLen);
+
     static QByteArray assembleAlarmDataRequestFrame(deviceIdType devid);
     static QByteArray assembleAlarmData1RequestFrame(deviceIdType devid);
     static QByteArray assembleRtDataRequestFrame(deviceIdType devid);
