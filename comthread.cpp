@@ -182,20 +182,33 @@ void comThread::comReadSlot()
         uchar  len   = 0;
         QByteArray data = this->comPort->readAll();
         this->readBufferArray.append(data);
-        if((0xAA != this->readBufferArray.at(0)) && (0xAA != (uchar)this->readBufferArray.at(1))
-            && (0x55 != (uchar)this->readBufferArray.at(2)) && (0x55 != (uchar)this->readBufferArray.at(3))) {
-            this->readBufferArray.clear();
+        qDebug()<<"485端口接收数据："+myHelper::ByteArrayToHexStr(this->readBufferArray);
+        if(this->readBufferArray.length() >= 4)
+        {
+            if((0xAA != this->readBufferArray.at(0)) && (0xAA != (uchar)this->readBufferArray.at(1))
+                && (0x55 != (uchar)this->readBufferArray.at(2)) && (0x55 != (uchar)this->readBufferArray.at(3)))
+            {
+                this->readBufferArray.clear();
+                qDebug() << "错误的帧头";
+                return ;
+            }
         }
-        if(this->readBufferArray.length() >= 18)
+        else
+        {
+            this->readBufferArray.clear();
+            qDebug() << "报文异常";
+            return ;
+        }
+        
+        if(this->readBufferArray.length() >= 200)
         {
             len = this->readBufferArray.at(4);
             //if(this->readBufferArray.length() >= (7+len))
             {
-                qDebug()<<"485端口接收数据："+myHelper::ByteArrayToHexStr(this->readBufferArray);
                 if((0x5A == (uchar)this->readBufferArray.at(len - 1)) && 0xA5 == (uchar)this->readBufferArray.at(len - 2)
                     && (0x5A == (uchar)this->readBufferArray.at(len - 3)) && (0xA5 == (uchar)this->readBufferArray.at(len - 4)))
                 {
-                    uchar *dataTmp = (uchar *)this->readBufferArray.data();
+                    //uchar *dataTmp = (uchar *)this->readBufferArray.data();
                     //crc16 = ((uchar)this->readBufferArray.at(4+len)<<8)|((uchar)this->readBufferArray.at(5+len));
                     //if(crc16 == myHelper::crc16(&dataTmp[4],len))
                     {
@@ -211,6 +224,10 @@ void comThread::comReadSlot()
                 }
                 this->readBufferArray.clear();
             }
+        }
+        else
+        {
+            qDebug() << "报文长度不足，继续接收";
         }
     }
 }
