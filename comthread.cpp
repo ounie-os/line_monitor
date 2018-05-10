@@ -189,21 +189,21 @@ void comThread::comReadSlot()
                 && (0x55 != (uchar)this->readBufferArray.at(2)) && (0x55 != (uchar)this->readBufferArray.at(3)))
             {
                 this->readBufferArray.clear();
-                qDebug() << "错误的帧头";
+                qDebug() << "错误的帧头， 丢弃";
                 return ;
             }
         }
         else
         {
             this->readBufferArray.clear();
-            qDebug() << "报文异常";
+            qDebug() << "报文异常， 丢弃";
             return ;
         }
         
         if(this->readBufferArray.length() >= 200)
         {
             len = this->readBufferArray.at(4);
-            //if(this->readBufferArray.length() >= (7+len))
+            if (len == 228)
             {
                 if((0x5A == (uchar)this->readBufferArray.at(len - 1)) && 0xA5 == (uchar)this->readBufferArray.at(len - 2)
                     && (0x5A == (uchar)this->readBufferArray.at(len - 3)) && (0xA5 == (uchar)this->readBufferArray.at(len - 4)))
@@ -223,6 +223,11 @@ void comThread::comReadSlot()
                     }
                 }
                 this->readBufferArray.clear();
+            }
+            else
+            {
+                this->readBufferArray.clear();
+                qDebug() << "报文长度不是228字节，丢弃";
             }
         }
         else
