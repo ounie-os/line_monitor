@@ -91,10 +91,12 @@ void comThread::run()
         {
             this->comPort->write(this->sendData.at(0));
 //            if(this->comPort->waitForBytesWritten(10000) == true) {
+#if 0
                 if(this->sendData.at(0).at(18) == MainCable_RT)
                 {
                     CNT_COM++;
                 }
+#endif /* 0 */
                 qDebug()<<"向485端口发送数据:"+ myHelper::ByteArrayToHexStr(this->sendData.at(0));
                 this->mutex_send_data.lock();
                 this->sendData.removeOne(this->sendData.at(0));
@@ -185,7 +187,7 @@ void comThread::comReadSlot()
         qDebug()<<"485端口接收数据："+myHelper::ByteArrayToHexStr(this->readBufferArray);
         if(this->readBufferArray.length() >= 4)
         {
-            if((0xAA != this->readBufferArray.at(0)) && (0xAA != (uchar)this->readBufferArray.at(1))
+            if((0xAA != (uchar)this->readBufferArray.at(0)) && (0xAA != (uchar)this->readBufferArray.at(1))
                 && (0x55 != (uchar)this->readBufferArray.at(2)) && (0x55 != (uchar)this->readBufferArray.at(3)))
             {
                 this->readBufferArray.clear();
