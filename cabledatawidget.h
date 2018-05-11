@@ -49,6 +49,7 @@ public:
     void item_alarm_table(uint row,uint col);
     void item_time_table(uint row,uint col,QDateTime data);
     void init_para();
+    float calc_current_rate(float new_current, float old_currnet);
 signals:
     void sendDataToDevice(int clientID,QByteArray data);
     void sendDataToDevice(QByteArray data);
@@ -198,6 +199,30 @@ private:
     float phase_B_cable_eleCur_CT;
     float phase_C_cable_eleCur_CT;
     float phase_N_cable_eleCur_CT;
+
+    union {uint uint_ground_current_A; float ground_current_A; }; //A相接地电流
+    union {uint uint_ground_current_B; float ground_current_B; }; //B相接地电流
+    union {uint uint_ground_current_C; float ground_current_C; }; //C相接地电流
+    union {uint uint_ground_current_ALL; float ground_current_ALL; }; //总接地电流
+    union {uint uint_op_current; float op_current; }; //运行电流
+
+    float connector_temp_A; //A相接头温度
+    float connector_temp_B; //B相接头温度
+    float connector_temp_C; //C相接头温度
+    
+    int a_x_axis;
+    int a_y_axis;
+    int a_z_axis;
+    int b_x_axis;
+    int b_y_axis;
+    int b_z_axis;
+    int c_x_axis;
+    int c_y_axis;
+    int c_z_axis;
+
+    uint runtime_in_seconds;
+    float ups_vol;
+    float env_temp;
 
     QList<QByteArray>list_SendDataToClient;
     QList<QByteArray>list_SendRtData;
