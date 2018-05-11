@@ -220,6 +220,9 @@ void MonitorMainWindow::init()
     connect(this,SIGNAL(signal_set_port_to_remote_server(quint16)),socket_save_to_server,SLOT(set_port(quint16)));
     connect(this->socket_save_to_server, SIGNAL(connected()), this, SLOT(hcSocketConnectedToServer()));
     connect(this->socket_save_to_server, SIGNAL(disconnected()), this, SLOT(hcSocketDisconnectedFromServer()));
+    connect(this->socket_save_to_server,SIGNAL(readyRead()),this->socket_save_to_server,SLOT(slot_recv_data_from_server()));
+    connect(this->socket_save_to_server, SIGNAL(signal_data_from_server_to_ui(QByteArray)), this, SLOT(recv_data_from_server(QByteArray)));
+    
     socket_save_to_server->moveToThread(thread_socket);
     thread_socket->start();
     this->hcIdMappingTable = new QHash<quint64, ChannelInfoType>();
@@ -453,6 +456,9 @@ void MonitorMainWindow::insertCableDevice(CableMonitorDevice device)
             widget, SLOT(slot_auto_get_AL_time(bool,qint32)));
     connect(this, SIGNAL(signal_stop_get_data()),
             widget, SLOT(slot_stop_get_data()));
+
+    connect(widget,SIGNAL(sendDataToServer(QByteArray)),this,SLOT(send_rt_data_to_server(QByteArray)));
+    connect(this, SIGNAL(signal_recv_data_to_ui(QByteArray)), widget, SLOT(receiveDataFromDevice(QByteArray)));
 }
 /*!
  * \brief MonitorMainWindow::removeCableDevice
@@ -867,7 +873,8 @@ void MonitorMainWindow::on_action_connet_server_triggered()
             {
                 emit signal_disconnect_to_remote_server();
             }
-            emit signal_connect_to_remote_server();;
+            emit signal_connect_to_remote_server();
+            
         }
         dialog->close();
         delete dialog;
@@ -1165,4 +1172,14 @@ void MonitorMainWindow::on_action_auto_get_data_triggered()
         emit this->signal_stop_get_data();
         this->ui->action_auto_get_data->setText("自动获取数据");
     }
+}
+
+void MonitorMainWindow::send_rt_data_to_server(QByteArray data)
+{
+    emit signal_send_data_to_remote_server(data);
+}
+
+void MonitorMainWindow::recv_data_from_server(QByteArray data)
+{
+    emit signal_recv_data_to_ui(data);
 }

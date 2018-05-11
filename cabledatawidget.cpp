@@ -823,9 +823,9 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
         uint frame_head = data_tmp[FRAME_HEAD_OFFSET] | (data_tmp[FRAME_HEAD_OFFSET+1]<<8) | (data_tmp[FRAME_HEAD_OFFSET+2]<<16) | (data_tmp[FRAME_HEAD_OFFSET+3] << 24);
         if ((frame_head == 0x5555aaaa) && (data.length() > 200)) // 帧头匹配
         {
-            comProtocol::getRunTime(&data_tmp[FRAME_OPTIME_OFFSET], 4); // 获取运行时间
-            comProtocol::getUpsVoltage(&data_tmp[FRAME_UPSVOL_OFFSET], 2); // 获取UPS电压
-            comProtocol::getDeviceTemp(&data_tmp[FRAME_ENVTEMP_OFFSET], 2); // 获取环境温度
+            uint runtime_in_seconds = comProtocol::getRunTime(&data_tmp[FRAME_OPTIME_OFFSET], 4); // 获取运行时间
+            float ups_vol = comProtocol::getUpsVoltage(&data_tmp[FRAME_UPSVOL_OFFSET], 2); // 获取UPS电压
+            float env_temp = comProtocol::getDeviceTemp(&data_tmp[FRAME_ENVTEMP_OFFSET], 2); // 获取环境温度
 
             uint_ground_current_A = data_tmp[FRAME_GROUND_CURRENT_A_OFFSET] | (data_tmp[FRAME_GROUND_CURRENT_A_OFFSET+1] << 8) | (data_tmp[FRAME_GROUND_CURRENT_A_OFFSET+2] << 16) | (data_tmp[FRAME_GROUND_CURRENT_A_OFFSET+3] << 24);
             qDebug() << "A相接地电流： " << ground_current_A;
@@ -1564,6 +1564,7 @@ void CableDataWidget::sendData_slot()
     {
         this->autogetDataFlag = false;
         this->sendDataFrame(comProtocol::assembleRtDataRequestFrame(this->deviceID.getDeviceId()));
+        emit sendDataToServer(comProtocol::assembleRtDataRequestFrame(this->deviceID.getDeviceId()));
 //        myHelper::Delay_MSec(100);
 #if 0
         this->sendDataFrame(comProtocol::assembleReadRTDataRequestFrame(this->deviceID.getDeviceId()));

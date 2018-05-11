@@ -9,13 +9,13 @@ SaveToServer::SaveToServer(QObject *parent)
 
 SaveToServer::~SaveToServer()
 {
-//    this->close();
+    this->close();
 }
 
 void SaveToServer::slot_open()
 {
     this->connectToHost(this->ip,this->port);
-    myHelper::Delay_MSec(1000);
+    this->waitForConnected(3000);
     if(this->ConnectedState)
     {
         qDebug()<<"连接远端服务器成功";
@@ -35,6 +35,29 @@ void SaveToServer::slot_send_data_to_server(QByteArray data)
     if(this->ConnectedState)
     {
         this->write(data);
+        qDebug() << "发送数据 ：" << myHelper::ByteArrayToHexStr(data);
+    }
+}
+
+void SaveToServer::slot_recv_data_from_server()
+{
+    QByteArray data = this->readAll();
+    qDebug() << "接收数据 ：" << myHelper::ByteArrayToHexStr(data);
+    if (data.length() >= 200)
+    {
+        if((0xAA == (uchar)data.at(0)) && (0xAA == (uchar)data.at(1)) 
+            && (0x55 == (uchar)data.at(2)) && (0x55 == (uchar)data.at(3)))
+            {
+                emit signal_data_from_server_to_ui(data);
+            }
+        else
+        {
+            qDebug() << "帧头不正确";
+        }
+    }
+    else
+    {
+        qDebug() << "接收报文长度不正确";
     }
 }
 

@@ -26,25 +26,25 @@ void tcpClientDevice::set_clientfd(int clientfd)
 
 void tcpClientDevice::slot_read_data_from_client()
 {
-    ushort crc16 = 0;
-    uchar  len   = 0;
+    //ushort crc16 = 0;
+    //uchar  len   = 0;
     QByteArray data=this->readAll();
-    QByteArray deviceId;
-    len   = data.at(3);
+    //QByteArray deviceId;
+    //len   = data.at(3);
     if(data.length() >= 4)
     {
-        if((0x5A == data.at(0))&&(0xA5 == (uchar)data.at(1))&&(0xAA == (uchar)data.at(6+len)))
+        if((0xAA == (uchar)data.at(0))&&(0xAA == (uchar)data.at(1))&&(0x55 == (uchar)data.at(2))&&(0x55 == (uchar)data.at(3)))
         {
-            uchar *dataTmp = (uchar *)data.data();
-            crc16 = ((uchar)data.at(4+len)<<8)|((uchar)data.at(5+len));
-            if(crc16 == myHelper::crc16(&dataTmp[4],len))
+            //uchar *dataTmp = (uchar *)data.data();
+            //crc16 = ((uchar)data.at(4+len)<<8)|((uchar)data.at(5+len));
+            //if(crc16 == myHelper::crc16(&dataTmp[4],len))
             {
 //                qDebug() <<"crc16 成功";
-                if(dataTmp[18] == MainCable_RT)
+                //if(dataTmp[18] == MainCable_RT)
                 {
-                    if(CNT_COM >0)
+                    //if(CNT_COM >0)
                     {
-                        CNT_COM--;
+                        //CNT_COM--;
                     }
                 }
                 qDebug()<<"从"+ this->peerAddress().toString()+":"
@@ -87,7 +87,7 @@ void tcpClientDevice::timer_send_data_to_client()
         //==========等待发送成功==============
 //        if(this->waitForBytesWritten(10) == true)
 //        {
-            if(data.at(18) == MainCable_RT)
+            //if(data.at(18) == MainCable_RT)
             {
 //                CNT_COM++;
             }

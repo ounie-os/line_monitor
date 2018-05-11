@@ -60,6 +60,7 @@ signals:
     void signal_auto_get_ST_time(bool flag, qint32 time);
     void signal_auto_get_AL_time(bool flag, qint32 time);
     void signal_stop_get_data();
+    void signal_recv_data_to_ui(QByteArray data);
 private slots:
     void printDebug(int type, QString text);
 
@@ -114,6 +115,9 @@ private slots:
 
     void slot_auto_connect();
     void on_action_auto_get_data_triggered();
+
+    void send_rt_data_to_server(QByteArray data);
+    void recv_data_from_server(QByteArray data);
 
 private:
     Ui::MonitorMainWindow *ui;

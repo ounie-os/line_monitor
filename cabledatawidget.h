@@ -52,6 +52,7 @@ public:
 signals:
     void sendDataToDevice(int clientID,QByteArray data);
     void sendDataToDevice(QByteArray data);
+    void sendDataToServer(QByteArray data);
     void DBsave(CableMonitorDevice ID,electricCableMetaData data);
     void sendDataToServer(deviceIdType ID,electricCableMetaData data);
     void sendDataToXml(deviceIdType ID,electricCableMetaData data);
