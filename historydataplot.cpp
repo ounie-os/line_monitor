@@ -85,7 +85,7 @@ void historyDataPlot::setScaleBaseTime(QDateTime time)
     this->replot();
 }
 
-void historyDataPlot::addDataCurve(QList<electricCableMetaData> datalist, QString curveTitle, QColor curveColor)
+void historyDataPlot::addDataCurve(QList<CableCurrent> datalist, QString curveTitle, QColor curveColor)
 {
     if(datalist.length() <= 0)
     {
@@ -116,7 +116,7 @@ void historyDataPlot::addDataCurve(QList<electricCableMetaData> datalist, QStrin
     {
         int passedSec = this->baseTime.secsTo(datalist.value(i).time);
         x.push_back(passedSec);
-        y.push_back(datalist.value(i).value);
+        y.push_back(datalist.value(i).ground_current);
     }
     this->chatList->value(curveTitle)->setSamples(x,y);
     this->replot();

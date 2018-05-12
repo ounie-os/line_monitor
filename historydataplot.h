@@ -11,6 +11,8 @@
 #include "qwt_plot_curve.h"
 #include "qwt_legend.h"
 #include "qwt_legend_label.h"
+#include "cabledatawidget.h"
+
 
 
 class historyDataPlot : public QwtPlot
@@ -25,7 +27,7 @@ private slots:
     void showCurveItem(const QVariant &itemInfo, bool on, int index);
 public slots:
     void setScaleBaseTime(QDateTime time);
-    void addDataCurve(QList<electricCableMetaData> datalist, QString curveTitle, QColor curveColor);
+    void addDataCurve(QList<CableCurrent> datalist, QString curveTitle, QColor curveColor);
     void clearAllCurves();
 private:
     QDateTime baseTime;

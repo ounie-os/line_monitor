@@ -14,14 +14,20 @@
 #include "cablemonitordevice.h"
 #include "electriccablemetadata.h"
 #include "channelinfotype.h"
+#include "cabledatawidget.h"
 
-#define DBPATH "./ECM.db"
+#define DBPATH "./CMDB.db"
 #define DEVICEID_TABLE QString("deviceid_table")
 #define MAINCABLE_TABLE QString("maincable_table")
 #define GROUNDCABLE_A_TABLE QString("groundcable_a_table")
 #define GROUNDCABLE_B_TABLE QString("groundcable_b_table")
 #define GROUNDCABLE_C_TABLE QString("groundcable_c_table")
 #define GROUNDCABLE_N_TABLE QString("groundcable_n_table")
+#define GROUNDCABLE_OP_TABLE QString("groundcable_op_table")
+#define CONNECTOR_A_TABLE QString("connector_a_table")
+#define CONNECTOR_B_TABLE QString("connector_b_table")
+#define CONNECTOR_C_TABLE QString("connector_c_table")
+
 
 //#define GROUNDCABLE_TEMP_A_TABLE QString("groundcable_temp_a_table")
 //#define GROUNDCABLE_TEMP_B_TABLE QString("groundcable_temp_b_table")
@@ -43,7 +49,7 @@ public:
     QHash<quint64, ChannelInfoType> readSystemMappingList();
 
     QList<electricCableMetaData> queryHistoryData(deviceIdType devid, QDateTime beginTime, QDateTime endTime, enum dataType type);
-
+    QList<CableCurrent> queryHistoryData(deviceIdType devid, QDateTime beginTime, QDateTime endTime, enum current_type type);
 signals:
 
 public slots:
@@ -52,6 +58,7 @@ public slots:
     void updateDevice(CableMonitorDevice device);
 
     void dataSave(CableMonitorDevice devid, electricCableMetaData data);
+    void dataSave(CableMonitorDevice devid, CableCurrent data);
     void dataTableSelfCheck();
     void deleteForm(QString form);
 

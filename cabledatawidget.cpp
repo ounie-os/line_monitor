@@ -842,6 +842,33 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
             this->uint_ground_current_ALL = uint_ground_current_ALL;
             this->uint_op_current = uint_op_current;
 
+            QDateTime frameTime;
+            static uint32_t secPassed = 1507601525;
+            secPassed++;
+            frameTime.setTime_t(secPassed);
+
+            CableCurrent current_A(this->ground_current_A, GroundCablePhaseA);
+            current_A.time = frameTime;
+            emit DBsave(this->deviceID, current_A);
+            CableCurrent current_B(this->ground_current_B, GroundCablePhaseB);
+            current_B.time = frameTime;
+            emit DBsave(this->deviceID, current_B);
+            CableCurrent current_C(this->ground_current_C, GroundCablePhaseC);
+            current_C.time = frameTime;
+            emit DBsave(this->deviceID, current_C);
+            CableCurrent current_ALL(this->ground_current_ALL, GroundCablePhaseALL);
+            current_ALL.time = frameTime;
+            emit DBsave(this->deviceID, current_ALL);
+            CableCurrent current_OP(this->op_current, GroundCablePhaseOP);
+            current_OP.time = frameTime;
+            emit DBsave(this->deviceID, current_OP);
+
+            this->ui->tab_groundCable->addData(0, frameTime, this->ground_current_A);
+            this->ui->tab_groundCable->addData(1, frameTime, this->ground_current_B);
+            this->ui->tab_groundCable->addData(2, frameTime, this->ground_current_C);
+            this->ui->tab_groundCable->addData(3, frameTime, this->ground_current_ALL);
+            this->ui->tab_groundCable->addData(4, frameTime, this->op_current);
+            
             this->connector_temp_A = (float)(((data_tmp[FRAME_CONNECTOR_TEMP_A_OFFSET] << 8) | data_tmp[FRAME_CONNECTOR_TEMP_A_OFFSET+1]) - 2731) / 10;
             qDebug() << "A相接头温度： " << this->connector_temp_A;
             this->connector_temp_B = (float)(((data_tmp[FRAME_CONNECTOR_TEMP_B_OFFSET] << 8) | data_tmp[FRAME_CONNECTOR_TEMP_B_OFFSET+1]) - 2731) / 10;
@@ -849,6 +876,18 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
             this->connector_temp_C = (float)(((data_tmp[FRAME_CONNECTOR_TEMP_C_OFFSET] << 8) | data_tmp[FRAME_CONNECTOR_TEMP_C_OFFSET+1]) - 2731) / 10;
             qDebug() << "C相接头温度： " << this->connector_temp_C;
 
+            CableCurrent connector_A(this->connector_temp_A, ConnectorATemp);
+            connector_A.time = frameTime;
+            emit DBsave(this->deviceID, connector_A);
+
+            CableCurrent connector_B(this->connector_temp_B, ConnectorBTemp);
+            connector_B.time = frameTime;
+            emit DBsave(this->deviceID, connector_B);
+
+            CableCurrent connector_C(this->connector_temp_C, ConnectorCTemp);
+            connector_C.time = frameTime;
+            emit DBsave(this->deviceID, connector_C);
+            
             this->a_x_axis = ((data_tmp[FRAME_A_X_AXIS_OFFSET] << 8) | data_tmp[FRAME_A_X_AXIS_OFFSET+1]) - 16000; //A相X轴姿态
             qDebug() << "A相X轴姿态： " << this->a_x_axis;
             this->a_y_axis = ((data_tmp[FRAME_A_Y_AXIS_OFFSET] << 8) | data_tmp[FRAME_A_Y_AXIS_OFFSET+1]) - 16000; //A相Y轴姿态
@@ -867,7 +906,22 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
             qDebug() << "C相Y轴姿态： " << this->c_y_axis;
             this->c_z_axis = ((data_tmp[FRAME_C_Z_AXIS_OFFSET] << 8) | data_tmp[FRAME_C_Z_AXIS_OFFSET+1]) - 16000; //C相Z轴姿态
             qDebug() << "C相Z轴姿态： " << this->c_z_axis;
-            //this->ui->tableWidget->item(0,0)->setText(QString::number(ground_current_A, 'f', 3)+" A");
+            
+            this->ui->tableWidget->item(0,1)->setText(QString::number(ground_current_A, 'f', 3)+" A");
+            this->ui->tableWidget->item(0,2)->setText(QString::number(ground_current_B, 'f', 3)+" A");
+            this->ui->tableWidget->item(0,3)->setText(QString::number(ground_current_C, 'f', 3)+" A");
+            this->ui->tableWidget->item(1,1)->setText(QString::number(connector_temp_A, 'f', 3)+" C");
+            this->ui->tableWidget->item(1,2)->setText(QString::number(connector_temp_B, 'f', 3)+" C");
+            this->ui->tableWidget->item(1,3)->setText(QString::number(connector_temp_C, 'f', 3)+" C");
+            this->ui->tableWidget->item(4,1)->setText(QString::number(a_x_axis, 'f', 3));
+            this->ui->tableWidget->item(4,2)->setText(QString::number(a_y_axis, 'f', 3));
+            this->ui->tableWidget->item(4,3)->setText(QString::number(a_z_axis, 'f', 3));
+            this->ui->tableWidget->item(5,1)->setText(QString::number(b_x_axis, 'f', 3));
+            this->ui->tableWidget->item(5,2)->setText(QString::number(b_y_axis, 'f', 3));
+            this->ui->tableWidget->item(5,3)->setText(QString::number(b_z_axis, 'f', 3));
+            this->ui->tableWidget->item(6,1)->setText(QString::number(c_x_axis, 'f', 3));
+            this->ui->tableWidget->item(6,2)->setText(QString::number(c_y_axis, 'f', 3));
+            this->ui->tableWidget->item(6,3)->setText(QString::number(c_z_axis, 'f', 3));
 
         }
     }
@@ -2640,4 +2694,14 @@ float CableDataWidget::calc_current_rate(float new_current, float old_current)
 
     qDebug() << "电流变化率： " << rate;
     return rate;
+}
+
+CableCurrent::CableCurrent()
+{
+}
+
+CableCurrent::CableCurrent(float value, enum current_type type)
+{
+    this->ground_current = value;
+    this->type = type;
 }

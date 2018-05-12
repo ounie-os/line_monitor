@@ -440,6 +440,8 @@ void MonitorMainWindow::insertCableDevice(CableMonitorDevice device)
             widget,SLOT(receiveDataFromDevice(QByteArray)));
     connect(widget,SIGNAL(DBsave(CableMonitorDevice,electricCableMetaData)),
             this->DBManager,SLOT(dataSave(CableMonitorDevice,electricCableMetaData)));
+    connect(widget,SIGNAL(DBsave(CableMonitorDevice,CableCurrent)),
+            this->DBManager,SLOT(dataSave(CableMonitorDevice,CableCurrent)));    
 //    connect(widget,SIGNAL(DBsave(deviceIdType,electricCableMetaData)),
 //            this->DBManager,SLOT(dataSave(deviceIdType,electricCableMetaData)),Qt::DirectConnection);
 
@@ -772,42 +774,38 @@ void MonitorMainWindow::on_queryPushButton_clicked()
 
     int index = this->ui->queryDevicceIdComboBox->currentIndex();
     deviceid = this->ui->queryDevicceIdComboBox->itemData(index, Qt::UserRole).value<CableMonitorDevice>().getDeviceId();
-    enum dataType datatype;
+    enum current_type datatype;
 
     switch (this->ui->queryDataTypeComboBox->currentIndex()) {
     case 0:
-        datatype = MainCable_AVG;
+        datatype = GroundCablePhaseA;
         break;
     case 1:
-        datatype = GroundCablePhaseA_AVG;
+        datatype = GroundCablePhaseB;
         break;
     case 2:
-        datatype = GroundCablePhaseB_AVG;
+        datatype = GroundCablePhaseC;
         break;
     case 3:
-        datatype = GroundCablePhaseC_AVG;
+        datatype = GroundCablePhaseALL;
         break;
     case 4:
-        datatype = GroundCablePhaseN_AVG;
+        datatype = GroundCablePhaseOP;
         break;
     case 5:
-        datatype = GroundCablePhaseA_Temp_AVG;
+        datatype = ConnectorATemp;
         break;
     case 6:
-        datatype = GroundCablePhaseB_Temp_AVG;
+        datatype = ConnectorBTemp;
         break;
     case 7:
-        datatype = GroundCablePhaseC_Temp_AVG;
-        break;
-    case 8:
-        datatype = GroundCablePhaseN_Temp_AVG;
+        datatype = ConnectorCTemp;
         break;
     default:
-        datatype = DataTypeReserved;
         break;
     }
 
-    QList<electricCableMetaData> datalist;
+    QList<CableCurrent> datalist;
 
     datalist = this->DBManager->queryHistoryData(deviceid, beginTime, endTime, datatype);
     qDebug() << "获取数据条目：" << datalist.length();

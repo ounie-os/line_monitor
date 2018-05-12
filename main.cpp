@@ -18,6 +18,8 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     qRegisterMetaType<electricCableMetaData>("electricCableMetaData");
     qRegisterMetaType<electricCableMetaData>("electricCableMetaData&");
+    qRegisterMetaType<CableCurrent>("CableCurrent");
+    qRegisterMetaType<CableCurrent>("CableCurrent&");
     myHelper::SetUTF8Code();
     myHelper::SetPlastiqueStyle();
     MonitorMainWindow w;

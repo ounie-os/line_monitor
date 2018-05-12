@@ -17,6 +17,8 @@ enum FlagType
     flag_network   = 0x02
 };
 
+class CableCurrent;
+
 namespace Ui {
 class CableDataWidget;
 }
@@ -55,6 +57,7 @@ signals:
     void sendDataToDevice(QByteArray data);
     void sendDataToServer(QByteArray data);
     void DBsave(CableMonitorDevice ID,electricCableMetaData data);
+    void DBsave(CableMonitorDevice ID,CableCurrent data);
     void sendDataToServer(deviceIdType ID,electricCableMetaData data);
     void sendDataToXml(deviceIdType ID,electricCableMetaData data);
     void signal_export_execel(int row,QString path,QStringList str_data);
@@ -237,6 +240,17 @@ private:
     uint32_t save_alarm_data_row_count;
     QString filePath_auto_save_alarm_data;
     Export_Execel *export_execel;
+};
+
+class CableCurrent
+{
+public:
+    CableCurrent();
+    CableCurrent(float value, enum current_type type);
+
+    enum current_type type;
+    float ground_current;
+    QDateTime time;
 };
 
 #endif // CABLEDATAWIDGET_H

@@ -40,6 +40,9 @@ void DataBaseManager::initTables()
     bool groundcablectbexit = false;
     bool groundcablentbexit = false;
     bool systemmappingtbexit = false;
+    bool connectoratbexit = false;
+    bool connectorbtbexit = false;
+    bool connectorctbexit = false;
 
     if(this->db.isOpen() == false)
         return;
@@ -67,10 +70,25 @@ void DataBaseManager::initTables()
             qDebug() << "C相接地电缆数据存储表已建立";
             groundcablectbexit = true;
         }
-        else if(query.value(0).toString() == GROUNDCABLE_N_TABLE)
+        else if(query.value(0).toString() == GROUNDCABLE_OP_TABLE)
         {
-            qDebug() << "N相接地电缆数据存储表已建立";
+            qDebug() << "运行电流数据存储表已建立";
             groundcablentbexit = true;
+        }
+        else if(query.value(0).toString() == CONNECTOR_A_TABLE)
+        {
+            qDebug() << "A接头温度表已建立";
+            connectoratbexit = true;
+        }
+        else if(query.value(0).toString() == CONNECTOR_B_TABLE)
+        {
+            qDebug() << "B接头温度表已建立";
+            connectorbtbexit = true;
+        }
+        else if(query.value(0).toString() == CONNECTOR_C_TABLE)
+        {
+            qDebug() << "C接头温度表已建立";
+            connectorctbexit = true;
         }
         else if(query.value(0).toString() == DEVICEID_TABLE)
         {
@@ -110,10 +128,24 @@ void DataBaseManager::initTables()
 
     if(groundcablentbexit == false)
     {
-        qDebug() << "创建N相接地电缆数据存储表";
-        createDataTable(GROUNDCABLE_N_TABLE);
+        qDebug() << "创建运行电流数据存储表";
+        createDataTable(GROUNDCABLE_OP_TABLE);
     }
-
+    if(connectoratbexit == false)
+    {
+        qDebug() << "创建A接头温度表";
+        createDataTable(CONNECTOR_A_TABLE);
+    }
+    if(connectorbtbexit == false)
+    {
+        qDebug() << "创建B接头温度表";
+        createDataTable(CONNECTOR_B_TABLE);
+    }
+    if(connectorctbexit == false)
+    {
+        qDebug() << "创建C接头温度表";
+        createDataTable(CONNECTOR_C_TABLE);
+    }
     if(deviceidtbexist == false)
     {
         qDebug() << "创建设备列表";
@@ -294,6 +326,90 @@ QList<electricCableMetaData> DataBaseManager::queryHistoryData(deviceIdType devi
     return list;
 }
 
+QList<CableCurrent> DataBaseManager::queryHistoryData(deviceIdType devid, QDateTime beginTime, QDateTime endTime, current_type type)
+{
+    QString beginTimeStr = "datetime('" + beginTime.toString("yyyy-MM-dd hh:mm:ss") + "')";
+    QString endTimeStr = "datetime('" + endTime.toString("yyyy-MM-dd hh:mm:ss") + "')";
+    QString tablename;
+
+    switch (type)
+    {
+        case GroundCablePhaseA:
+        {
+            tablename = GROUNDCABLE_A_TABLE;
+            break;
+        }
+        case GroundCablePhaseB:
+        {
+            tablename = GROUNDCABLE_B_TABLE;
+            break;
+        }
+        case GroundCablePhaseC:
+        {
+            tablename = GROUNDCABLE_C_TABLE;
+            break;
+        }
+        case GroundCablePhaseALL:
+        {
+            tablename = MAINCABLE_TABLE;
+            break;
+        }
+        case GroundCablePhaseOP:
+        {
+            tablename = GROUNDCABLE_OP_TABLE;
+            break;
+        }
+        case ConnectorATemp:
+        {
+            tablename = CONNECTOR_A_TABLE;
+            break;
+        }
+        case ConnectorBTemp:
+        {
+            tablename = CONNECTOR_B_TABLE;
+            break;
+        }
+        case ConnectorCTemp:
+        {
+            tablename = CONNECTOR_C_TABLE;
+            break;
+        }
+        default:
+            break;
+    }
+
+    QString sqlCmd = "select  * from " + tablename + " where datetime >= " + beginTimeStr
+                + " and datetime <= " + endTimeStr +
+                " and deviceid = " + "'" + devid.toString() + "'"  +
+                " and datatype = " +  QString::number(type)  + " order by id";
+    QList<CableCurrent> list;
+    if(this->db.isOpen() == false)
+        return list;
+
+    QSqlQuery query(this->db);
+    if(query.exec(sqlCmd))
+    {
+        while(query.next())
+        {
+            QSqlRecord record = query.record();
+            CableCurrent data;
+
+            data.time = QDateTime::fromString(record.value("datetime").toString(),"yyyy-MM-dd hh:mm:ss");
+            data.ground_current = record.value("value").toFloat();
+            data.type = (enum current_type)(record.value("datatype").toInt());
+
+            list.append(data);
+        }
+    }
+    else
+    {
+        qCritical() << query.lastError().text();
+
+    }
+//    qDebug() << "DataBaseManager: "<< QThread::currentThreadId();
+    return list;
+}
+
 void DataBaseManager::insertDevice(CableMonitorDevice device)
 {
     if(this->db.isOpen() == false)
@@ -458,13 +574,86 @@ void DataBaseManager::dataSave(CableMonitorDevice devid, electricCableMetaData d
 //    qDebug() << QString("dataSave id:") << QThread::currentThreadId();
 }
 
+void DataBaseManager::dataSave(CableMonitorDevice devid, CableCurrent data)
+{
+    if(this->db.isOpen() == false)
+        return;
+
+    QString tablename = "";
+
+    switch (data.type)
+    {
+        case GroundCablePhaseA:
+        {
+            tablename = GROUNDCABLE_A_TABLE;
+            break;
+        }
+        case GroundCablePhaseB:
+        {
+            tablename = GROUNDCABLE_B_TABLE;
+            break;
+        }
+        case GroundCablePhaseC:
+        {
+            tablename = GROUNDCABLE_C_TABLE;
+            break;
+        }
+        case GroundCablePhaseALL:
+        {
+            tablename = MAINCABLE_TABLE;
+            break;
+        }
+        case GroundCablePhaseOP:
+        {
+            tablename = GROUNDCABLE_OP_TABLE;
+            break;
+        }
+        case ConnectorATemp:
+        {
+            tablename = CONNECTOR_A_TABLE;
+            break;
+        }
+        case ConnectorBTemp:
+        {
+            tablename = CONNECTOR_B_TABLE;
+            break;
+        }
+        case ConnectorCTemp:
+        {
+            tablename = CONNECTOR_C_TABLE;
+            break;
+        }
+        default:
+            break;
+    }
+
+    if (tablename.isEmpty())
+        return;
+
+    QSqlQuery query(this->db);
+    query.prepare("insert into " + tablename +
+                  " values(NULL, :deviceid, :datatype, :datetime, :value)");
+    query.bindValue(":deviceid", devid.getDeviceId().toString());
+    query.bindValue(":datatype", data.type);
+    query.bindValue(":datetime", data.time.toString("yyyy-MM-dd hh:mm:ss"));
+    query.bindValue(":value", data.ground_current);
+
+    if(query.exec() == false)
+    {
+        qCritical() << query.lastError().text();
+    }
+}
+
 void DataBaseManager::dataTableSelfCheck()
 {
     this->dataTableSelfDelete(MAINCABLE_TABLE);
     this->dataTableSelfDelete(GROUNDCABLE_A_TABLE);
     this->dataTableSelfDelete(GROUNDCABLE_B_TABLE);
     this->dataTableSelfDelete(GROUNDCABLE_C_TABLE);
-    this->dataTableSelfDelete(GROUNDCABLE_N_TABLE);
+    this->dataTableSelfDelete(GROUNDCABLE_OP_TABLE);
+    this->dataTableSelfDelete(CONNECTOR_A_TABLE);
+    this->dataTableSelfDelete(CONNECTOR_B_TABLE);
+    this->dataTableSelfDelete(CONNECTOR_C_TABLE);
 }
 
 void DataBaseManager::deleteForm(QString form)

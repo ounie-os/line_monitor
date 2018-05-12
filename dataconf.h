@@ -200,4 +200,17 @@ enum configType
     ResetSystem = 0xEE
 };
 
+enum current_type
+{
+    GroundCablePhaseA = 0x00,  // A相接地电流
+    GroundCablePhaseB,         // B相接地电流
+    GroundCablePhaseC,         // C相接地电流
+    GroundCablePhaseALL,       // 主缆接地电流
+    GroundCablePhaseOP,        // 运行电流
+    ConnectorATemp,            // A接头温度
+    ConnectorBTemp,            // B接头温度
+    ConnectorCTemp,            // C接头温度
+};
+
+
 #endif
