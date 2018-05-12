@@ -778,16 +778,16 @@ void MonitorMainWindow::on_queryPushButton_clicked()
 
     switch (this->ui->queryDataTypeComboBox->currentIndex()) {
     case 0:
-        datatype = GroundCablePhaseA;
+        datatype = GroundCablePhaseALL;
         break;
     case 1:
-        datatype = GroundCablePhaseB;
+        datatype = GroundCablePhaseA;
         break;
     case 2:
-        datatype = GroundCablePhaseC;
+        datatype = GroundCablePhaseB;
         break;
     case 3:
-        datatype = GroundCablePhaseALL;
+        datatype = GroundCablePhaseC;
         break;
     case 4:
         datatype = GroundCablePhaseOP;
