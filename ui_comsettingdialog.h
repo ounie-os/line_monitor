@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'comsettingdialog.ui'
 **
-** Created by: Qt User Interface Compiler version 4.8.5
+** Created by: Qt User Interface Compiler version 4.8.6
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -218,6 +218,7 @@ public:
          << QApplication::translate("comSettingDialog", "4800", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("comSettingDialog", "9600", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("comSettingDialog", "19200", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("comSettingDialog", "57600", 0, QApplication::UnicodeUTF8)
         );
         label_3->setText(QApplication::translate("comSettingDialog", "\346\225\260\346\215\256\344\275\215", 0, QApplication::UnicodeUTF8));
         dataBitComboBox->clear();

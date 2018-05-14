@@ -5,7 +5,7 @@ comSetting::comSetting(QObject *parent) :
 {
     this->comPort = "COM1";
     this->portNum = 1;
-    this->baudRate = BAUD19200;
+    this->baudRate = BAUD57600;
     this->parity = PAR_NONE;
     this->data_bit = DATA_8;
     this->stop_bit = STOP_1;

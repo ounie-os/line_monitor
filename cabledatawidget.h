@@ -145,7 +145,7 @@ private slots:
 
     void on_pushButton_save_alarm_value_clicked();
 
-    void on_checkBox_statistics_value_clicked(bool checked);
+    //void on_checkBox_statistics_value_clicked(bool checked);
 
     void on_pushButton_statistics_value_clicked();
 
@@ -158,12 +158,16 @@ private slots:
     void on_channelControlReadPushButton_clicked();
 
     void slot_auto_get_RT_time(bool flag, qint32 time);
-    void slot_auto_get_ST_time(bool flag, qint32 time);
+    //void slot_auto_get_ST_time(bool flag, qint32 time);
     void slot_auto_get_AL_time(bool flag, qint32 time);
     void slot_stop_get_data();    
-    void on_checkBox_statistics_value_toggled(bool checked);
+    //void on_checkBox_statistics_value_toggled(bool checked);
 
     void on_checkBox_alarm_value_toggled(bool checked);
+
+    void on_tab_mainCable_destroyed();
+
+    void on_label_34_linkActivated(const QString &link);
 
 private:
     Ui::CableDataWidget *ui;
@@ -226,6 +230,8 @@ private:
     uint runtime_in_seconds;
     float ups_vol;
     float env_temp;
+
+    uint start_recv_rt_data;
 
     QList<QByteArray>list_SendDataToClient;
     QList<QByteArray>list_SendRtData;

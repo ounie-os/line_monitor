@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'cablehistorydatawidget.ui'
 **
-** Created by: Qt User Interface Compiler version 4.8.5
+** Created by: Qt User Interface Compiler version 4.8.6
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -172,11 +172,14 @@ public:
         label_4->setText(QApplication::translate("cableHistoryDataWidget", "To", 0, QApplication::UnicodeUTF8));
         queryDataTypeComboBox->clear();
         queryDataTypeComboBox->insertItems(0, QStringList()
-         << QApplication::translate("cableHistoryDataWidget", "MainCable AVG", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("cableHistoryDataWidget", "Ground Cable A AVG", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("cableHistoryDataWidget", "Ground Cable B AVG", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("cableHistoryDataWidget", "Ground Cable C AVG", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("cableHistoryDataWidget", "Ground Cable N AVG", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("cableHistoryDataWidget", "\344\270\273\347\274\206\347\224\265\346\265\201\345\200\274", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("cableHistoryDataWidget", "A\347\233\270\347\224\265\346\265\201\345\200\274", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("cableHistoryDataWidget", "B\347\233\270\347\224\265\346\265\201\345\200\274", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("cableHistoryDataWidget", "C\347\233\270\347\224\265\346\265\201\345\200\274", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("cableHistoryDataWidget", "\350\277\220\350\241\214\347\224\265\346\265\201\345\200\274", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("cableHistoryDataWidget", "A\347\233\270\346\216\245\345\244\264\346\270\251\345\272\246\345\200\274", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("cableHistoryDataWidget", "B\347\233\270\346\216\245\345\244\264\346\270\251\345\272\246\345\200\274", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("cableHistoryDataWidget", "C\346\216\245\345\244\264\346\270\251\345\272\246\345\200\274", 0, QApplication::UnicodeUTF8)
         );
         queryPushButton->setText(QApplication::translate("cableHistoryDataWidget", "Query", 0, QApplication::UnicodeUTF8));
         clearCurvesPushButton->setText(QApplication::translate("cableHistoryDataWidget", "Clear", 0, QApplication::UnicodeUTF8));

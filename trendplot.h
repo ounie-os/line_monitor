@@ -40,5 +40,29 @@ private:
     QList<curveXY> curveXYList;
     QwtLegend *legend;
 };
+class trendPlotfz : public QwtPlot
+{
+    Q_OBJECT
+public:
+    explicit trendPlotfz(QWidget *parent = 0);
+    ~trendPlotfz();
+signals:
+
+private slots:
+    void showCurveItem(const QVariant &itemInfo, bool on, int index);
+public slots:
+    void initCurves(int curveCnt, QStringList curveTitleList, QList<QColor> colorList);
+    void addData(int curveNum, QDateTime time, double data);
+    void setCurveEnable(int curveNum, bool flag);
+
+    void clearAllCurvesfz();
+private:
+    QDateTime baseTime;
+    int showPntNumber;
+
+    QList<QwtPlotCurve *> curveList;
+    QList<curveXY> curveXYList;
+    QwtLegend *legend;
+};
 
 #endif // TRENDPLOT_H

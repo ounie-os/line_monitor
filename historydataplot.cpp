@@ -100,7 +100,7 @@ void historyDataPlot::addDataCurve(QList<CableCurrent> datalist, QString curveTi
         curve->setRenderHint(QwtPlotItem::RenderAntialiased);
         curve->setLegendAttribute(QwtPlotCurve::LegendShowLine, true);
         curve->setPen(QPen(curveColor,3.0));
-        curve->setStyle(QwtPlotCurve::Dots);//点形式
+        curve->setStyle(QwtPlotCurve::Lines);//点形式
         curve->attach(this);
         this->chatList->insert(curveTitle,curve);
         const QVariant iteminfo = itemToInfo(this->itemList(QwtPlotItem::Rtti_PlotCurve).last());

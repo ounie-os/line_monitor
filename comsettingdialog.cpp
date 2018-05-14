@@ -155,8 +155,7 @@ void comSettingDialog::comSettingSavePushButtonClickedSlot()
             this->_setting->setBaud(BAUD9600);
             break;
         case 6:
-            //this->_setting->setBaud(BAUD19200);
-            this->_setting->setBaud(BAUD57600);
+            this->_setting->setBaud(BAUD19200);
             break;
         case 7:
             this->_setting->setBaud(BAUD57600);

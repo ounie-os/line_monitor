@@ -70,9 +70,9 @@ void DataBaseManager::initTables()
             qDebug() << "C相接地电缆数据存储表已建立";
             groundcablectbexit = true;
         }
-        else if(query.value(0).toString() == GROUNDCABLE_OP_TABLE)
+        else if(query.value(0).toString() == GROUNDCABLE_N_TABLE)
         {
-            qDebug() << "运行电流数据存储表已建立";
+            qDebug() << "N相接地电缆数据存储表已建立";
             groundcablentbexit = true;
         }
         else if(query.value(0).toString() == CONNECTOR_A_TABLE)
@@ -128,8 +128,8 @@ void DataBaseManager::initTables()
 
     if(groundcablentbexit == false)
     {
-        qDebug() << "创建运行电流数据存储表";
-        createDataTable(GROUNDCABLE_OP_TABLE);
+        qDebug() << "创建N相接地电缆数据存储表";
+        createDataTable(GROUNDCABLE_N_TABLE);
     }
     if(connectoratbexit == false)
     {
@@ -349,14 +349,14 @@ QList<CableCurrent> DataBaseManager::queryHistoryData(deviceIdType devid, QDateT
             tablename = GROUNDCABLE_C_TABLE;
             break;
         }
-        case GroundCablePhaseALL:
+        case GroundCablePhaseN:
         {
-            tablename = MAINCABLE_TABLE;
+            tablename = GROUNDCABLE_N_TABLE;
             break;
         }
-        case GroundCablePhaseOP:
+        case GroundCablePhaseMain:
         {
-            tablename = GROUNDCABLE_OP_TABLE;
+            tablename = MAINCABLE_TABLE;
             break;
         }
         case ConnectorATemp:
@@ -598,14 +598,14 @@ void DataBaseManager::dataSave(CableMonitorDevice devid, CableCurrent data)
             tablename = GROUNDCABLE_C_TABLE;
             break;
         }
-        case GroundCablePhaseALL:
+        case GroundCablePhaseN:
         {
-            tablename = MAINCABLE_TABLE;
+            tablename = GROUNDCABLE_N_TABLE;
             break;
         }
-        case GroundCablePhaseOP:
+        case GroundCablePhaseMain:
         {
-            tablename = GROUNDCABLE_OP_TABLE;
+            tablename = MAINCABLE_TABLE;
             break;
         }
         case ConnectorATemp:
@@ -650,7 +650,7 @@ void DataBaseManager::dataTableSelfCheck()
     this->dataTableSelfDelete(GROUNDCABLE_A_TABLE);
     this->dataTableSelfDelete(GROUNDCABLE_B_TABLE);
     this->dataTableSelfDelete(GROUNDCABLE_C_TABLE);
-    this->dataTableSelfDelete(GROUNDCABLE_OP_TABLE);
+    this->dataTableSelfDelete(GROUNDCABLE_N_TABLE);
     this->dataTableSelfDelete(CONNECTOR_A_TABLE);
     this->dataTableSelfDelete(CONNECTOR_B_TABLE);
     this->dataTableSelfDelete(CONNECTOR_C_TABLE);

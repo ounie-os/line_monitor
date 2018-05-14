@@ -119,6 +119,12 @@ private slots:
     void send_rt_data_to_server(QByteArray data);
     void recv_data_from_server(QByteArray data);
 
+    void on_scrollAreaWidgetContents_destroyed();
+
+    void on_page_2_destroyed();
+
+    void on_page_3_destroyed();
+
 private:
     Ui::MonitorMainWindow *ui;
     QList<QColor> colorList;

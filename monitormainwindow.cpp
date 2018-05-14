@@ -452,8 +452,8 @@ void MonitorMainWindow::insertCableDevice(CableMonitorDevice device)
             this->apiServer,SLOT(dataUpdate(deviceIdType,electricCableMetaData)));
     connect(this, SIGNAL(signal_auto_get_RT_time(bool,qint32)),
             widget, SLOT(slot_auto_get_RT_time(bool,qint32)));
-    connect(this, SIGNAL(signal_auto_get_ST_time(bool,qint32)),
-            widget, SLOT(slot_auto_get_ST_time(bool,qint32)));
+   /* connect(this, SIGNAL(signal_auto_get_ST_time(bool,qint32)),
+            widget, SLOT(slot_auto_get_ST_time(bool,qint32)));*/
     connect(this, SIGNAL(signal_auto_get_AL_time(bool,qint32)),
             widget, SLOT(slot_auto_get_AL_time(bool,qint32)));
     connect(this, SIGNAL(signal_stop_get_data()),
@@ -778,7 +778,7 @@ void MonitorMainWindow::on_queryPushButton_clicked()
 
     switch (this->ui->queryDataTypeComboBox->currentIndex()) {
     case 0:
-        datatype = GroundCablePhaseALL;
+        datatype = GroundCablePhaseMain;
         break;
     case 1:
         datatype = GroundCablePhaseA;
@@ -790,7 +790,7 @@ void MonitorMainWindow::on_queryPushButton_clicked()
         datatype = GroundCablePhaseC;
         break;
     case 4:
-        datatype = GroundCablePhaseOP;
+        datatype = GroundCablePhaseN;
         break;
     case 5:
         datatype = ConnectorATemp;
@@ -801,6 +801,8 @@ void MonitorMainWindow::on_queryPushButton_clicked()
     case 7:
         datatype = ConnectorCTemp;
         break;
+
+
     default:
         break;
     }
@@ -1180,4 +1182,19 @@ void MonitorMainWindow::send_rt_data_to_server(QByteArray data)
 void MonitorMainWindow::recv_data_from_server(QByteArray data)
 {
     emit signal_recv_data_to_ui(data);
+}
+
+void MonitorMainWindow::on_scrollAreaWidgetContents_destroyed()
+{
+
+}
+
+void MonitorMainWindow::on_page_2_destroyed()
+{
+
+}
+
+void MonitorMainWindow::on_page_3_destroyed()
+{
+
 }

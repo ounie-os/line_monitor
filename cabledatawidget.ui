@@ -137,342 +137,414 @@ color: rgb(0, 0, 0);
                   <height>490</height>
                  </rect>
                 </property>
-                <layout class="QGridLayout" name="gridLayout">
-                 <item row="0" column="0">
-                  <layout class="QVBoxLayout" name="verticalLayout_3">
-                   <item>
-                    <layout class="QHBoxLayout" name="horizontalLayout_6">
-                     <item>
-                      <widget class="QTableWidget" name="tableWidget">
-                       <property name="sizePolicy">
-                        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                         <horstretch>0</horstretch>
-                         <verstretch>0</verstretch>
-                        </sizepolicy>
-                       </property>
-                       <row>
+                <widget class="QWidget" name="layoutWidget">
+                 <property name="geometry">
+                  <rect>
+                   <x>21</x>
+                   <y>2</y>
+                   <width>591</width>
+                   <height>471</height>
+                  </rect>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_7" stretch="1,6">
+                  <item>
+                   <layout class="QVBoxLayout" name="verticalLayout_3" stretch="2,1">
+                    <item>
+                     <layout class="QVBoxLayout" name="verticalLayout_2">
+                      <item>
+                       <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="1,2,1,2">
+                        <item>
+                         <widget class="QLabel" name="label_14">
+                          <property name="text">
+                           <string>运行时间：</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QLabel" name="label_34">
+                          <property name="text">
+                           <string/>
+                          </property>
+                          <property name="buddy">
+                           <cstring></cstring>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QLabel" name="label_37">
+                          <property name="text">
+                           <string>UPS电压：</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QLabel" name="label_38">
+                          <property name="text">
+                           <string/>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </item>
+                      <item>
+                       <layout class="QHBoxLayout" name="horizontalLayout_6">
+                        <item>
+                         <widget class="QLabel" name="label_43">
+                          <property name="text">
+                           <string>环境温度：</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QLabel" name="label_44">
+                          <property name="text">
+                           <string/>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QLabel" name="label_41">
+                          <property name="text">
+                           <string>本机温度：</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QLabel" name="label_46">
+                          <property name="text">
+                           <string/>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QLabel" name="label_45">
+                          <property name="text">
+                           <string>湿度：</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QLabel" name="label_42">
+                          <property name="text">
+                           <string/>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </item>
+                     </layout>
+                    </item>
+                    <item>
+                     <layout class="QHBoxLayout" name="horizontalLayout_4">
+                      <item>
+                       <widget class="QPushButton" name="pushButton_ReadRtData">
                         <property name="text">
-                         <string>电流实时值</string>
+                         <string>读取实时数据</string>
                         </property>
-                       </row>
-                       <row>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QCheckBox" name="checkBox">
                         <property name="text">
-                         <string>电流平均值</string>
+                         <string>自动获取实时数据</string>
                         </property>
-                       </row>
-                       <row>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="label_4">
                         <property name="text">
-                         <string>电流最大值</string>
+                         <string>    设置间隔时间</string>
                         </property>
-                       </row>
-                       <row>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QSpinBox" name="spinBox">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
+                        <property name="minimum">
+                         <number>1</number>
+                        </property>
+                        <property name="maximum">
+                         <number>99999</number>
+                        </property>
+                        <property name="value">
+                         <number>3</number>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="label_12">
                         <property name="text">
-                         <string>电流最小值</string>
+                         <string>秒</string>
                         </property>
-                       </row>
-                       <row>
-                        <property name="text">
-                         <string>温度实时值</string>
-                        </property>
-                       </row>
-                       <row>
-                        <property name="text">
-                         <string>温度平均值</string>
-                        </property>
-                       </row>
-                       <row>
-                        <property name="text">
-                         <string>温度最大值</string>
-                        </property>
-                       </row>
-                       <row>
-                        <property name="text">
-                         <string>温度最小值</string>
-                        </property>
-                       </row>
-                       <row>
-                        <property name="text">
-                         <string>环流负荷比</string>
-                        </property>
-                       </row>
-                       <row>
-                        <property name="text">
-                         <string>环流最大最小比</string>
-                        </property>
-                       </row>
-                       <column>
-                        <property name="text">
-                         <string>主缆</string>
-                        </property>
-                       </column>
-                       <column>
-                        <property name="text">
-                         <string>A相</string>
-                        </property>
-                       </column>
-                       <column>
-                        <property name="text">
-                         <string>B相</string>
-                        </property>
-                       </column>
-                       <column>
-                        <property name="text">
-                         <string>C相</string>
-                        </property>
-                       </column>
-                       <column>
-                        <property name="text">
-                         <string>N相</string>
-                        </property>
-                       </column>
-                      </widget>
-                     </item>
-                     <item>
-                      <spacer name="horizontalSpacer_2">
-                       <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                       </property>
-                       <property name="sizeType">
-                        <enum>QSizePolicy::Minimum</enum>
-                       </property>
-                       <property name="sizeHint" stdset="0">
-                        <size>
-                         <width>0</width>
-                         <height>20</height>
-                        </size>
-                       </property>
-                      </spacer>
-                     </item>
-                     <item>
-                      <layout class="QVBoxLayout" name="verticalLayout_2">
-                       <item>
-                        <layout class="QHBoxLayout" name="horizontalLayout_5">
-                         <item>
-                          <layout class="QHBoxLayout" name="horizontalLayout_4">
-                           <item>
-                            <widget class="QLabel" name="label_4">
-                             <property name="text">
-                              <string>设置间隔时间</string>
-                             </property>
-                            </widget>
-                           </item>
-                           <item>
-                            <widget class="QSpinBox" name="spinBox">
-                             <property name="minimum">
-                              <number>1</number>
-                             </property>
-                             <property name="maximum">
-                              <number>99999</number>
-                             </property>
-                             <property name="value">
-                              <number>3</number>
-                             </property>
-                            </widget>
-                           </item>
-                           <item>
-                            <widget class="QLabel" name="label_12">
-                             <property name="text">
-                              <string>秒</string>
-                             </property>
-                            </widget>
-                           </item>
-                           <item>
-                            <widget class="QCheckBox" name="checkBox">
-                             <property name="text">
-                              <string>自动获取实时数据</string>
-                             </property>
-                            </widget>
-                           </item>
-                           <item>
-                            <widget class="QPushButton" name="pushButton_ReadRtData">
-                             <property name="text">
-                              <string>读取实时数据</string>
-                             </property>
-                            </widget>
-                           </item>
-                          </layout>
-                         </item>
-                        </layout>
-                       </item>
-                       <item>
-                        <layout class="QHBoxLayout" name="horizontalLayout_14">
-                         <item>
-                          <widget class="QLabel" name="label_37">
-                           <property name="text">
-                            <string>设置间隔时间</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <widget class="QSpinBox" name="spinBox_statistics_value">
-                           <property name="minimum">
-                            <number>60</number>
-                           </property>
-                           <property name="maximum">
-                            <number>99999</number>
-                           </property>
-                           <property name="value">
-                            <number>60</number>
-                           </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <widget class="QLabel" name="label_38">
-                           <property name="text">
-                            <string>秒</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <widget class="QCheckBox" name="checkBox_statistics_value">
-                           <property name="text">
-                            <string>自动获取统计数据</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <widget class="QPushButton" name="pushButton_statistics_value">
-                           <property name="text">
-                            <string>读取统计数据</string>
-                           </property>
-                          </widget>
-                         </item>
-                        </layout>
-                       </item>
-                       <item>
-                        <layout class="QHBoxLayout" name="horizontalLayout_15">
-                         <item>
-                          <widget class="QLabel" name="label_14">
-                           <property name="text">
-                            <string>输入电压：</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <widget class="QLabel" name="label_InputVol">
-                           <property name="text">
-                            <string/>
-                           </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <widget class="QPushButton" name="pushButton_InputVol">
-                           <property name="text">
-                            <string>读取输入电压</string>
-                           </property>
-                          </widget>
-                         </item>
-                        </layout>
-                       </item>
-                       <item>
-                        <layout class="QHBoxLayout" name="horizontalLayout_22">
-                         <item>
-                          <widget class="QLabel" name="label_34">
-                           <property name="text">
-                            <string>电流变化率窗体大小：</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <widget class="QLabel" name="label_CurChangerateWindowSize">
-                           <property name="text">
-                            <string/>
-                           </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <widget class="QPushButton" name="pushButton_Read_CurChangerateWindowSize">
-                           <property name="text">
-                            <string>读取</string>
-                           </property>
-                          </widget>
-                         </item>
-                        </layout>
-                       </item>
-                       <item>
-                        <layout class="QHBoxLayout" name="horizontalLayout_13"/>
-                       </item>
-                       <item>
-                        <layout class="QHBoxLayout" name="horizontalLayout_28">
-                         <item>
-                          <widget class="QPushButton" name="pushButton_clarChart">
-                           <property name="text">
-                            <string>清除曲线图</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <widget class="QPushButton" name="pushButton_save_rt_data">
-                           <property name="text">
-                            <string>保存数据</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <widget class="QPushButton" name="pushButton_clear_rt_data">
-                           <property name="text">
-                            <string>清除数据</string>
-                           </property>
-                          </widget>
-                         </item>
-                        </layout>
-                       </item>
-                       <item>
-                        <spacer name="verticalSpacer">
-                         <property name="orientation">
-                          <enum>Qt::Vertical</enum>
-                         </property>
-                         <property name="sizeType">
-                          <enum>QSizePolicy::Expanding</enum>
-                         </property>
-                         <property name="sizeHint" stdset="0">
-                          <size>
-                           <width>20</width>
-                           <height>170</height>
-                          </size>
-                         </property>
-                        </spacer>
-                       </item>
-                      </layout>
-                     </item>
-                    </layout>
-                   </item>
-                   <item>
-                    <widget class="QTabWidget" name="tabWidget_chart">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <widget class="QTableWidget" name="tableWidget">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="frameShape">
+                     <enum>QFrame::NoFrame</enum>
+                    </property>
+                    <property name="midLineWidth">
+                     <number>0</number>
+                    </property>
+                    <attribute name="horizontalHeaderDefaultSectionSize">
+                     <number>115</number>
+                    </attribute>
+                    <attribute name="verticalHeaderDefaultSectionSize">
+                     <number>35</number>
+                    </attribute>
+                    <row>
+                     <property name="text">
+                      <string>接地电流</string>
                      </property>
-                     <property name="minimumSize">
-                      <size>
-                       <width>150</width>
-                       <height>150</height>
-                      </size>
+                    </row>
+                    <row>
+                     <property name="text">
+                      <string>接头温度</string>
                      </property>
-                     <property name="currentIndex">
-                      <number>1</number>
+                    </row>
+                    <row>
+                     <property name="text">
+                      <string>电流变化率</string>
                      </property>
-                     <widget class="trendPlot" name="tab_mainCable">
-                      <attribute name="title">
-                       <string>主缆电流图</string>
-                      </attribute>
-                     </widget>
-                     <widget class="trendPlot" name="tab_groundCable">
-                      <attribute name="title">
-                       <string>接地电缆护层电流图</string>
-                      </attribute>
-                     </widget>
-                    </widget>
-                   </item>
-                  </layout>
-                 </item>
-                </layout>
+                    </row>
+                    <row>
+                     <property name="text">
+                      <string>电缆振动</string>
+                     </property>
+                    </row>
+                    <row>
+                     <property name="text">
+                      <string>x轴姿态</string>
+                     </property>
+                    </row>
+                    <row>
+                     <property name="text">
+                      <string>y轴姿态</string>
+                     </property>
+                    </row>
+                    <row>
+                     <property name="text">
+                      <string>z轴姿态</string>
+                     </property>
+                    </row>
+                    <row>
+                     <property name="text">
+                      <string>表面温度</string>
+                     </property>
+                    </row>
+                    <column>
+                     <property name="text">
+                      <string>主缆</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>A相</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>B相</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>C相</string>
+                     </property>
+                    </column>
+                    <item row="0" column="0">
+                     <property name="text">
+                      <string/>
+                     </property>
+                     <property name="textAlignment">
+                      <set>AlignLeft|AlignVCenter</set>
+                     </property>
+                     <property name="background">
+                      <brush brushstyle="FDiagPattern">
+                       <color alpha="255">
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                       </color>
+                      </brush>
+                     </property>
+                     <property name="foreground">
+                      <brush brushstyle="NoBrush">
+                       <color alpha="255">
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                       </color>
+                      </brush>
+                     </property>
+                    </item>
+                    <item row="0" column="1">
+                     <property name="text">
+                      <string/>
+                     </property>
+                     <property name="background">
+                      <brush brushstyle="NoBrush">
+                       <color alpha="255">
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                       </color>
+                      </brush>
+                     </property>
+                     <property name="foreground">
+                      <brush brushstyle="NoBrush">
+                       <color alpha="255">
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                       </color>
+                      </brush>
+                     </property>
+                    </item>
+                    <item row="1" column="0">
+                     <property name="text">
+                      <string/>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <strikeout>false</strikeout>
+                      </font>
+                     </property>
+                     <property name="background">
+                      <brush brushstyle="FDiagPattern">
+                       <color alpha="255">
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                       </color>
+                      </brush>
+                     </property>
+                     <property name="foreground">
+                      <brush brushstyle="FDiagPattern">
+                       <color alpha="255">
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                       </color>
+                      </brush>
+                     </property>
+                    </item>
+                    <item row="6" column="0">
+                     <property name="text">
+                      <string/>
+                     </property>
+                     <property name="background">
+                      <brush brushstyle="FDiagPattern">
+                       <color alpha="255">
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                       </color>
+                      </brush>
+                     </property>
+                     <property name="foreground">
+                      <brush brushstyle="FDiagPattern">
+                       <color alpha="255">
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                       </color>
+                      </brush>
+                     </property>
+                    </item>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
                </widget>
               </widget>
              </item>
             </layout>
+           </widget>
+           <widget class="QWidget" name="tab">
+            <attribute name="title">
+             <string>实时数据曲线</string>
+            </attribute>
+            <widget class="QWidget" name="layoutWidget">
+             <property name="geometry">
+              <rect>
+               <x>31</x>
+               <y>20</y>
+               <width>721</width>
+               <height>401</height>
+              </rect>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_8" stretch="1,1">
+              <item>
+               <widget class="QTabWidget" name="tabWidget_chart_2">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>150</width>
+                  <height>150</height>
+                 </size>
+                </property>
+                <property name="currentIndex">
+                 <number>0</number>
+                </property>
+                <widget class="trendPlot" name="tab_groundCable_2">
+                 <attribute name="title">
+                  <string>接地电缆接头温度图</string>
+                 </attribute>
+                </widget>
+               </widget>
+              </item>
+              <item>
+               <widget class="QTabWidget" name="tabWidget_chart">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>150</width>
+                  <height>150</height>
+                 </size>
+                </property>
+                <property name="currentIndex">
+                 <number>0</number>
+                </property>
+                <widget class="trendPlot" name="tab_groundCable">
+                 <attribute name="title">
+                  <string>接地电缆护层电流图</string>
+                 </attribute>
+                </widget>
+                <widget class="trendPlot" name="tab_mainCable">
+                 <attribute name="title">
+                  <string>主缆电流图</string>
+                 </attribute>
+                </widget>
+               </widget>
+              </item>
+             </layout>
+            </widget>
            </widget>
            <widget class="QWidget" name="tab_alarm_value">
             <attribute name="title">
@@ -489,8 +561,8 @@ color: rgb(0, 0, 0);
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>970</width>
-                  <height>490</height>
+                  <width>438</width>
+                  <height>91</height>
                  </rect>
                 </property>
                 <layout class="QHBoxLayout" name="horizontalLayout_26">

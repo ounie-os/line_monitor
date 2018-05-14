@@ -78,27 +78,42 @@ background-color: rgb(176, 194, 200);</string>
             <widget class="QComboBox" name="queryDataTypeComboBox">
              <item>
               <property name="text">
-               <string>MainCable AVG</string>
+               <string>主缆电流值</string>
               </property>
              </item>
              <item>
               <property name="text">
-               <string>Ground Cable A AVG</string>
+               <string>A相电流值</string>
               </property>
              </item>
              <item>
               <property name="text">
-               <string>Ground Cable B AVG</string>
+               <string>B相电流值</string>
               </property>
              </item>
              <item>
               <property name="text">
-               <string>Ground Cable C AVG</string>
+               <string>C相电流值</string>
               </property>
              </item>
              <item>
               <property name="text">
-               <string>Ground Cable N AVG</string>
+               <string>运行电流值</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>A相接头温度值</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>B相接头温度值</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>C接头温度值</string>
               </property>
              </item>
             </widget>

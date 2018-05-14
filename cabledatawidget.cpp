@@ -32,6 +32,7 @@ CableDataWidget::CableDataWidget(QWidget *parent) :
     cableDataWidget_init();
     save_rt_data_row_count = 0;
     save_alarm_data_row_count = 0;
+    start_recv_rt_data = 0;
 }
 /*!
  * \brief CableDataWidget::~CableDataWidget
@@ -52,6 +53,7 @@ CableDataWidget::~CableDataWidget()
         }
     }
     this->export_execel->deleteLater();
+    this->start_recv_rt_data = 0;
 }
 /*!
  * \brief CableDataWidget::cableDataWidget_init
@@ -90,6 +92,8 @@ void CableDataWidget::cableDataWidget_init()
 
     this->sendDataToClient          = new QTimer;
     this->sendDataToClient->setInterval(250);
+
+    this->start_recv_rt_data = 0;
 //    this->sendDataToClient->start();
     connect(this->sendDataToClient,SIGNAL(timeout()),
             this,SLOT(sendDataToClient_slot()));
@@ -121,10 +125,15 @@ void CableDataWidget::cableDataWidget_init()
     colorList.append(Qt::darkRed);
     colorList.append(Qt::darkGreen);
     colorList.append(Qt::darkYellow);
-    this->ui->tab_mainCable->initCurves(1, QStringList() << tr("MainCable AVG"), colorList);
-    this->ui->tab_groundCable->initCurves(4, QStringList() << tr("GroundCable A AVG") <<
-                                                     tr("GroundCable B AVG") << tr("GroundCable C AVG")
-                                                     << tr("GroundCable N AVG"), colorList);
+    colorList.append(Qt::darkMagenta);
+
+    this->ui->tab_mainCable->initCurves(1, QStringList() << tr("主缆电流值"), colorList);
+    this->ui->tab_groundCable_2->initCurves(3, QStringList() << tr("A相接头温度值") <<
+                                                     tr("B相接头温度值") << tr("C相接头温度值")
+                                                    , colorList);
+    this->ui->tab_groundCable->initCurves(4, QStringList() << tr("A相电流值") <<
+                                                     tr("B相电流值") << tr("C相电流值")
+                                                     << tr("N相电流值"), colorList);
     //===============初始化数据显示表==================
     clear_rt_data();
     clear_alarm_data();
@@ -856,10 +865,10 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
             CableCurrent current_C(this->ground_current_C, GroundCablePhaseC);
             current_C.time = frameTime;
             emit DBsave(this->deviceID, current_C);
-            CableCurrent current_ALL(this->ground_current_ALL, GroundCablePhaseALL);
+            CableCurrent current_ALL(this->ground_current_ALL, GroundCablePhaseN);
             current_ALL.time = frameTime;
             emit DBsave(this->deviceID, current_ALL);
-            CableCurrent current_OP(this->op_current, GroundCablePhaseOP);
+            CableCurrent current_OP(this->op_current, GroundCablePhaseMain);
             current_OP.time = frameTime;
             emit DBsave(this->deviceID, current_OP);
 
@@ -867,7 +876,10 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
             this->ui->tab_groundCable->addData(1, frameTime, this->ground_current_B);
             this->ui->tab_groundCable->addData(2, frameTime, this->ground_current_C);
             this->ui->tab_groundCable->addData(3, frameTime, this->ground_current_ALL);
-            this->ui->tab_groundCable->addData(4, frameTime, this->op_current);
+
+            this->ui->tab_mainCable->addData(0, frameTime, this->op_current);
+
+
             
             this->connector_temp_A = (float)(((data_tmp[FRAME_CONNECTOR_TEMP_A_OFFSET] << 8) | data_tmp[FRAME_CONNECTOR_TEMP_A_OFFSET+1]) - 2731) / 10;
             qDebug() << "A相接头温度： " << this->connector_temp_A;
@@ -875,6 +887,10 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
             qDebug() << "B相接头温度： " << this->connector_temp_B;
             this->connector_temp_C = (float)(((data_tmp[FRAME_CONNECTOR_TEMP_C_OFFSET] << 8) | data_tmp[FRAME_CONNECTOR_TEMP_C_OFFSET+1]) - 2731) / 10;
             qDebug() << "C相接头温度： " << this->connector_temp_C;
+
+            this->ui->tab_groundCable_2->addData(0, frameTime, this->connector_temp_A);
+            this->ui->tab_groundCable_2->addData(1, frameTime, this->connector_temp_B);
+            this->ui->tab_groundCable_2->addData(2, frameTime, this->connector_temp_C);
 
             CableCurrent connector_A(this->connector_temp_A, ConnectorATemp);
             connector_A.time = frameTime;
@@ -906,7 +922,8 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
             qDebug() << "C相Y轴姿态： " << this->c_y_axis;
             this->c_z_axis = ((data_tmp[FRAME_C_Z_AXIS_OFFSET] << 8) | data_tmp[FRAME_C_Z_AXIS_OFFSET+1]) - 16000; //C相Z轴姿态
             qDebug() << "C相Z轴姿态： " << this->c_z_axis;
-            
+
+
             this->ui->tableWidget->item(0,1)->setText(QString::number(ground_current_A, 'f', 3)+" A");
             this->ui->tableWidget->item(0,2)->setText(QString::number(ground_current_B, 'f', 3)+" A");
             this->ui->tableWidget->item(0,3)->setText(QString::number(ground_current_C, 'f', 3)+" A");
@@ -923,6 +940,7 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
             this->ui->tableWidget->item(6,2)->setText(QString::number(c_y_axis, 'f', 3));
             this->ui->tableWidget->item(6,3)->setText(QString::number(c_z_axis, 'f', 3));
 
+            this->start_recv_rt_data = 1;
         }
     }
 }
@@ -944,13 +962,14 @@ void CableDataWidget::upData_UI(electricCableMetaData data)
         }else
         {
             this->itemNormal(0,0);
+            this->ui->tab_mainCable->addData(0,data.time,data.value);
         }
         break;
     case MainCable_AVG:
-        qDebug()<< "主缆电流平均值"<< data.value;
+        qDebug()<< "主缆电流值"<< data.value;
         this->ui->tableWidget->item(1,0)->setText(QString::number(data.value, 'f', 3)+" A");
         this->itemNormal(1,0);
-        this->ui->tab_mainCable->addData(0,data.time,data.value);
+        //this->ui->tab_mainCable->addData(0,data.time,data.value);
         break;
     case MainCable_MAX:
         qDebug()<< "主缆电流最大值"<< data.value;
@@ -967,17 +986,18 @@ void CableDataWidget::upData_UI(electricCableMetaData data)
         this->ui->tableWidget->item(0,1)->setText(QString::number(data.value, 'f', 3)+" A");
         if(this->phase_A_cable_eleCur_ThresholdValue <= data.value)
         {
-            this->itemAlarm(0,1);
+            this->itemAlarm(1,1);
         }else
         {
-            this->itemNormal(0,1);
+            this->itemNormal(1,1);
+            this->ui->tab_groundCable_2->addData(4,data.time,data.value);
         }
         break;
     case GroundCablePhaseA_AVG:
         qDebug()<< "A相电流平均值"<< data.value;
         this->ui->tableWidget->item(1,1)->setText(QString::number(data.value, 'f', 3)+" A");
         this->itemNormal(1,1);
-        this->ui->tab_groundCable->addData(0,data.time,data.value);
+        //this->ui->tab_groundCable->addData(0,data.time,data.value);
         break;
     case GroundCablePhaseA_MAX:
         qDebug()<< "A相电流最大值"<< data.value;
@@ -994,17 +1014,18 @@ void CableDataWidget::upData_UI(electricCableMetaData data)
         this->ui->tableWidget->item(0,2)->setText(QString::number(data.value, 'f', 3)+" A");
         if(this->phase_B_cable_eleCur_ThresholdValue <= data.value)
         {
-            this->itemAlarm(0,2);
+            this->itemAlarm(1,2);
         }else
         {
-            this->itemNormal(0,2);
+            this->itemNormal(1,2);
+             this->ui->tab_groundCable_2->addData(5,data.time,data.value);
         }
         break;
     case GroundCablePhaseB_AVG:
         qDebug()<< "B相电流平均值"<< data.value;
         this->ui->tableWidget->item(1,2)->setText(QString::number(data.value, 'f', 3)+" A");
          this->itemNormal(1,2);
-        this->ui->tab_groundCable->addData(1,data.time,data.value);
+        //this->ui->tab_groundCable->addData(1,data.time,data.value);
         break;
     case GroundCablePhaseB_MAX:
         qDebug()<< "B相电流最大值"<< data.value;
@@ -1021,17 +1042,18 @@ void CableDataWidget::upData_UI(electricCableMetaData data)
         this->ui->tableWidget->item(0,3)->setText(QString::number(data.value, 'f', 3)+" A");
         if(this->phase_C_cable_eleCur_ThresholdValue <= data.value)
         {
-             this->itemAlarm(0,3);
+             this->itemAlarm(1,3);
         }else
         {
-             this->itemNormal(0,3);
+             this->itemNormal(1,3);
+             this->ui->tab_groundCable_2->addData(6,data.time,data.value);
         }
         break;
     case GroundCablePhaseC_AVG:
         qDebug()<< "C相电流平均值"<< data.value;
         this->ui->tableWidget->item(1,3)->setText(QString::number(data.value, 'f', 3)+" A");
         this->itemNormal(1,3);
-        this->ui->tab_groundCable->addData(2,data.time,data.value);
+       // this->ui->tab_groundCable->addData(2,data.time,data.value);
         break;
     case GroundCablePhaseC_MAX:
         qDebug()<< "C相电流最大值"<< data.value;
@@ -1052,13 +1074,14 @@ void CableDataWidget::upData_UI(electricCableMetaData data)
         }else
         {
             this->itemNormal(0,4);
+            this->ui->tab_groundCable->addData(0,data.time,data.value);
         }
         break;
     case GroundCablePhaseN_AVG:
         qDebug()<< "N相电流平均值"<< data.value;
         this->ui->tableWidget->item(1,4)->setText(QString::number(data.value, 'f', 3)+" A");
         this->itemNormal(1,4);
-        this->ui->tab_groundCable->addData(3,data.time,data.value);
+       // this->ui->tab_groundCable->addData(3,data.time,data.value);
         break;
     case GroundCablePhaseN_MAX:
         qDebug()<< "A相电流最大值"<< data.value;
@@ -1084,6 +1107,7 @@ void CableDataWidget::upData_UI(electricCableMetaData data)
             }else
             {
                 this->itemNormal(4,1);
+                this->ui->tab_groundCable_2->addData(4,data.time,data.value);
             }
         }
         break;
@@ -1128,6 +1152,7 @@ void CableDataWidget::upData_UI(electricCableMetaData data)
             }else
             {
                 this->itemNormal(4,2);
+                this->ui->tab_groundCable_2->addData(5,data.time,data.value);
             }
         }
         break;
@@ -1172,6 +1197,7 @@ void CableDataWidget::upData_UI(electricCableMetaData data)
             }else
             {
                 this->itemNormal(4,3);
+                 this->ui->tab_groundCable_2->addData(6,data.time,data.value);
             }
         }
         break;
@@ -1471,12 +1497,12 @@ void CableDataWidget::upData_UI(electricCableMetaData data)
         this->item_time_table(25,1,data.time);
         break;
 
-    case InputVolt:
+    /*case InputVolt:
         qDebug()<< "输入电压："<< data.value<<"V";
         this->ui->label_InputVol->setText(QString::number(data.value, 'f', 3)+"V");
         break;
     default:
-        break;
+        break;*/
     }
 }
 
@@ -1586,20 +1612,20 @@ void CableDataWidget::sendData_slot()
         this->autogetStatisticFlag = false;
         this->autogetStatisticFlag = false;        
         this->autogetAlarmDataFlag = false;
-        if(this->ui->checkBox->isChecked())
+        /*if(this->ui->checkBox->isChecked())
         {
             this->autoGetDataTimer->start();
 
-        }
+        }*/
         if(this->ui->checkBox_alarm_value->isChecked())
         {
             this->autoGetAlarmDataTimer->start();
         }
-        if(this->ui->checkBox_statistics_value->isChecked())
+        /*if(this->ui->checkBox_statistics_value->isChecked())
         {
             this->autoGetStatisticTimer->start();
         }
-        this->setDataFlag = false;
+        this->setDataFlag = false;*/
         if(this->sendData.count() !=0)
         {
             this->sendDataFrame(this->sendData);
@@ -1639,6 +1665,22 @@ void CableDataWidget::sendData_slot()
 //        myHelper::Delay_MSec(100);
         this->sendDataFrame(comProtocol::assembleAlarmData1RequestFrame(this->deviceID.getDeviceId()));
     }
+    if (this->start_recv_rt_data)
+    {
+        this->ui->label_38->setText(QString::number(ups_vol) + " V");
+        this->ui->label_44->setText(QString::number(env_temp) + " ℃");
+        uint day,hour,minute,second;
+
+        day = this->runtime_in_seconds / 86400;
+        hour = (this->runtime_in_seconds % 86400) / 3600;
+        minute = ((this->runtime_in_seconds % 86400) % 3600) / 60;
+        second = ((this->runtime_in_seconds % 86400) % 3600) % 60;
+
+        QString str;
+        str.sprintf("%d 天 %d 小时 %d 分 %d 秒", day, hour, minute, second);
+        this->ui->label_34->setText(str);
+    }
+
 }
 
 void CableDataWidget::clear_rt_data()
@@ -1651,6 +1693,7 @@ void CableDataWidget::clear_rt_data()
             this->ui->tableWidget->setItem(j,i,item);
             if(list_display_rt_data.length() != 5*this->ui->tableWidget->rowCount())
             list_display_rt_data.append(QString("无信息"));
+
         }
     }
 }
@@ -2445,7 +2488,7 @@ void CableDataWidget::on_pushButton_save_alarm_value_clicked()
     save_Alarm_data();
 }
 
-void CableDataWidget::on_checkBox_statistics_value_clicked(bool checked)
+/*void CableDataWidget::on_checkBox_statistics_value_clicked(bool checked)
 {
     if(checked == true)
     {
@@ -2455,7 +2498,7 @@ void CableDataWidget::on_checkBox_statistics_value_clicked(bool checked)
     {
         this->autoGetStatisticTimer->stop();
     }
-}
+}*/
 
 void CableDataWidget::on_pushButton_statistics_value_clicked()
 {
@@ -2608,17 +2651,17 @@ void CableDataWidget::on_channelControlReadPushButton_clicked()
 
 void CableDataWidget::slot_auto_get_RT_time(bool flag, qint32 time)
 {
-    if(this->ui->checkBox->isChecked() != flag)
+    /*if(this->ui->checkBox->isChecked() != flag)
     {
         this->ui->checkBox->setChecked(flag);
-    }
+    }*/
     if(this->ui->spinBox->value() != time)
     {
         this->ui->spinBox->setValue(time);
     }
 }
 
-void CableDataWidget::slot_auto_get_ST_time(bool flag, qint32 time)
+/*void CableDataWidget::slot_auto_get_ST_time(bool flag, qint32 time)
 {
     if(this->ui->checkBox_statistics_value->isChecked() != flag)
     {
@@ -2628,7 +2671,7 @@ void CableDataWidget::slot_auto_get_ST_time(bool flag, qint32 time)
     {
         this->ui->spinBox_statistics_value->setValue(time);
     }
-}
+}*/
 
 void CableDataWidget::slot_auto_get_AL_time(bool flag, qint32 time)
 {
@@ -2644,12 +2687,12 @@ void CableDataWidget::slot_auto_get_AL_time(bool flag, qint32 time)
 
 void CableDataWidget::slot_stop_get_data()
 {
-    this->ui->checkBox->setChecked(false);
-    this->ui->checkBox_statistics_value->setChecked(false);
+    /*this->ui->checkBox->setChecked(false);
+    this->ui->checkBox_statistics_value->setChecked(false);*/
     this->ui->checkBox_alarm_value->setChecked(false);
 }
 
-void CableDataWidget::on_checkBox_statistics_value_toggled(bool checked)
+/*void CableDataWidget::on_checkBox_statistics_value_toggled(bool checked)
 {
     if(checked)
     {
@@ -2660,7 +2703,8 @@ void CableDataWidget::on_checkBox_statistics_value_toggled(bool checked)
     {
         this->autoGetStatisticTimer->stop();
     }
-}
+}*/
+
 
 void CableDataWidget::on_checkBox_alarm_value_toggled(bool checked)
 {
@@ -2704,4 +2748,15 @@ CableCurrent::CableCurrent(float value, enum current_type type)
 {
     this->ground_current = value;
     this->type = type;
+}
+
+void CableDataWidget::on_tab_mainCable_destroyed()
+{
+
+}
+
+
+void CableDataWidget::on_label_34_linkActivated(const QString &link)
+{
+
 }

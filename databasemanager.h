@@ -23,7 +23,6 @@
 #define GROUNDCABLE_B_TABLE QString("groundcable_b_table")
 #define GROUNDCABLE_C_TABLE QString("groundcable_c_table")
 #define GROUNDCABLE_N_TABLE QString("groundcable_n_table")
-#define GROUNDCABLE_OP_TABLE QString("groundcable_op_table")
 #define CONNECTOR_A_TABLE QString("connector_a_table")
 #define CONNECTOR_B_TABLE QString("connector_b_table")
 #define CONNECTOR_C_TABLE QString("connector_c_table")
