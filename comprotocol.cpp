@@ -1463,9 +1463,7 @@ float comProtocol::getDeviceTemp(uint8_t *message, int msgLen)
     float temp_float = 0;
 
     temp_hex = (message[0] << 8) | message[1];
-    temp_float = ((float)temp_hex) / 10 - 273.1;
-
-    qDebug() << "环境温度： " << temp_float;
+    temp_float = (float)((temp_hex)  - 2731) / 10;
 
     return temp_float;
 }
