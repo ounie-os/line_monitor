@@ -443,7 +443,6 @@ public:
          << QApplication::translate("MonitorMainWindow", "A\347\233\270\347\224\265\346\265\201\345\200\274", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("MonitorMainWindow", "B\347\233\270\347\224\265\346\265\201\345\200\274", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("MonitorMainWindow", "C\347\233\270\347\224\265\346\265\201\345\200\274", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("MonitorMainWindow", "\344\270\273\347\274\206\347\224\265\346\265\201\345\200\274", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("MonitorMainWindow", "A\347\233\270\346\216\245\345\244\264\346\270\251\345\272\246\345\200\274", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("MonitorMainWindow", "B\347\233\270\346\216\245\345\244\264\346\270\251\345\272\246\345\200\274", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("MonitorMainWindow", "C\347\233\270\346\216\245\345\244\264\346\270\251\345\272\246\345\200\274", 0, QApplication::UnicodeUTF8)
