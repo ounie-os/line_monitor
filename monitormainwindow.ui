@@ -259,11 +259,6 @@
                          </item>
                          <item>
                           <property name="text">
-                           <string>主缆电流值</string>
-                          </property>
-                         </item>
-                         <item>
-                          <property name="text">
                            <string>A相接头温度值</string>
                           </property>
                          </item>

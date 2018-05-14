@@ -789,12 +789,13 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
 #define FRAME_HEAD_OFFSET (0) // 帧头
 #define FRAME_OPTIME_OFFSET (25) // 运行时间
 #define FRAME_UPSVOL_OFFSET (29) // UPS电压
-#define FRAME_ENVTEMP_OFFSET (31) // 环境温度
+#define FRAME_DEVTEMP_OFFSET (31) // 本机温度
 #define FRAME_GROUND_CURRENT_A_OFFSET (33) // A相接地电流
 #define FRAME_GROUND_CURRENT_B_OFFSET (37) // B相接地电流
 #define FRAME_GROUND_CURRENT_C_OFFSET (41) // C相接地电流
 #define FRAME_GROUND_CURRENT_ALL_OFFSET (45) // 总接地电流
 #define FRAME_OP_CURRENT_OFFSET       (49) // 运行电流
+#define FRAME_ENVTEMP_OFFSET (53) // 环境温度
 #define FRAME_CONNECTOR_TEMP_A_OFFSET (61) // A相接头温度
 #define FRAME_CONNECTOR_TEMP_B_OFFSET (71) // B相接头温度
 #define FRAME_CONNECTOR_TEMP_C_OFFSET (81) // C相接头温度
@@ -825,6 +826,9 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
             this->runtime_in_seconds = comProtocol::getRunTime(&data_tmp[FRAME_OPTIME_OFFSET], 4); // 获取运行时间
             this->ups_vol = comProtocol::getUpsVoltage(&data_tmp[FRAME_UPSVOL_OFFSET], 2); // 获取UPS电压
             this->env_temp = comProtocol::getDeviceTemp(&data_tmp[FRAME_ENVTEMP_OFFSET], 2); // 获取环境温度
+            qDebug() << "环境温度： " << this->env_temp;
+            this->dev_temp = comProtocol::getDeviceTemp(&data_tmp[FRAME_DEVTEMP_OFFSET], 2); // 获取本机温度
+            qDebug() << "本机温度： " << this->dev_temp;
 
             uint_ground_current_A = data_tmp[FRAME_GROUND_CURRENT_A_OFFSET] | (data_tmp[FRAME_GROUND_CURRENT_A_OFFSET+1] << 8) | (data_tmp[FRAME_GROUND_CURRENT_A_OFFSET+2] << 16) | (data_tmp[FRAME_GROUND_CURRENT_A_OFFSET+3] << 24);
             qDebug() << "A相接地电流： " << ground_current_A;
@@ -852,9 +856,8 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
             this->uint_op_current = uint_op_current;
 
             QDateTime frameTime;
-            static uint32_t secPassed = 1507601525;
-            secPassed++;
-            frameTime.setTime_t(secPassed);
+
+            frameTime = QDateTime::currentDateTime();
 
             CableCurrent current_A(this->ground_current_A, GroundCablePhaseA);
             current_A.time = frameTime;
@@ -927,18 +930,18 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
             this->ui->tableWidget->item(0,1)->setText(QString::number(ground_current_A, 'f', 3)+" A");
             this->ui->tableWidget->item(0,2)->setText(QString::number(ground_current_B, 'f', 3)+" A");
             this->ui->tableWidget->item(0,3)->setText(QString::number(ground_current_C, 'f', 3)+" A");
-            this->ui->tableWidget->item(1,1)->setText(QString::number(connector_temp_A, 'f', 3)+" C");
-            this->ui->tableWidget->item(1,2)->setText(QString::number(connector_temp_B, 'f', 3)+" C");
-            this->ui->tableWidget->item(1,3)->setText(QString::number(connector_temp_C, 'f', 3)+" C");
-            this->ui->tableWidget->item(4,1)->setText(QString::number(a_x_axis, 'f', 3));
-            this->ui->tableWidget->item(4,2)->setText(QString::number(a_y_axis, 'f', 3));
-            this->ui->tableWidget->item(4,3)->setText(QString::number(a_z_axis, 'f', 3));
-            this->ui->tableWidget->item(5,1)->setText(QString::number(b_x_axis, 'f', 3));
-            this->ui->tableWidget->item(5,2)->setText(QString::number(b_y_axis, 'f', 3));
-            this->ui->tableWidget->item(5,3)->setText(QString::number(b_z_axis, 'f', 3));
-            this->ui->tableWidget->item(6,1)->setText(QString::number(c_x_axis, 'f', 3));
-            this->ui->tableWidget->item(6,2)->setText(QString::number(c_y_axis, 'f', 3));
-            this->ui->tableWidget->item(6,3)->setText(QString::number(c_z_axis, 'f', 3));
+            this->ui->tableWidget->item(1,1)->setText(QString::number(connector_temp_A, 'f', 3)+" ℃");
+            this->ui->tableWidget->item(1,2)->setText(QString::number(connector_temp_B, 'f', 3)+" ℃");
+            this->ui->tableWidget->item(1,3)->setText(QString::number(connector_temp_C, 'f', 3)+" ℃");
+            this->ui->tableWidget->item(4,1)->setText(QString::number(a_x_axis));
+            this->ui->tableWidget->item(4,2)->setText(QString::number(a_y_axis));
+            this->ui->tableWidget->item(4,3)->setText(QString::number(a_z_axis));
+            this->ui->tableWidget->item(5,1)->setText(QString::number(b_x_axis));
+            this->ui->tableWidget->item(5,2)->setText(QString::number(b_y_axis));
+            this->ui->tableWidget->item(5,3)->setText(QString::number(b_z_axis));
+            this->ui->tableWidget->item(6,1)->setText(QString::number(c_x_axis));
+            this->ui->tableWidget->item(6,2)->setText(QString::number(c_y_axis));
+            this->ui->tableWidget->item(6,3)->setText(QString::number(c_z_axis));
 
             this->start_recv_rt_data = 1;
         }
@@ -1667,8 +1670,9 @@ void CableDataWidget::sendData_slot()
     }
     if (this->start_recv_rt_data)
     {
-        this->ui->label_38->setText(QString::number(ups_vol) + " V");
-        this->ui->label_44->setText(QString::number(env_temp) + " ℃");
+        this->ui->label_38->setText(QString::number(ups_vol, 'f', 3) + " V");
+        this->ui->label_44->setText(QString::number(env_temp, 'f', 1) + " ℃");
+        this->ui->label_46->setText(QString::number(dev_temp, 'f', 1) + " ℃");
         uint day,hour,minute,second;
 
         day = this->runtime_in_seconds / 86400;
@@ -1689,10 +1693,10 @@ void CableDataWidget::clear_rt_data()
     {
         for(int j=0;j<this->ui->tableWidget->rowCount();j++)
         {
-            QTableWidgetItem *item = new QTableWidgetItem(tr("无信息"));
+            QTableWidgetItem *item = new QTableWidgetItem(tr("/"));
             this->ui->tableWidget->setItem(j,i,item);
             if(list_display_rt_data.length() != 5*this->ui->tableWidget->rowCount())
-            list_display_rt_data.append(QString("无信息"));
+            list_display_rt_data.append(QString("/"));
 
         }
     }
@@ -1702,12 +1706,12 @@ void CableDataWidget::clear_alarm_data()
 {
     for(int i=0;i<this->ui->tableWidget_alarm_value->rowCount();i++)
     {
-        this->ui->tableWidget_alarm_value->item(i,0)->setText("无信息");
-        this->ui->tableWidget_alarm_value->item(i,1)->setText("无信息");
+        this->ui->tableWidget_alarm_value->item(i,0)->setText("/");
+        this->ui->tableWidget_alarm_value->item(i,1)->setText("/");
         if(list_display_Alarm_data.length() != this->ui->tableWidget_alarm_value->rowCount()*2)
         {
-            list_display_Alarm_data.append(QString("无信息"));
-            list_display_Alarm_data.append(QString("无信息"));
+            list_display_Alarm_data.append(QString("/"));
+            list_display_Alarm_data.append(QString("/"));
         }
     }
 }

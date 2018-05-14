@@ -230,6 +230,7 @@ private:
     uint runtime_in_seconds;
     float ups_vol;
     float env_temp;
+    float dev_temp;
 
     uint start_recv_rt_data;
 
