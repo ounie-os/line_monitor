@@ -29,6 +29,14 @@ private slots:
 
     void deviceNameItemEditting(QTableWidgetItem *item);
     void deviceNameItemEditted(QTableWidgetItem *item);
+    void on_createPushButton_clicked();
+
+    void on_createPushButton_clicked(bool checked);
+
+    void on_createPushButton_pressed();
+
+    void on_createPushButton_windowIconChanged(const QIcon &icon);
+
 private:
     Ui::deviceRegisterDialog *ui;
     QHash<QByteArray, CableMonitorDevice> *deviceTable;
