@@ -44,7 +44,7 @@ public:
     {
         if (hcSystemNetConfigDialog->objectName().isEmpty())
             hcSystemNetConfigDialog->setObjectName(QString::fromUtf8("hcSystemNetConfigDialog"));
-        hcSystemNetConfigDialog->resize(268, 99);
+        hcSystemNetConfigDialog->resize(268, 101);
         horizontalLayout_4 = new QHBoxLayout(hcSystemNetConfigDialog);
         horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
         verticalLayout = new QVBoxLayout();
@@ -117,8 +117,8 @@ public:
     void retranslateUi(QDialog *hcSystemNetConfigDialog)
     {
         hcSystemNetConfigDialog->setWindowTitle(QApplication::translate("hcSystemNetConfigDialog", "Dialog", 0, QApplication::UnicodeUTF8));
-        label_5->setText(QApplication::translate("hcSystemNetConfigDialog", "IP Address:", 0, QApplication::UnicodeUTF8));
-        label_6->setText(QApplication::translate("hcSystemNetConfigDialog", "Port:", 0, QApplication::UnicodeUTF8));
+        label_5->setText(QApplication::translate("hcSystemNetConfigDialog", "IP \345\234\260\345\235\200:", 0, QApplication::UnicodeUTF8));
+        label_6->setText(QApplication::translate("hcSystemNetConfigDialog", "\347\253\257\345\217\243:", 0, QApplication::UnicodeUTF8));
         okPushButton->setText(QApplication::translate("hcSystemNetConfigDialog", "OK", 0, QApplication::UnicodeUTF8));
         cancelPushButton->setText(QApplication::translate("hcSystemNetConfigDialog", "Cancel", 0, QApplication::UnicodeUTF8));
     } // retranslateUi

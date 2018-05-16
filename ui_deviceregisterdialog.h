@@ -140,11 +140,11 @@ public:
     void retranslateUi(QDialog *deviceRegisterDialog)
     {
         deviceRegisterDialog->setWindowTitle(QApplication::translate("deviceRegisterDialog", "Dialog", 0, QApplication::UnicodeUTF8));
-        label->setText(QApplication::translate("deviceRegisterDialog", "Device ID:", 0, QApplication::UnicodeUTF8));
-        label_2->setText(QApplication::translate("deviceRegisterDialog", "Device Name:", 0, QApplication::UnicodeUTF8));
-        label_3->setText(QApplication::translate("deviceRegisterDialog", "Device User:", 0, QApplication::UnicodeUTF8));
-        createPushButton->setText(QApplication::translate("deviceRegisterDialog", "Create", 0, QApplication::UnicodeUTF8));
-        removePushButton->setText(QApplication::translate("deviceRegisterDialog", "Remove", 0, QApplication::UnicodeUTF8));
+        label->setText(QApplication::translate("deviceRegisterDialog", "\350\256\276\345\244\207 ID:", 0, QApplication::UnicodeUTF8));
+        label_2->setText(QApplication::translate("deviceRegisterDialog", "\350\256\276\345\244\207\345\220\215:", 0, QApplication::UnicodeUTF8));
+        label_3->setText(QApplication::translate("deviceRegisterDialog", "\350\256\276\345\244\207\347\224\250\346\210\267:", 0, QApplication::UnicodeUTF8));
+        createPushButton->setText(QApplication::translate("deviceRegisterDialog", "\345\210\233\345\273\272", 0, QApplication::UnicodeUTF8));
+        removePushButton->setText(QApplication::translate("deviceRegisterDialog", "\347\247\273\351\231\244", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

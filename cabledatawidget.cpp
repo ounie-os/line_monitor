@@ -799,6 +799,7 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
 #define FRAME_CONNECTOR_TEMP_A_OFFSET (61) // A相接头温度
 #define FRAME_CONNECTOR_TEMP_B_OFFSET (71) // B相接头温度
 #define FRAME_CONNECTOR_TEMP_C_OFFSET (81) // C相接头温度
+#define FRAME_ENVHUMIDITY_OFFSET (99) // 环境湿度
 #define FRAME_A_X_AXIS_OFFSET (55) // A轴X姿态数据
 #define FRAME_A_Y_AXIS_OFFSET (57) // A轴Y姿态数据
 #define FRAME_A_Z_AXIS_OFFSET (59) // A轴Z姿态数据
@@ -829,6 +830,8 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
             qDebug() << "环境温度： " << this->env_temp;
             this->dev_temp = comProtocol::getDeviceTemp(&data_tmp[FRAME_DEVTEMP_OFFSET], 2); // 获取本机温度
             qDebug() << "本机温度： " << this->dev_temp;
+            this->env_humidity = comProtocol::getDeviceTemp(&data_tmp[FRAME_ENVHUMIDITY_OFFSET], 2); //获取环境湿度
+            qDebug() << "环境温度： " << this->env_humidity;
 
             uint_ground_current_A = data_tmp[FRAME_GROUND_CURRENT_A_OFFSET] | (data_tmp[FRAME_GROUND_CURRENT_A_OFFSET+1] << 8) | (data_tmp[FRAME_GROUND_CURRENT_A_OFFSET+2] << 16) | (data_tmp[FRAME_GROUND_CURRENT_A_OFFSET+3] << 24);
             qDebug() << "A相接地电流： " << ground_current_A;
@@ -848,7 +851,14 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
                 float current_C_rate = this->calc_current_rate(ground_current_C, this->uint_ground_current_C);
                 float current_ALL_rate = this->calc_current_rate(ground_current_ALL, this->ground_current_ALL);
                 float current_OP_rate = this->calc_current_rate(op_current, this->op_current);
+
+                this->ui->tableWidget->item(2,0)->setText(QString::number(current_OP_rate, 'f', 3)+" A/S");
+                this->ui->tableWidget->item(2,1)->setText(QString::number(current_A_rate, 'f', 3)+" A/S");
+                this->ui->tableWidget->item(2,2)->setText(QString::number(current_B_rate, 'f', 3)+" A/S");
+                this->ui->tableWidget->item(2,3)->setText(QString::number(current_C_rate, 'f', 3)+" A/S");
+                this->ui->tableWidget->item(2,4)->setText(QString::number(current_ALL_rate, 'f', 3)+" A/S");
             }
+            
             this->uint_ground_current_A = uint_ground_current_A;
             this->uint_ground_current_B = uint_ground_current_B;
             this->uint_ground_current_C = uint_ground_current_C;
@@ -881,8 +891,6 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
             this->ui->tab_groundCable->addData(3, frameTime, this->ground_current_ALL);
 
             this->ui->tab_mainCable->addData(0, frameTime, this->op_current);
-
-
             
             this->connector_temp_A = (float)(((data_tmp[FRAME_CONNECTOR_TEMP_A_OFFSET] << 8) | data_tmp[FRAME_CONNECTOR_TEMP_A_OFFSET+1]) - 2731) / 10;
             qDebug() << "A相接头温度： " << this->connector_temp_A;
@@ -926,10 +934,11 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
             this->c_z_axis = ((data_tmp[FRAME_C_Z_AXIS_OFFSET] << 8) | data_tmp[FRAME_C_Z_AXIS_OFFSET+1]) - 16000; //C相Z轴姿态
             qDebug() << "C相Z轴姿态： " << this->c_z_axis;
 
-
+            this->ui->tableWidget->item(0,0)->setText(QString::number(op_current, 'f', 3)+" A");
             this->ui->tableWidget->item(0,1)->setText(QString::number(ground_current_A, 'f', 3)+" A");
             this->ui->tableWidget->item(0,2)->setText(QString::number(ground_current_B, 'f', 3)+" A");
             this->ui->tableWidget->item(0,3)->setText(QString::number(ground_current_C, 'f', 3)+" A");
+            this->ui->tableWidget->item(0,4)->setText(QString::number(ground_current_ALL, 'f', 3)+" A");        
             this->ui->tableWidget->item(1,1)->setText(QString::number(connector_temp_A, 'f', 3)+" ℃");
             this->ui->tableWidget->item(1,2)->setText(QString::number(connector_temp_B, 'f', 3)+" ℃");
             this->ui->tableWidget->item(1,3)->setText(QString::number(connector_temp_C, 'f', 3)+" ℃");
@@ -1673,6 +1682,7 @@ void CableDataWidget::sendData_slot()
         this->ui->label_38->setText(QString::number(ups_vol, 'f', 3) + " V");
         this->ui->label_44->setText(QString::number(env_temp, 'f', 1) + " ℃");
         this->ui->label_46->setText(QString::number(dev_temp, 'f', 1) + " ℃");
+        this->ui->label_42->setText(QString::number(env_humidity, 'f', 1) + " %RH");
         uint day,hour,minute,second;
 
         day = this->runtime_in_seconds / 86400;
@@ -2218,7 +2228,19 @@ void CableDataWidget::on_checkBox_toggled(bool checked)
     }else
     {
         this->autoGetDataTimer->stop();
+
+        this->ui->tableWidget->item(2,0)->setText("/");
+        this->ui->tableWidget->item(2,1)->setText("/");
+        this->ui->tableWidget->item(2,2)->setText("/");
+        this->ui->tableWidget->item(2,3)->setText("/");
+        this->ui->tableWidget->item(2,4)->setText("/");
     }
+    
+    this->uint_ground_current_A = 0;
+    this->uint_ground_current_B = 0;
+    this->uint_ground_current_C = 0;
+    this->uint_ground_current_ALL = 0;
+    this->uint_op_current = 0;
 }
 /*!
  * \brief CableDataWidget::on_rtcTimingPushButton_clicked

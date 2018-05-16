@@ -231,6 +231,7 @@ private:
     float ups_vol;
     float env_temp;
     float dev_temp;
+    float env_humidity;
 
     uint start_recv_rt_data;
 
