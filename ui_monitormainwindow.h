@@ -110,6 +110,7 @@ public:
         MonitorMainWindow->setSizePolicy(sizePolicy);
         MonitorMainWindow->setMinimumSize(QSize(1000, 600));
         MonitorMainWindow->setFocusPolicy(Qt::NoFocus);
+        MonitorMainWindow->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
         action_data = new QAction(MonitorMainWindow);
         action_data->setObjectName(QString::fromUtf8("action_data"));
         action_history = new QAction(MonitorMainWindow);
@@ -177,9 +178,8 @@ public:
         groupBox_2->setSizePolicy(sizePolicy1);
         horizontalLayout_6 = new QHBoxLayout(groupBox_2);
         horizontalLayout_6->setSpacing(0);
-        horizontalLayout_6->setContentsMargins(11, 11, 11, 11);
-        horizontalLayout_6->setObjectName(QString::fromUtf8("horizontalLayout_6"));
         horizontalLayout_6->setContentsMargins(0, 0, 0, 0);
+        horizontalLayout_6->setObjectName(QString::fromUtf8("horizontalLayout_6"));
         stackedWidget = new QStackedWidget(groupBox_2);
         stackedWidget->setObjectName(QString::fromUtf8("stackedWidget"));
         sizePolicy1.setHeightForWidth(stackedWidget->sizePolicy().hasHeightForWidth());
@@ -344,9 +344,8 @@ public:
         groupBox_3->setSizePolicy(sizePolicy1);
         horizontalLayout_4 = new QHBoxLayout(groupBox_3);
         horizontalLayout_4->setSpacing(0);
-        horizontalLayout_4->setContentsMargins(11, 11, 11, 11);
-        horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
         horizontalLayout_4->setContentsMargins(0, 0, 0, 0);
+        horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
         textBrowser = new QTextBrowser(groupBox_3);
         textBrowser->setObjectName(QString::fromUtf8("textBrowser"));
         QSizePolicy sizePolicy5(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -381,6 +380,7 @@ public:
         MonitorMainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MonitorMainWindow);
         mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
+        mainToolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
         MonitorMainWindow->addToolBar(Qt::TopToolBarArea, mainToolBar);
 
         menuBar->addAction(menu_2->menuAction());
@@ -397,7 +397,7 @@ public:
         menu_3->addAction(action_set_map);
         menu_4->addAction(action_CableMonitor);
         mainToolBar->addAction(action_connect_485);
-        mainToolBar->addAction(action_connect_network);
+        mainToolBar->addAction(action_connet_server);
         mainToolBar->addAction(action_clearLog);
         mainToolBar->addAction(action_cnt_com_failed);
         mainToolBar->addAction(action_clearCnt);
