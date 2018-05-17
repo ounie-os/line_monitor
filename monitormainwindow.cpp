@@ -281,9 +281,11 @@ void MonitorMainWindow::init()
     this->timer_led->start();
     //============自动连接==============
     this->network_Flag = false;
+    this->b_reconnect  = false;
     this->timer_auto_connect = new QTimer();
     connect(this->timer_auto_connect,  SIGNAL(timeout()), this, SLOT(slot_auto_connect()));
-    this->timer_auto_connect->start(5000);
+    
+
 }
 /*!
  * \brief MonitorMainWindow::printDebug
@@ -850,6 +852,8 @@ void MonitorMainWindow::on_action_connet_server_triggered()
     if(this->hcHostConnctedStatus)
     {
         emit signal_disconnect_to_remote_server();
+        this->timer_auto_connect->stop();
+        this->b_reconnect = false;
     }else
     {
         hcSystemNetConfigDialog *dialog = new hcSystemNetConfigDialog(this);
@@ -906,10 +910,13 @@ void MonitorMainWindow::hcSocketConnectedToServer()
     qDebug() << "成功连接到远端服务器";
     this->ui->action_connet_server->setText("远端服务器断开");
     emit signal_remote_server(true);
+    this->b_reconnect = false;
+    this->timer_auto_connect->start(3000);
 }
 
 void MonitorMainWindow::hcSocketDisconnectedFromServer()
 {
+    this->b_reconnect = true;
     this->hcHostConnctedStatus = false;
     qDebug() << "从远端服务器断开";
     this->ui->action_connet_server->setText("远端服务器连接");
@@ -1145,10 +1152,18 @@ void MonitorMainWindow::on_action_CableMonitor_triggered()
  */
 void MonitorMainWindow::slot_auto_connect()
 {
+#if 0
     if((this->network_Flag == true) && (this->hash_client.count() == 0))
     {
         emit signal_close_server();
         emit signal_open_server();
+    }
+#endif /* 0 */
+
+    if (this->b_reconnect == true)
+    {
+        emit signal_disconnect_to_remote_server();
+        emit signal_connect_to_remote_server();
     }
 }
 

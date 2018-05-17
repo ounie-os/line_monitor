@@ -35,8 +35,6 @@ private slots:
 
     void on_createPushButton_pressed();
 
-    void on_createPushButton_windowIconChanged(const QIcon &icon);
-
 private:
     Ui::deviceRegisterDialog *ui;
     QHash<QByteArray, CableMonitorDevice> *deviceTable;

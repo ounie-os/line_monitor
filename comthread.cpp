@@ -244,6 +244,7 @@ void comThread::sendDataToDevice_slot(QByteArray data)
     this->mutex_send_data.lock();
     if(this->sendData.contains(data))
     {
+        this->mutex_send_data.unlock();
         return;
     }else
     {

@@ -149,6 +149,7 @@ private:
     QThread *comDeviceThread;
     bool com_485_Flag;
     bool network_Flag;
+    bool b_reconnect;
 
     //=============远端服务器=============
     SaveToServer *socket_save_to_server;

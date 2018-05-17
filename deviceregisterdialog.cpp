@@ -167,8 +167,3 @@ void deviceRegisterDialog::on_createPushButton_pressed()
 {
 
 }
-
-void deviceRegisterDialog::on_createPushButton_windowIconChanged(const QIcon &icon)
-{
-
-}
