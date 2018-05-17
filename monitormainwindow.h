@@ -61,6 +61,7 @@ signals:
     void signal_auto_get_AL_time(bool flag, qint32 time);
     void signal_stop_get_data();
     void signal_recv_data_to_ui(QByteArray data);
+    void signal_remote_server(bool flag);
 private slots:
     void printDebug(int type, QString text);
 

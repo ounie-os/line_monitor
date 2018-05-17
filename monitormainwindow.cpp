@@ -461,6 +461,8 @@ void MonitorMainWindow::insertCableDevice(CableMonitorDevice device)
 
     connect(widget,SIGNAL(sendDataToServer(QByteArray)),this,SLOT(send_rt_data_to_server(QByteArray)));
     connect(this, SIGNAL(signal_recv_data_to_ui(QByteArray)), widget, SLOT(receiveDataFromDevice(QByteArray)));
+    connect(this, SIGNAL(signal_remote_server(bool)), widget, SLOT(connect_server_status(bool)));
+    
 }
 /*!
  * \brief MonitorMainWindow::removeCableDevice
@@ -859,6 +861,7 @@ void MonitorMainWindow::on_action_connet_server_triggered()
         {
             qDebug() << "设置系统远端服务器连接IP为：" << dialog->getIPAdress();
             qDebug() << "设置系统远端服务器端口为：" << dialog->getPort();
+            qDebug() << "正在连接...";
 
             this->hcIPAddress = dialog->getIPAdress();
             this->hcHostPort = dialog->getPort();
@@ -900,8 +903,9 @@ void MonitorMainWindow::hcSendDataToServer()
 void MonitorMainWindow::hcSocketConnectedToServer()
 {
     this->hcHostConnctedStatus = true;
-    qDebug() << "连接到远端服务器";
+    qDebug() << "成功连接到远端服务器";
     this->ui->action_connet_server->setText("远端服务器断开");
+    emit signal_remote_server(true);
 }
 
 void MonitorMainWindow::hcSocketDisconnectedFromServer()
@@ -909,6 +913,7 @@ void MonitorMainWindow::hcSocketDisconnectedFromServer()
     this->hcHostConnctedStatus = false;
     qDebug() << "从远端服务器断开";
     this->ui->action_connet_server->setText("远端服务器连接");
+    emit signal_remote_server(false);
 }
 /*!
  * \brief MonitorMainWindow::sendDataToServer_slot

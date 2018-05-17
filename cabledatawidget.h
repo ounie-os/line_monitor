@@ -63,6 +63,7 @@ signals:
     void signal_export_execel(int row,QString path,QStringList str_data);
 private slots:
     void receiveDataFromDevice(QByteArray data);
+    void connect_server_status(bool flag);
 
     void autoGetData_slot();
     void autoGetAlarmData_slot();
@@ -97,11 +98,7 @@ private slots:
     void on_ctReadPushButton_clicked();
     void on_spinBox_valueChanged(const QString &arg1);
 
-    void on_pushButton_clarChart_clicked();
-
     void on_pushButton_ReadRtData_clicked();
-
-    void on_pushButton_InputVol_clicked();
 
     void on_pushButton_setTempThreashold_clicked();
 
@@ -129,8 +126,6 @@ private slots:
 
     void on_pushButton_Read_CurChangerateCycle_clicked();
 
-    void on_pushButton_Read_CurChangerateWindowSize_clicked();
-
     void on_pushButton_read_alarm_value_clicked();
 
     void on_checkBox_alarm_value_clicked(bool checked);
@@ -139,17 +134,9 @@ private slots:
 
     void on_pushButton_clear_alarm_value_clicked();
 
-    void on_pushButton_clear_rt_data_clicked();
-
-    void on_pushButton_save_rt_data_clicked();
-
     void on_pushButton_save_alarm_value_clicked();
 
     //void on_checkBox_statistics_value_clicked(bool checked);
-
-    void on_pushButton_statistics_value_clicked();
-
-    void on_spinBox_statistics_value_valueChanged(int arg1);
 
     void on_supperRootOperationPushButton_clicked();
 
@@ -177,6 +164,8 @@ private:
     QString clientIP;
     CableMonitorDevice deviceID;
     FlagType blindFlag;
+
+    bool is_connected_to_server;
 
     QTimer *sendDataTimer;
     QTimer *autoGetDataTimer;//<自动获取实时数据定时器

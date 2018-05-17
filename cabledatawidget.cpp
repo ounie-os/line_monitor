@@ -33,6 +33,7 @@ CableDataWidget::CableDataWidget(QWidget *parent) :
     save_rt_data_row_count = 0;
     save_alarm_data_row_count = 0;
     start_recv_rt_data = 0;
+    is_connected_to_server = false;
 }
 /*!
  * \brief CableDataWidget::~CableDataWidget
@@ -54,6 +55,7 @@ CableDataWidget::~CableDataWidget()
     }
     this->export_execel->deleteLater();
     this->start_recv_rt_data = 0;
+    this->is_connected_to_server = false;
 }
 /*!
  * \brief CableDataWidget::cableDataWidget_init
@@ -1664,7 +1666,8 @@ void CableDataWidget::sendData_slot()
     {
         this->autogetDataFlag = false;
         this->sendDataFrame(comProtocol::assembleRtDataRequestFrame(this->deviceID.getDeviceId()));
-        emit sendDataToServer(comProtocol::assembleRtDataRequestFrame(this->deviceID.getDeviceId()));
+        if (this->is_connected_to_server)
+            emit sendDataToServer(comProtocol::assembleRtDataRequestFrame(this->deviceID.getDeviceId()));
 //        myHelper::Delay_MSec(100);
 #if 0
         this->sendDataFrame(comProtocol::assembleReadRTDataRequestFrame(this->deviceID.getDeviceId()));
@@ -2377,21 +2380,10 @@ void CableDataWidget::on_spinBox_valueChanged(const QString &arg1)
     }
 }
 
-void CableDataWidget::on_pushButton_clarChart_clicked()
-{
-    this->ui->tab_mainCable->clearAllCurves();
-    this->ui->tab_groundCable->clearAllCurves();
-}
 
 void CableDataWidget::on_pushButton_ReadRtData_clicked()
 {
     this->autogetDataFlag = true;
-}
-
-void CableDataWidget::on_pushButton_InputVol_clicked()
-{
-    this->setDataFlag = true;
-    this->sendDataFrame(comProtocol::assembleReadInputVolRequestFrame(this->deviceID.getDeviceId()));
 }
 
 void CableDataWidget::on_PushButton_Temp_SetStatisticArgument_clicked()
@@ -2484,12 +2476,6 @@ void CableDataWidget::on_pushButton_Read_CurChangerateCycle_clicked()
     this->sendDataFrame(comProtocol::assembleConfigReadFrame(this->deviceID.getDeviceId(),SetChangeRateStatistical));
 }
 
-void CableDataWidget::on_pushButton_Read_CurChangerateWindowSize_clicked()
-{
-    this->setDataFlag = true;
-    this->sendDataFrame(comProtocol::assembleConfigReadFrame(this->deviceID.getDeviceId(),ChangeRateStatisticalCycle));
-}
-
 void CableDataWidget::on_spinBox_alarm_value_valueChanged(int arg1)
 {
     this->autoGetAlarmDataTimer->setInterval(arg1*1000);
@@ -2500,14 +2486,6 @@ void CableDataWidget::on_pushButton_clear_alarm_value_clicked()
     clear_alarm_data();
 }
 
-void CableDataWidget::on_pushButton_clear_rt_data_clicked()
-{
-    clear_rt_data();
-}
-void CableDataWidget::on_pushButton_save_rt_data_clicked()
-{
-    save_Rt_data();
-}
 
 void CableDataWidget::on_pushButton_save_alarm_value_clicked()
 {
@@ -2525,16 +2503,6 @@ void CableDataWidget::on_pushButton_save_alarm_value_clicked()
         this->autoGetStatisticTimer->stop();
     }
 }*/
-
-void CableDataWidget::on_pushButton_statistics_value_clicked()
-{
-    this->autogetStatisticFlag = true;
-}
-
-void CableDataWidget::on_spinBox_statistics_value_valueChanged(int arg1)
-{
-     this->autoGetStatisticTimer->setInterval(arg1*1000);
-}
 
 void CableDataWidget::on_supperRootOperationPushButton_clicked()
 {
@@ -2785,4 +2753,9 @@ void CableDataWidget::on_tab_mainCable_destroyed()
 void CableDataWidget::on_label_34_linkActivated(const QString &link)
 {
 
+}
+
+void CableDataWidget::connect_server_status(bool flag)
+{
+    this->is_connected_to_server = flag;
 }

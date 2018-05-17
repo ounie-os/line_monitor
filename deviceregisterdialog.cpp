@@ -13,7 +13,7 @@ deviceRegisterDialog::deviceRegisterDialog(QWidget *parent) :
     this->ui->userSelectComboBox->setHidden(true);
 
     this->ui->deviceTableShowTableWidget->setColumnCount(2);
-    this->ui->deviceTableShowTableWidget->setHorizontalHeaderLabels(QStringList() << tr("ID") << tr("Éè±¸Ãû³Æ"));
+    this->ui->deviceTableShowTableWidget->setHorizontalHeaderLabels(QStringList() << tr("ID") << tr("è®¾å¤‡åç§°"));
     this->ui->deviceTableShowTableWidget->horizontalHeader()->setStretchLastSection(true);
     this->ui->deviceTableShowTableWidget->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
     this->ui->deviceTableShowTableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);

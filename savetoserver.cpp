@@ -15,14 +15,7 @@ SaveToServer::~SaveToServer()
 void SaveToServer::slot_open()
 {
     this->connectToHost(this->ip,this->port);
-    this->waitForConnected(3000);
-    if(this->ConnectedState)
-    {
-        qDebug()<<"连接远端服务器成功";
-    }else
-    {
-        qDebug()<<"连接远端服务器失败";
-    }
+    this->waitForConnected(1500);
 }
 
 void SaveToServer::slot_close()
@@ -35,14 +28,14 @@ void SaveToServer::slot_send_data_to_server(QByteArray data)
     if(this->ConnectedState)
     {
         this->write(data);
-        qDebug() << "发送数据 ：" << myHelper::ByteArrayToHexStr(data);
+        qDebug() << "网口发送数据 ：" << myHelper::ByteArrayToHexStr(data);
     }
 }
 
 void SaveToServer::slot_recv_data_from_server()
 {
     QByteArray data = this->readAll();
-    qDebug() << "接收数据 ：" << myHelper::ByteArrayToHexStr(data);
+    qDebug() << "网口接收数据 ：" << myHelper::ByteArrayToHexStr(data);
     if (data.length() >= 200)
     {
         if((0xAA == (uchar)data.at(0)) && (0xAA == (uchar)data.at(1)) 

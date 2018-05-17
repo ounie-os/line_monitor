@@ -12,6 +12,7 @@ public:
     quint16 get_port();
 signals:
     void signal_data_from_server_to_ui(QByteArray data);
+    void signal_port_is_open();
 private slots:
     void slot_open();
     void slot_close();
