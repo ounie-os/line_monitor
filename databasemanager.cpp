@@ -809,3 +809,35 @@ void DataBaseManager::dataTableSelfDelete(QString table)
         qDebug() << query.lastError();
     }
 }
+
+void DataBaseManager::dataTableDeleteAll(void)
+{
+    this->dataTableDelete(MAINCABLE_TABLE);
+    this->dataTableDelete(GROUNDCABLE_A_TABLE);
+    this->dataTableDelete(GROUNDCABLE_B_TABLE);
+    this->dataTableDelete(GROUNDCABLE_C_TABLE);
+    this->dataTableDelete(GROUNDCABLE_N_TABLE);
+    this->dataTableDelete(CONNECTOR_A_TABLE);
+    this->dataTableDelete(CONNECTOR_B_TABLE);
+    this->dataTableDelete(CONNECTOR_C_TABLE);
+}
+
+void DataBaseManager::dataTableDelete(QString table)
+{
+    QSqlQuery query(this->db);
+    QString checkSqlCmd = "select count(*) from " + table;
+    if(query.exec(checkSqlCmd) == false)
+    {
+        qDebug() << query.lastError();
+        return;
+    }
+    query.last();
+    int tableRecordsNum = query.value(0).toInt();
+    QString deleteSqlCmd = "delete from " + table + " where id in (" + "select id from "
+            + table + " order by id limit " + QString::number(tableRecordsNum) + ")";
+    if(query.exec(deleteSqlCmd) == false)
+    {
+        qDebug() << query.lastError();
+    }
+}
+

@@ -65,6 +65,7 @@ public slots:
     void updateSystemMapping(quint64 hcId, ChannelInfoType channelinfo);
     void removeSystemMapping(quint64 hcId);
     void slot_close();
+    void dataTableDeleteAll(void);
 private:
     QSqlDatabase db;
     QTimer *dbSelfCheckTimer;
@@ -73,6 +74,7 @@ private:
     void createSystemMappingTable(QString tablename);
 
     void dataTableSelfDelete(QString table);
+    void dataTableDelete(QString table);
 
 };
 

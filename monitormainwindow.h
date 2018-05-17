@@ -62,6 +62,7 @@ signals:
     void signal_stop_get_data();
     void signal_recv_data_to_ui(QByteArray data);
     void signal_remote_server(bool flag);
+    void signal_DBdel(void);
 private slots:
     void printDebug(int type, QString text);
 

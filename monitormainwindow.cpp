@@ -205,6 +205,7 @@ void MonitorMainWindow::init()
     connect(this->DBManager,SIGNAL(destroyed(QObject*)),workThread,SLOT(quit()));
     connect(this->DBManager,SIGNAL(finished()),workThread,SLOT(deleteLater()));
     connect(this,SIGNAL(signal_close_DB()),this->DBManager,SLOT(slot_close()));
+    connect(this,SIGNAL(signal_DBdel(void)), this->DBManager,SLOT(dataTableDeleteAll(void)));
     this->DBManager->moveToThread(workThread);
     workThread->start();
     //=============远端服务器=============
@@ -828,7 +829,7 @@ void MonitorMainWindow::on_clearCurvesPushButton_clicked()
 
 void MonitorMainWindow::on_clearDBPushButton_clicked()
 {
- //   this->DBManager
+    emit signal_DBdel();
 }
 
 void MonitorMainWindow::on_action_set_map_triggered()
