@@ -426,6 +426,7 @@ void MonitorMainWindow::insertCableDevice(CableMonitorDevice device)
     CableDataWidget *widget = new CableDataWidget(this);
     widget->setDeviceID(device);
     widget->setLabelID();
+    widget->setLabelIP(" ");
     widget->init_para();
 
     this->cableMonitorWidgetTable->insert(deviceItem, widget);
@@ -465,6 +466,8 @@ void MonitorMainWindow::insertCableDevice(CableMonitorDevice device)
     connect(widget,SIGNAL(sendDataToServer(QByteArray)),this,SLOT(send_rt_data_to_server(QByteArray)));
     connect(this, SIGNAL(signal_recv_data_to_ui(QByteArray)), widget, SLOT(receiveDataFromDevice(QByteArray)));
     connect(this, SIGNAL(signal_remote_server(bool)), widget, SLOT(connect_server_status(bool)));
+
+    connect(this, SIGNAL(signal_send_ip_to_monitor(QString)), widget, SLOT(get_server_ip(QString)));
     
 }
 /*!
@@ -911,6 +914,7 @@ void MonitorMainWindow::hcSocketConnectedToServer()
     qDebug() << "成功连接到远端服务器";
     this->ui->action_connet_server->setText("远端服务器断开");
     emit signal_remote_server(true);
+    emit signal_send_ip_to_monitor(this->hcIPAddress);
     this->b_reconnect = false;
     this->timer_auto_connect->start(3000);
 }
@@ -922,6 +926,7 @@ void MonitorMainWindow::hcSocketDisconnectedFromServer()
     qDebug() << "从远端服务器断开";
     this->ui->action_connet_server->setText("远端服务器连接");
     emit signal_remote_server(false);
+    emit signal_send_ip_to_monitor(" ");
 }
 /*!
  * \brief MonitorMainWindow::sendDataToServer_slot

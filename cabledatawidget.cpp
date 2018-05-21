@@ -288,6 +288,16 @@ void CableDataWidget::setLabelID()
     this->ui->label_deviceID->setText(this->deviceID.getDeviceId().toString());
     this->ui->label_deviceName->setText(this->deviceID.getDeviceName());
 }
+
+/*!
+ * \brief CableDataWidget::setLabelIP
+ * 显示设备的ip地址
+ */
+void CableDataWidget::setLabelIP(QString ip)
+{
+    this->ui->label_IP->setText(ip);
+}
+
 /*!
  * \brief CableDataWidget::getBlindFlag
  * \return
@@ -2758,4 +2768,9 @@ void CableDataWidget::on_label_34_linkActivated(const QString &link)
 void CableDataWidget::connect_server_status(bool flag)
 {
     this->is_connected_to_server = flag;
+}
+
+void CableDataWidget::get_server_ip(QString ip)
+{
+    this->setLabelIP(ip);
 }

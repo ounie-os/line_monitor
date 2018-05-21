@@ -37,6 +37,7 @@ public:
     void setTcpClientID(int ID);
     int getTcpClientID();
     void setLabelID();
+    void setLabelIP(QString ip);
     FlagType getBlindFlag();
     void setBlindFlag(FlagType flag);
     void setClientIP(QString IP);
@@ -64,6 +65,7 @@ signals:
 private slots:
     void receiveDataFromDevice(QByteArray data);
     void connect_server_status(bool flag);
+    void get_server_ip(QString ip);
 
     void autoGetData_slot();
     void autoGetAlarmData_slot();
@@ -166,6 +168,7 @@ private:
     FlagType blindFlag;
 
     bool is_connected_to_server;
+    QString server_ip;
 
     QTimer *sendDataTimer;
     QTimer *autoGetDataTimer;//<自动获取实时数据定时器
