@@ -805,8 +805,8 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
 #define FRAME_GROUND_CURRENT_A_OFFSET (33) // A相接地电流
 #define FRAME_GROUND_CURRENT_B_OFFSET (37) // B相接地电流
 #define FRAME_GROUND_CURRENT_C_OFFSET (41) // C相接地电流
-#define FRAME_GROUND_CURRENT_ALL_OFFSET (45) // 总接地电流
-#define FRAME_OP_CURRENT_OFFSET       (49) // 运行电流
+#define FRAME_GROUND_CURRENT_ALL_OFFSET (45) // N相接地电流
+#define FRAME_OP_CURRENT_OFFSET       (49) // 主缆电流
 #define FRAME_ENVTEMP_OFFSET (53) // 环境温度
 #define FRAME_CONNECTOR_TEMP_A_OFFSET (61) // A相接头温度
 #define FRAME_CONNECTOR_TEMP_B_OFFSET (71) // B相接头温度
@@ -829,8 +829,8 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
         union {uint uint_ground_current_A; float ground_current_A; }; //A相接地电流
         union {uint uint_ground_current_B; float ground_current_B; }; //B相接地电流
         union {uint uint_ground_current_C; float ground_current_C; }; //C相接地电流
-        union {uint uint_ground_current_ALL; float ground_current_ALL; }; //总接地电流
-        union {uint uint_op_current; float op_current; }; //运行电流
+        union {uint uint_ground_current_ALL; float ground_current_ALL; }; //N相接地电流
+        union {uint uint_op_current; float op_current; }; //主缆电流
 
         uchar *data_tmp = (uchar *)data.data();
         uint frame_head = data_tmp[FRAME_HEAD_OFFSET] | (data_tmp[FRAME_HEAD_OFFSET+1]<<8) | (data_tmp[FRAME_HEAD_OFFSET+2]<<16) | (data_tmp[FRAME_HEAD_OFFSET+3] << 24);
@@ -852,17 +852,22 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
             uint_ground_current_C = data_tmp[FRAME_GROUND_CURRENT_C_OFFSET] | (data_tmp[FRAME_GROUND_CURRENT_C_OFFSET+1] << 8) | (data_tmp[FRAME_GROUND_CURRENT_C_OFFSET+2] << 16) | (data_tmp[FRAME_GROUND_CURRENT_C_OFFSET+3] << 24);
             qDebug() << "C相接地电流： " << ground_current_C;
             uint_ground_current_ALL = data_tmp[FRAME_GROUND_CURRENT_ALL_OFFSET] | (data_tmp[FRAME_GROUND_CURRENT_ALL_OFFSET+1] << 8) | (data_tmp[FRAME_GROUND_CURRENT_ALL_OFFSET+2] << 16) | (data_tmp[FRAME_GROUND_CURRENT_ALL_OFFSET+3] << 24);
-            qDebug() << "总接地电流： " << ground_current_ALL;
+            qDebug() << "N相接地电流： " << ground_current_ALL;
             uint_op_current = data_tmp[FRAME_OP_CURRENT_OFFSET] | (data_tmp[FRAME_OP_CURRENT_OFFSET+1] << 8) | (data_tmp[FRAME_OP_CURRENT_OFFSET+2] << 16) | (data_tmp[FRAME_OP_CURRENT_OFFSET+3] << 24);
-            qDebug() << "运行电流： " << op_current;
+            qDebug() << "主缆电流： " << op_current;
 
             if (this->ui->checkBox->isChecked())
             {
                 float current_A_rate = this->calc_current_rate(ground_current_A, this->ground_current_A);
+                qDebug() << "A相电流变化率： " << current_A_rate;
                 float current_B_rate = this->calc_current_rate(ground_current_B, this->ground_current_B);
-                float current_C_rate = this->calc_current_rate(ground_current_C, this->uint_ground_current_C);
+                qDebug() << "B相电流变化率： " << current_B_rate;
+                float current_C_rate = this->calc_current_rate(ground_current_C, this->ground_current_C);
+                qDebug() << "C相电流变化率： " << current_C_rate;
                 float current_ALL_rate = this->calc_current_rate(ground_current_ALL, this->ground_current_ALL);
+                qDebug() << "N相电流变化率： " << current_ALL_rate;
                 float current_OP_rate = this->calc_current_rate(op_current, this->op_current);
+                qDebug() << "主缆电流变化率： " << current_OP_rate;
 
                 this->ui->tableWidget->item(2,0)->setText(QString::number(current_OP_rate, 'f', 3)+" A/S");
                 this->ui->tableWidget->item(2,1)->setText(QString::number(current_A_rate, 'f', 3)+" A/S");
@@ -955,13 +960,13 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
             this->ui->tableWidget->item(1,2)->setText(QString::number(connector_temp_B, 'f', 3)+" ℃");
             this->ui->tableWidget->item(1,3)->setText(QString::number(connector_temp_C, 'f', 3)+" ℃");
             this->ui->tableWidget->item(4,1)->setText(QString::number(a_x_axis));
-            this->ui->tableWidget->item(4,2)->setText(QString::number(a_y_axis));
-            this->ui->tableWidget->item(4,3)->setText(QString::number(a_z_axis));
-            this->ui->tableWidget->item(5,1)->setText(QString::number(b_x_axis));
+            this->ui->tableWidget->item(5,1)->setText(QString::number(a_y_axis));
+            this->ui->tableWidget->item(6,1)->setText(QString::number(a_z_axis));
+            this->ui->tableWidget->item(4,2)->setText(QString::number(b_x_axis));
             this->ui->tableWidget->item(5,2)->setText(QString::number(b_y_axis));
-            this->ui->tableWidget->item(5,3)->setText(QString::number(b_z_axis));
-            this->ui->tableWidget->item(6,1)->setText(QString::number(c_x_axis));
-            this->ui->tableWidget->item(6,2)->setText(QString::number(c_y_axis));
+            this->ui->tableWidget->item(6,2)->setText(QString::number(b_z_axis));
+            this->ui->tableWidget->item(4,3)->setText(QString::number(c_x_axis));
+            this->ui->tableWidget->item(5,3)->setText(QString::number(c_y_axis));
             this->ui->tableWidget->item(6,3)->setText(QString::number(c_z_axis));
 
             this->start_recv_rt_data = 1;
@@ -1574,23 +1579,23 @@ void CableDataWidget::autoGetData_slot()
 
 void CableDataWidget::on_pushButton_read_alarm_value_clicked()
 {
-    this->autogetAlarmDataFlag = true;
+//    this->autogetAlarmDataFlag = true;
 }
 
 void CableDataWidget::on_checkBox_alarm_value_clicked(bool checked)
 {
-    if(checked == true)
-    {
-        this->autoGetAlarmDataTimer->setInterval(this->ui->spinBox_alarm_value->text().toInt()*1000);
-        this->autoGetAlarmDataTimer->start();
-    }else
-    {
-        this->autoGetAlarmDataTimer->stop();
-    }
+//    if(checked == true)
+//    {
+//        this->autoGetAlarmDataTimer->setInterval(this->ui->spinBox_alarm_value->text().toInt()*1000);
+//        this->autoGetAlarmDataTimer->start();
+//    }else
+//    {
+//        this->autoGetAlarmDataTimer->stop();
+//    }
 }
 void CableDataWidget::autoGetAlarmData_slot()
 {
-    this->autogetAlarmDataFlag = true;
+//    this->autogetAlarmDataFlag = true;
 }
 /*!
  * \brief CableDataWidget::autoGetStatistic_slot
@@ -2261,11 +2266,11 @@ void CableDataWidget::on_checkBox_toggled(bool checked)
  */
 void CableDataWidget::on_rtcTimingPushButton_clicked()
 {
-    this->setDataFlag = true;
-    this->ui->rtcTimingPushButton->setEnabled(false);
-    this->sendDataFrame(comProtocol::assembleTimeSetFrame(this->deviceID.getDeviceId(),QDateTime::currentDateTime()));
-    myHelper::Delay_MSec(200);
-    this->ui->rtcTimingPushButton->setEnabled(true);
+//    this->setDataFlag = true;
+//    this->ui->rtcTimingPushButton->setEnabled(false);
+//    this->sendDataFrame(comProtocol::assembleTimeSetFrame(this->deviceID.getDeviceId(),QDateTime::currentDateTime()));
+//    myHelper::Delay_MSec(200);
+//    this->ui->rtcTimingPushButton->setEnabled(true);
 }
 /*!
  * \brief CableDataWidget::on_rtcReadPushButton_clicked
@@ -2273,8 +2278,8 @@ void CableDataWidget::on_rtcTimingPushButton_clicked()
  */
 void CableDataWidget::on_rtcReadPushButton_clicked()
 {
-    this->setDataFlag = true;
-    this->sendDataFrame(comProtocol::assembleConfigReadFrame(this->deviceID.getDeviceId(),RtcTime_Set));
+//    this->setDataFlag = true;
+//    this->sendDataFrame(comProtocol::assembleConfigReadFrame(this->deviceID.getDeviceId(),RtcTime_Set));
 }
 /*!
  * \brief CableDataWidget::on_statisticArgumentSetPushButton_clicked
@@ -2282,14 +2287,14 @@ void CableDataWidget::on_rtcReadPushButton_clicked()
  */
 void CableDataWidget::on_statisticArgumentSetPushButton_clicked()
 {
-    this->ui->statisticArgumentSetPushButton->setEnabled(false);
-    this->setDataFlag = true;
-    this->sendDataFrame(comProtocol::assembleStatisticalArgumentFrame(this->deviceID.getDeviceId(),
-                                                                      this->ui->sampleSecSpinBox->text().toInt(),
-                                                                      this->ui->statisticCycleSpinBox->text().toInt(),
-                                                                      this->ui->statisticCountSpinBox->text().toInt()));
-    myHelper::Delay_MSec(200);
-    this->ui->statisticArgumentSetPushButton->setEnabled(true);
+//    this->ui->statisticArgumentSetPushButton->setEnabled(false);
+//    this->setDataFlag = true;
+//    this->sendDataFrame(comProtocol::assembleStatisticalArgumentFrame(this->deviceID.getDeviceId(),
+//                                                                      this->ui->sampleSecSpinBox->text().toInt(),
+//                                                                      this->ui->statisticCycleSpinBox->text().toInt(),
+//                                                                      this->ui->statisticCountSpinBox->text().toInt()));
+//    myHelper::Delay_MSec(200);
+//    this->ui->statisticArgumentSetPushButton->setEnabled(true);
 }
 /*!
  * \brief CableDataWidget::on_statisticArgumentReadPushButton_clicked
@@ -2297,8 +2302,8 @@ void CableDataWidget::on_statisticArgumentSetPushButton_clicked()
  */
 void CableDataWidget::on_statisticArgumentReadPushButton_clicked()
 {
-    this->setDataFlag = true;
-    this->sendDataFrame(comProtocol::assembleConfigReadFrame(this->deviceID.getDeviceId(),StatisticArgument));
+//    this->setDataFlag = true;
+//    this->sendDataFrame(comProtocol::assembleConfigReadFrame(this->deviceID.getDeviceId(),StatisticArgument));
 }
 /*!
  * \brief CableDataWidget::on_thresholdSetPushButton_clicked
@@ -2306,13 +2311,13 @@ void CableDataWidget::on_statisticArgumentReadPushButton_clicked()
  */
 void CableDataWidget::on_thresholdSetPushButton_clicked()
 {
-    this->ui->thresholdSetPushButton->setEnabled(false);
-    this->setDataFlag = true;
-    this->sendDataFrame(comProtocol::assembleThresholdFrame(this->deviceID.getDeviceId(),
-                                                            this->ui->thresholdTypeComboBox->currentIndex()+ MainCable_Alarm_Threhold,
-                                                            this->ui->thresholdValueDoubleSpinBox->text().toFloat()*1000));
-    myHelper::Delay_MSec(200);
-    this->ui->thresholdSetPushButton->setEnabled(true);
+//    this->ui->thresholdSetPushButton->setEnabled(false);
+//    this->setDataFlag = true;
+//    this->sendDataFrame(comProtocol::assembleThresholdFrame(this->deviceID.getDeviceId(),
+//                                                            this->ui->thresholdTypeComboBox->currentIndex()+ MainCable_Alarm_Threhold,
+//                                                            this->ui->thresholdValueDoubleSpinBox->text().toFloat()*1000));
+//    myHelper::Delay_MSec(200);
+//    this->ui->thresholdSetPushButton->setEnabled(true);
 }
 /*!
  * \brief CableDataWidget::on_thresholdReadPushButton_clicked
@@ -2320,27 +2325,27 @@ void CableDataWidget::on_thresholdSetPushButton_clicked()
  */
 void CableDataWidget::on_thresholdReadPushButton_clicked()
 {
-    this->setDataFlag = true;
-    this->sendDataFrame(comProtocol::assembleConfigReadFrame(this->deviceID.getDeviceId(),
-                                                             this->ui->thresholdTypeComboBox->currentIndex()+MainCable_Alarm_Threhold));
+//    this->setDataFlag = true;
+//    this->sendDataFrame(comProtocol::assembleConfigReadFrame(this->deviceID.getDeviceId(),
+//                                                             this->ui->thresholdTypeComboBox->currentIndex()+MainCable_Alarm_Threhold));
 }
 
 void CableDataWidget::on_pushButton_setTempThreashold_clicked()
 {
-    this->ui->pushButton_setTempThreashold->setEnabled(false);
-    this->setDataFlag = true;
-    this->sendDataFrame(comProtocol::assembleThresholdFrame(this->deviceID.getDeviceId(),
-                                                            this->ui->comboBox_TempThresholdType->currentIndex()+ GroundCablePhaseATemperature_Alarm_Threshold,
-                                                            this->ui->doubleSpinBox_Temp_Threshold->text().toFloat()*100));
-    myHelper::Delay_MSec(200);
-    this->ui->pushButton_setTempThreashold->setEnabled(true);
+//    this->ui->pushButton_setTempThreashold->setEnabled(false);
+//    this->setDataFlag = true;
+//    this->sendDataFrame(comProtocol::assembleThresholdFrame(this->deviceID.getDeviceId(),
+//                                                            this->ui->comboBox_TempThresholdType->currentIndex()+ GroundCablePhaseATemperature_Alarm_Threshold,
+//                                                            this->ui->doubleSpinBox_Temp_Threshold->text().toFloat()*100));
+//    myHelper::Delay_MSec(200);
+//    this->ui->pushButton_setTempThreashold->setEnabled(true);
 }
 
 void CableDataWidget::on_pushButton_readTempThreshold_clicked()
 {
-    this->setDataFlag = true;
-    this->sendDataFrame(comProtocol::assembleConfigReadFrame(this->deviceID.getDeviceId(),
-                                                             this->ui->comboBox_TempThresholdType->currentIndex()+GroundCablePhaseATemperature_Alarm_Threshold));
+//    this->setDataFlag = true;
+//    this->sendDataFrame(comProtocol::assembleConfigReadFrame(this->deviceID.getDeviceId(),
+//                                                             this->ui->comboBox_TempThresholdType->currentIndex()+GroundCablePhaseATemperature_Alarm_Threshold));
 }
 
 void CableDataWidget::sendDataToClient_slot()
@@ -2357,13 +2362,13 @@ void CableDataWidget::sendDataToClient_slot()
  */
 void CableDataWidget::on_ctSetPushButton_clicked()
 {
-    this->ui->ctSetPushButton->setEnabled(false);
-    this->setDataFlag = true;
-    this->sendDataFrame(comProtocol::assembleCtFrame(this->deviceID.getDeviceId(),
-                                                     this->ui->ctTypeComboBox->currentIndex()+MainCableCtValue_Set,
-                                                     this->ui->ctValueDoubleSpinBox->text().toFloat()));
-    myHelper::Delay_MSec(200);
-    this->ui->ctSetPushButton->setEnabled(true);
+//    this->ui->ctSetPushButton->setEnabled(false);
+//    this->setDataFlag = true;
+//    this->sendDataFrame(comProtocol::assembleCtFrame(this->deviceID.getDeviceId(),
+//                                                     this->ui->ctTypeComboBox->currentIndex()+MainCableCtValue_Set,
+//                                                     this->ui->ctValueDoubleSpinBox->text().toFloat()));
+//    myHelper::Delay_MSec(200);
+//    this->ui->ctSetPushButton->setEnabled(true);
 }
 /*!
  * \brief CableDataWidget::on_ctReadPushButton_clicked
@@ -2371,9 +2376,9 @@ void CableDataWidget::on_ctSetPushButton_clicked()
  */
 void CableDataWidget::on_ctReadPushButton_clicked()
 {
-    this->setDataFlag = true;
-    this->sendDataFrame(comProtocol::assembleConfigReadFrame(this->deviceID.getDeviceId(),
-                                                             this->ui->ctTypeComboBox->currentIndex()+MainCableCtValue_Set));
+//    this->setDataFlag = true;
+//    this->sendDataFrame(comProtocol::assembleConfigReadFrame(this->deviceID.getDeviceId(),
+//                                                             this->ui->ctTypeComboBox->currentIndex()+MainCableCtValue_Set));
 }
 /*!
  * \brief CableDataWidget::on_spinBox_valueChanged
@@ -2398,108 +2403,108 @@ void CableDataWidget::on_pushButton_ReadRtData_clicked()
 
 void CableDataWidget::on_PushButton_Temp_SetStatisticArgument_clicked()
 {
-    this->ui->PushButton_Temp_SetStatisticArgument->setEnabled(false);
-    this->setDataFlag = true;
-    this->sendDataFrame(comProtocol::assembleTempStatisticalArgumentFrame(this->deviceID.getDeviceId(),
-                                                                      this->ui->SpinBox_Temp_SampleSec->text().toInt(),
-                                                                      this->ui->SpinBox_Temp_StatisticCycle->text().toInt(),
-                                                                      this->ui->SpinBox_Temp_StatisticCount->text().toInt()));
-    myHelper::Delay_MSec(200);
-    this->ui->PushButton_Temp_SetStatisticArgument->setEnabled(true);
+//    this->ui->PushButton_Temp_SetStatisticArgument->setEnabled(false);
+//    this->setDataFlag = true;
+//    this->sendDataFrame(comProtocol::assembleTempStatisticalArgumentFrame(this->deviceID.getDeviceId(),
+//                                                                      this->ui->SpinBox_Temp_SampleSec->text().toInt(),
+//                                                                      this->ui->SpinBox_Temp_StatisticCycle->text().toInt(),
+//                                                                      this->ui->SpinBox_Temp_StatisticCount->text().toInt()));
+//    myHelper::Delay_MSec(200);
+//    this->ui->PushButton_Temp_SetStatisticArgument->setEnabled(true);
 }
 
 void CableDataWidget::on_PushButton_Read_StatisticArgument_clicked()
 {
-    this->setDataFlag = true;
-    this->sendDataFrame(comProtocol::assembleConfigReadFrame(this->deviceID.getDeviceId(),
-                                                             TemperatureMeasureCycle));
+//    this->setDataFlag = true;
+//    this->sendDataFrame(comProtocol::assembleConfigReadFrame(this->deviceID.getDeviceId(),
+//                                                             TemperatureMeasureCycle));
 }
 
 void CableDataWidget::on_pushButton_SetVibrate_Threshold_clicked()
 {
-    this->ui->pushButton_SetVibrate_Threshold->setEnabled(false);
-    this->setDataFlag = true;
-    this->sendDataFrame(comProtocol::assembleSetVibrateThreshildFrame(this->deviceID.getDeviceId(),
-                                                                      this->ui->comboBox_Vibate_Threshold->currentIndex() + GroundCablePhaseAVibrationCount_Alarm_Threshold,
-                                                                      this->ui->doubleSpinBox_Vibrate_Threshold->text().toFloat()));
-    myHelper::Delay_MSec(200);
-    this->ui->pushButton_SetVibrate_Threshold->setEnabled(true);
+//    this->ui->pushButton_SetVibrate_Threshold->setEnabled(false);
+//    this->setDataFlag = true;
+//    this->sendDataFrame(comProtocol::assembleSetVibrateThreshildFrame(this->deviceID.getDeviceId(),
+//                                                                      this->ui->comboBox_Vibate_Threshold->currentIndex() + GroundCablePhaseAVibrationCount_Alarm_Threshold,
+//                                                                      this->ui->doubleSpinBox_Vibrate_Threshold->text().toFloat()));
+//    myHelper::Delay_MSec(200);
+//    this->ui->pushButton_SetVibrate_Threshold->setEnabled(true);
 }
 
 void CableDataWidget::on_pushButton_ReadVibrate_Threshold_clicked()
 {
-    this->setDataFlag = true;
-    this->sendDataFrame(comProtocol::assembleConfigReadFrame(this->deviceID.getDeviceId(),
-                                                             this->ui->comboBox_Vibate_Threshold->currentIndex()+GroundCablePhaseAVibrationCount_Alarm_Threshold));
+//    this->setDataFlag = true;
+//    this->sendDataFrame(comProtocol::assembleConfigReadFrame(this->deviceID.getDeviceId(),
+//                                                             this->ui->comboBox_Vibate_Threshold->currentIndex()+GroundCablePhaseAVibrationCount_Alarm_Threshold));
 }
 
 void CableDataWidget::on_pushButton_Read_VibrateStatisticTime_clicked()
 {
-    this->setDataFlag = true;
-    this->sendDataFrame(comProtocol::assembleConfigReadFrame(this->deviceID.getDeviceId(),
-                                                             VibrationStatisticalCycle));
+//    this->setDataFlag = true;
+//    this->sendDataFrame(comProtocol::assembleConfigReadFrame(this->deviceID.getDeviceId(),
+//                                                             VibrationStatisticalCycle));
 }
 
 void CableDataWidget::on_pushButton_Set_VibrateStatisticTime_clicked()
 {
-    this->ui->pushButton_Set_VibrateStatisticTime->setEnabled(false);
-    this->setDataFlag = true;
-    this->sendDataFrame(comProtocol::assembleSetVibrateTimeFrame(this->deviceID.getDeviceId(),
-                                                                 this->ui->spinBox_VibrateStatisticTime->text().toInt()));
-    myHelper::Delay_MSec(200);
-    this->ui->pushButton_Set_VibrateStatisticTime->setEnabled(true);
+//    this->ui->pushButton_Set_VibrateStatisticTime->setEnabled(false);
+//    this->setDataFlag = true;
+//    this->sendDataFrame(comProtocol::assembleSetVibrateTimeFrame(this->deviceID.getDeviceId(),
+//                                                                 this->ui->spinBox_VibrateStatisticTime->text().toInt()));
+//    myHelper::Delay_MSec(200);
+//    this->ui->pushButton_Set_VibrateStatisticTime->setEnabled(true);
 }
 
 
 void CableDataWidget::on_pushButton_SetCurChangeRate_Threshold_clicked()
 {
-    this->ui->pushButton_SetCurChangeRate_Threshold->setEnabled(false);
-    this->setDataFlag = true;
-    this->sendDataFrame(comProtocol::assembleSetCurChangerateThreshildFrame(this->deviceID.getDeviceId(),
-                                                                      this->ui->comboBox_CurChangeRate_Threshold->currentIndex() + GroundCablePhaseAChangeRate_Alarm_Threshold,
-                                                                      this->ui->doubleSpinBox_CurChangeRate_Threshold->text().toFloat()));
-    myHelper::Delay_MSec(200);
-    this->ui->pushButton_SetCurChangeRate_Threshold->setEnabled(true);
+//    this->ui->pushButton_SetCurChangeRate_Threshold->setEnabled(false);
+//    this->setDataFlag = true;
+//    this->sendDataFrame(comProtocol::assembleSetCurChangerateThreshildFrame(this->deviceID.getDeviceId(),
+//                                                                      this->ui->comboBox_CurChangeRate_Threshold->currentIndex() + GroundCablePhaseAChangeRate_Alarm_Threshold,
+//                                                                      this->ui->doubleSpinBox_CurChangeRate_Threshold->text().toFloat()));
+//    myHelper::Delay_MSec(200);
+//    this->ui->pushButton_SetCurChangeRate_Threshold->setEnabled(true);
 }
 
 void CableDataWidget::on_pushButton_ReadCurChangeRate_Threshold_clicked()
 {
-    this->setDataFlag = true;
-    this->sendDataFrame(comProtocol::assembleConfigReadFrame(this->deviceID.getDeviceId(),
-                                                                  this->ui->comboBox_CurChangeRate_Threshold->currentIndex() + GroundCablePhaseAChangeRate_Alarm_Threshold));
+//    this->setDataFlag = true;
+//    this->sendDataFrame(comProtocol::assembleConfigReadFrame(this->deviceID.getDeviceId(),
+//                                                                  this->ui->comboBox_CurChangeRate_Threshold->currentIndex() + GroundCablePhaseAChangeRate_Alarm_Threshold));
 }
 
 void CableDataWidget::on_pushButton_Set_CurChangerateCycle_clicked()
 {
-    this->ui->pushButton_Set_CurChangerateCycle->setEnabled(false);
-    this->setDataFlag = true;
-    this->sendDataFrame(comProtocol::assembleSetCurChangerateCycleFrame(this->deviceID.getDeviceId(),
-                                                                 this->ui->spinBox_CurChangerateCycle->text().toInt()));
-    myHelper::Delay_MSec(200);
-    this->ui->pushButton_Set_CurChangerateCycle->setEnabled(true);
+//    this->ui->pushButton_Set_CurChangerateCycle->setEnabled(false);
+//    this->setDataFlag = true;
+//    this->sendDataFrame(comProtocol::assembleSetCurChangerateCycleFrame(this->deviceID.getDeviceId(),
+//                                                                 this->ui->spinBox_CurChangerateCycle->text().toInt()));
+//    myHelper::Delay_MSec(200);
+//    this->ui->pushButton_Set_CurChangerateCycle->setEnabled(true);
 }
 
 void CableDataWidget::on_pushButton_Read_CurChangerateCycle_clicked()
 {
-    this->setDataFlag = true;
+//    this->setDataFlag = true;
 //    this->sendDataFrame(comProtocol::assembleConfigReadFrame(this->deviceID.getDeviceId(),ChangeRateStatisticalCycle));
-    this->sendDataFrame(comProtocol::assembleConfigReadFrame(this->deviceID.getDeviceId(),SetChangeRateStatistical));
+//    this->sendDataFrame(comProtocol::assembleConfigReadFrame(this->deviceID.getDeviceId(),SetChangeRateStatistical));
 }
 
 void CableDataWidget::on_spinBox_alarm_value_valueChanged(int arg1)
 {
-    this->autoGetAlarmDataTimer->setInterval(arg1*1000);
+//    this->autoGetAlarmDataTimer->setInterval(arg1*1000);
 }
 
 void CableDataWidget::on_pushButton_clear_alarm_value_clicked()
 {
-    clear_alarm_data();
+//    clear_alarm_data();
 }
 
 
 void CableDataWidget::on_pushButton_save_alarm_value_clicked()
 {
-    save_Alarm_data();
+//    save_Alarm_data();
 }
 
 /*void CableDataWidget::on_checkBox_statistics_value_clicked(bool checked)
@@ -2516,141 +2521,141 @@ void CableDataWidget::on_pushButton_save_alarm_value_clicked()
 
 void CableDataWidget::on_supperRootOperationPushButton_clicked()
 {
-    Dialog_InputPassWord * dialog = new Dialog_InputPassWord(this);
-    dialog->show();
-    if(dialog->exec())
-    {
-        this->ui->phaseMainControlbitsCheckBox->show();
-        this->ui->phaseAControlbitsCheckBox->show();
-        this->ui->phaseBControlbitsCheckBox->show();
-        this->ui->phaseCControlbitsCheckBox->show();
-        this->ui->phaseNControlbitsCheckBox->show();
-        this->ui->channelControlReadPushButton->show();
-        this->ui->channelControlSetPushButton->show();
-    }else
-    {
-        this->ui->phaseMainControlbitsCheckBox->hide();
-        this->ui->phaseAControlbitsCheckBox->hide();
-        this->ui->phaseBControlbitsCheckBox->hide();
-        this->ui->phaseCControlbitsCheckBox->hide();
-        this->ui->phaseNControlbitsCheckBox->hide();
-        this->ui->channelControlReadPushButton->hide();
-        this->ui->channelControlSetPushButton->hide();
-    }
+//    Dialog_InputPassWord * dialog = new Dialog_InputPassWord(this);
+//    dialog->show();
+//    if(dialog->exec())
+//    {
+//        this->ui->phaseMainControlbitsCheckBox->show();
+//        this->ui->phaseAControlbitsCheckBox->show();
+//        this->ui->phaseBControlbitsCheckBox->show();
+//        this->ui->phaseCControlbitsCheckBox->show();
+//        this->ui->phaseNControlbitsCheckBox->show();
+//        this->ui->channelControlReadPushButton->show();
+//        this->ui->channelControlSetPushButton->show();
+//    }else
+//    {
+//        this->ui->phaseMainControlbitsCheckBox->hide();
+//        this->ui->phaseAControlbitsCheckBox->hide();
+//        this->ui->phaseBControlbitsCheckBox->hide();
+//        this->ui->phaseCControlbitsCheckBox->hide();
+//        this->ui->phaseNControlbitsCheckBox->hide();
+//        this->ui->channelControlReadPushButton->hide();
+//        this->ui->channelControlSetPushButton->hide();
+//    }
 
-    dialog->close();
-    delete dialog;
+//    dialog->close();
+//    delete dialog;
 
 }
 
 void CableDataWidget::on_channelControlSetPushButton_clicked()
 {
-    quint8 controltype = 0x00;
-    quint8 controlbits = 0x00;
-    switch (this->ui->channelTypeComboBox->currentIndex())
-    {
-    case 0:
-        controltype = CurrentChannelControl;
-        break;
-    case 1:
-        controltype = TemperatureChannelControl;
-        break;
-    case 2:
-        controltype = VibrationChannelControl;
-        break;
-    default:
-        break;
-    }
-    if(controltype == CurrentChannelControl)
-    {
-        if(this->ui->phaseMainControlbitsCheckBox->isChecked()) {
-            controlbits |= (1 << 0);
-        }
-        if(this->ui->phaseAControlbitsCheckBox->isChecked()) {
-            controlbits |= (1 << 1);
-        }
-        if(this->ui->phaseBControlbitsCheckBox->isChecked()) {
-            controlbits |= (1 << 2);
-        }
+//    quint8 controltype = 0x00;
+//    quint8 controlbits = 0x00;
+//    switch (this->ui->channelTypeComboBox->currentIndex())
+//    {
+//    case 0:
+//        controltype = CurrentChannelControl;
+//        break;
+//    case 1:
+//        controltype = TemperatureChannelControl;
+//        break;
+//    case 2:
+//        controltype = VibrationChannelControl;
+//        break;
+//    default:
+//        break;
+//    }
+//    if(controltype == CurrentChannelControl)
+//    {
+//        if(this->ui->phaseMainControlbitsCheckBox->isChecked()) {
+//            controlbits |= (1 << 0);
+//        }
+//        if(this->ui->phaseAControlbitsCheckBox->isChecked()) {
+//            controlbits |= (1 << 1);
+//        }
+//        if(this->ui->phaseBControlbitsCheckBox->isChecked()) {
+//            controlbits |= (1 << 2);
+//        }
 
-        if(this->ui->phaseCControlbitsCheckBox->isChecked()) {
-            controlbits |= (1 << 3);
-        }
+//        if(this->ui->phaseCControlbitsCheckBox->isChecked()) {
+//            controlbits |= (1 << 3);
+//        }
 
-        if(this->ui->phaseNControlbitsCheckBox->isChecked()) {
-            controlbits |= (1 << 4);
-        }
-//        controlbits |= (1 << 0);
-    }else if(controltype == TemperatureChannelControl)
-    {
-        if(this->ui->phaseAControlbitsCheckBox->isChecked())
-        {
-            controlbits |= (1 << 0);
-        }
+//        if(this->ui->phaseNControlbitsCheckBox->isChecked()) {
+//            controlbits |= (1 << 4);
+//        }
+////        controlbits |= (1 << 0);
+//    }else if(controltype == TemperatureChannelControl)
+//    {
+//        if(this->ui->phaseAControlbitsCheckBox->isChecked())
+//        {
+//            controlbits |= (1 << 0);
+//        }
 
-        if(this->ui->phaseBControlbitsCheckBox->isChecked())
-        {
-            controlbits |= (1 << 1);
-        }
+//        if(this->ui->phaseBControlbitsCheckBox->isChecked())
+//        {
+//            controlbits |= (1 << 1);
+//        }
 
-        if(this->ui->phaseCControlbitsCheckBox->isChecked())
-        {
-            controlbits |= (1 << 2);
-        }
+//        if(this->ui->phaseCControlbitsCheckBox->isChecked())
+//        {
+//            controlbits |= (1 << 2);
+//        }
 
-        if(this->ui->phaseNControlbitsCheckBox->isChecked())
-        {
-            controlbits |= (1 << 3);
-        }
-    }else if(controltype == VibrationChannelControl)
-    {
-        if(this->ui->phaseAControlbitsCheckBox->isChecked())
-        {
-            controlbits |= (1 << 0);
-        }
+//        if(this->ui->phaseNControlbitsCheckBox->isChecked())
+//        {
+//            controlbits |= (1 << 3);
+//        }
+//    }else if(controltype == VibrationChannelControl)
+//    {
+//        if(this->ui->phaseAControlbitsCheckBox->isChecked())
+//        {
+//            controlbits |= (1 << 0);
+//        }
 
-        if(this->ui->phaseBControlbitsCheckBox->isChecked())
-        {
-            controlbits |= (1 << 1);
-        }
+//        if(this->ui->phaseBControlbitsCheckBox->isChecked())
+//        {
+//            controlbits |= (1 << 1);
+//        }
 
-        if(this->ui->phaseCControlbitsCheckBox->isChecked())
-        {
-            controlbits |= (1 << 2);
-        }
+//        if(this->ui->phaseCControlbitsCheckBox->isChecked())
+//        {
+//            controlbits |= (1 << 2);
+//        }
 
-        if(this->ui->phaseNControlbitsCheckBox->isChecked())
-        {
-            controlbits |= (1 << 3);
-        }
-    }
-    this->ui->channelControlSetPushButton->setEnabled(false);
-    this->setDataFlag = true;
-    this->sendDataFrame(comProtocol::assembleChannelControlFrame(
-                            this->deviceID.getDeviceId(),controltype,controlbits));
-    myHelper::Delay_MSec(200);
-    this->ui->channelControlSetPushButton->setEnabled(true);
+//        if(this->ui->phaseNControlbitsCheckBox->isChecked())
+//        {
+//            controlbits |= (1 << 3);
+//        }
+//    }
+//    this->ui->channelControlSetPushButton->setEnabled(false);
+//    this->setDataFlag = true;
+//    this->sendDataFrame(comProtocol::assembleChannelControlFrame(
+//                            this->deviceID.getDeviceId(),controltype,controlbits));
+//    myHelper::Delay_MSec(200);
+//    this->ui->channelControlSetPushButton->setEnabled(true);
 }
 
 void CableDataWidget::on_channelControlReadPushButton_clicked()
 {
-    quint8 controltype = 0x00;
-    switch (this->ui->channelTypeComboBox->currentIndex())
-    {
-    case 0:
-        controltype = CurrentChannelControl;
-        break;
-    case 1:
-        controltype = TemperatureChannelControl;
-        break;
-    case 2:
-        controltype = VibrationChannelControl;
-        break;
-    default:
-        break;
-    }
-    this->setDataFlag = true;
-    this->sendDataFrame(comProtocol::assembleConfigReadFrame(this->deviceID.getDeviceId(),controltype));
+//    quint8 controltype = 0x00;
+//    switch (this->ui->channelTypeComboBox->currentIndex())
+//    {
+//    case 0:
+//        controltype = CurrentChannelControl;
+//        break;
+//    case 1:
+//        controltype = TemperatureChannelControl;
+//        break;
+//    case 2:
+//        controltype = VibrationChannelControl;
+//        break;
+//    default:
+//        break;
+//    }
+//    this->setDataFlag = true;
+//    this->sendDataFrame(comProtocol::assembleConfigReadFrame(this->deviceID.getDeviceId(),controltype));
 }
 
 void CableDataWidget::slot_auto_get_RT_time(bool flag, qint32 time)
@@ -2740,7 +2745,6 @@ float CableDataWidget::calc_current_rate(float new_current, float old_current)
         return 0;
     }
 
-    qDebug() << "电流变化率： " << rate;
     return rate;
 }
 
@@ -2773,4 +2777,44 @@ void CableDataWidget::connect_server_status(bool flag)
 void CableDataWidget::get_server_ip(QString ip)
 {
     this->setLabelIP(ip);
+}
+
+void CableDataWidget::on_checkBox_alarm_value_clicked()
+{
+
+}
+
+void CableDataWidget::on_spinBox_alarm_value_editingFinished()
+{
+
+}
+
+void CableDataWidget::on_rtcReadDateTimeEdit_editingFinished()
+{
+
+}
+
+void CableDataWidget::on_sampleSecSpinBox_editingFinished()
+{
+
+}
+
+void CableDataWidget::on_thresholdTypeComboBox_activated(const QString &arg1)
+{
+
+}
+
+void CableDataWidget::on_ctValueDoubleSpinBox_editingFinished()
+{
+
+}
+
+void CableDataWidget::on_spinBox_alarm_value_destroyed()
+{
+
+}
+
+void CableDataWidget::on_spinBox_alarm_value_valueChanged(const QString &arg1)
+{
+
 }
