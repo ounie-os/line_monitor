@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>268</width>
-    <height>99</height>
+    <height>101</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,7 +21,7 @@
        <item>
         <widget class="QLabel" name="label_5">
          <property name="text">
-          <string>IP Address:</string>
+          <string>IP 地址:</string>
          </property>
         </widget>
        </item>
@@ -42,7 +42,7 @@
        <item>
         <widget class="QLabel" name="label_6">
          <property name="text">
-          <string>Port:</string>
+          <string>端口:</string>
          </property>
         </widget>
        </item>

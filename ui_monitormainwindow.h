@@ -178,8 +178,9 @@ public:
         groupBox_2->setSizePolicy(sizePolicy1);
         horizontalLayout_6 = new QHBoxLayout(groupBox_2);
         horizontalLayout_6->setSpacing(0);
-        horizontalLayout_6->setContentsMargins(0, 0, 0, 0);
+        horizontalLayout_6->setContentsMargins(11, 11, 11, 11);
         horizontalLayout_6->setObjectName(QString::fromUtf8("horizontalLayout_6"));
+        horizontalLayout_6->setContentsMargins(0, 0, 0, 0);
         stackedWidget = new QStackedWidget(groupBox_2);
         stackedWidget->setObjectName(QString::fromUtf8("stackedWidget"));
         sizePolicy1.setHeightForWidth(stackedWidget->sizePolicy().hasHeightForWidth());
@@ -344,8 +345,9 @@ public:
         groupBox_3->setSizePolicy(sizePolicy1);
         horizontalLayout_4 = new QHBoxLayout(groupBox_3);
         horizontalLayout_4->setSpacing(0);
-        horizontalLayout_4->setContentsMargins(0, 0, 0, 0);
+        horizontalLayout_4->setContentsMargins(11, 11, 11, 11);
         horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
+        horizontalLayout_4->setContentsMargins(0, 0, 0, 0);
         textBrowser = new QTextBrowser(groupBox_3);
         textBrowser->setObjectName(QString::fromUtf8("textBrowser"));
         QSizePolicy sizePolicy5(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -401,7 +403,6 @@ public:
         mainToolBar->addAction(action_clearLog);
         mainToolBar->addAction(action_cnt_com_failed);
         mainToolBar->addAction(action_clearCnt);
-        mainToolBar->addAction(action_auto_get_data);
 
         retranslateUi(MonitorMainWindow);
 

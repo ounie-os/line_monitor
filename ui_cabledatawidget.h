@@ -54,7 +54,7 @@ public:
     QVBoxLayout *verticalLayout;
     QScrollArea *scrollArea_2;
     QWidget *scrollAreaWidgetContents_2;
-    QWidget *widget;
+    QWidget *layoutWidget;
     QVBoxLayout *verticalLayout_7;
     QHBoxLayout *horizontalLayout_15;
     QVBoxLayout *verticalLayout_3;
@@ -81,7 +81,7 @@ public:
     QLabel *label_12;
     QTableWidget *tableWidget;
     QWidget *tab;
-    QWidget *layoutWidget;
+    QWidget *layoutWidget1;
     QVBoxLayout *verticalLayout_8;
     QTabWidget *tabWidget_chart_2;
     trendPlot *tab_groundCable_2;
@@ -298,10 +298,10 @@ public:
         scrollAreaWidgetContents_2 = new QWidget();
         scrollAreaWidgetContents_2->setObjectName(QString::fromUtf8("scrollAreaWidgetContents_2"));
         scrollAreaWidgetContents_2->setGeometry(QRect(0, 0, 970, 490));
-        widget = new QWidget(scrollAreaWidgetContents_2);
-        widget->setObjectName(QString::fromUtf8("widget"));
-        widget->setGeometry(QRect(22, 6, 591, 361));
-        verticalLayout_7 = new QVBoxLayout(widget);
+        layoutWidget = new QWidget(scrollAreaWidgetContents_2);
+        layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
+        layoutWidget->setGeometry(QRect(22, 6, 591, 361));
+        verticalLayout_7 = new QVBoxLayout(layoutWidget);
         verticalLayout_7->setObjectName(QString::fromUtf8("verticalLayout_7"));
         verticalLayout_7->setContentsMargins(0, 0, 0, 0);
         horizontalLayout_15 = new QHBoxLayout();
@@ -310,12 +310,12 @@ public:
         verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
         horizontalLayout_14 = new QHBoxLayout();
         horizontalLayout_14->setObjectName(QString::fromUtf8("horizontalLayout_14"));
-        label_14 = new QLabel(widget);
+        label_14 = new QLabel(layoutWidget);
         label_14->setObjectName(QString::fromUtf8("label_14"));
 
         horizontalLayout_14->addWidget(label_14);
 
-        label_34 = new QLabel(widget);
+        label_34 = new QLabel(layoutWidget);
         label_34->setObjectName(QString::fromUtf8("label_34"));
 
         horizontalLayout_14->addWidget(label_34);
@@ -325,22 +325,22 @@ public:
 
         horizontalLayout_13 = new QHBoxLayout();
         horizontalLayout_13->setObjectName(QString::fromUtf8("horizontalLayout_13"));
-        label_43 = new QLabel(widget);
+        label_43 = new QLabel(layoutWidget);
         label_43->setObjectName(QString::fromUtf8("label_43"));
 
         horizontalLayout_13->addWidget(label_43);
 
-        label_44 = new QLabel(widget);
+        label_44 = new QLabel(layoutWidget);
         label_44->setObjectName(QString::fromUtf8("label_44"));
 
         horizontalLayout_13->addWidget(label_44);
 
-        label_41 = new QLabel(widget);
+        label_41 = new QLabel(layoutWidget);
         label_41->setObjectName(QString::fromUtf8("label_41"));
 
         horizontalLayout_13->addWidget(label_41);
 
-        label_46 = new QLabel(widget);
+        label_46 = new QLabel(layoutWidget);
         label_46->setObjectName(QString::fromUtf8("label_46"));
 
         horizontalLayout_13->addWidget(label_46);
@@ -355,12 +355,12 @@ public:
         verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
         horizontalLayout_5 = new QHBoxLayout();
         horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
-        label_37 = new QLabel(widget);
+        label_37 = new QLabel(layoutWidget);
         label_37->setObjectName(QString::fromUtf8("label_37"));
 
         horizontalLayout_5->addWidget(label_37);
 
-        label_38 = new QLabel(widget);
+        label_38 = new QLabel(layoutWidget);
         label_38->setObjectName(QString::fromUtf8("label_38"));
 
         horizontalLayout_5->addWidget(label_38);
@@ -370,12 +370,12 @@ public:
 
         horizontalLayout_6 = new QHBoxLayout();
         horizontalLayout_6->setObjectName(QString::fromUtf8("horizontalLayout_6"));
-        label_45 = new QLabel(widget);
+        label_45 = new QLabel(layoutWidget);
         label_45->setObjectName(QString::fromUtf8("label_45"));
 
         horizontalLayout_6->addWidget(label_45);
 
-        label_42 = new QLabel(widget);
+        label_42 = new QLabel(layoutWidget);
         label_42->setObjectName(QString::fromUtf8("label_42"));
 
         horizontalLayout_6->addWidget(label_42);
@@ -391,22 +391,22 @@ public:
 
         horizontalLayout_4 = new QHBoxLayout();
         horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
-        pushButton_ReadRtData = new QPushButton(widget);
+        pushButton_ReadRtData = new QPushButton(layoutWidget);
         pushButton_ReadRtData->setObjectName(QString::fromUtf8("pushButton_ReadRtData"));
 
         horizontalLayout_4->addWidget(pushButton_ReadRtData);
 
-        checkBox = new QCheckBox(widget);
+        checkBox = new QCheckBox(layoutWidget);
         checkBox->setObjectName(QString::fromUtf8("checkBox"));
 
         horizontalLayout_4->addWidget(checkBox);
 
-        label_4 = new QLabel(widget);
+        label_4 = new QLabel(layoutWidget);
         label_4->setObjectName(QString::fromUtf8("label_4"));
 
         horizontalLayout_4->addWidget(label_4);
 
-        spinBox = new QSpinBox(widget);
+        spinBox = new QSpinBox(layoutWidget);
         spinBox->setObjectName(QString::fromUtf8("spinBox"));
         QSizePolicy sizePolicy3(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy3.setHorizontalStretch(0);
@@ -419,7 +419,7 @@ public:
 
         horizontalLayout_4->addWidget(spinBox);
 
-        label_12 = new QLabel(widget);
+        label_12 = new QLabel(layoutWidget);
         label_12->setObjectName(QString::fromUtf8("label_12"));
 
         horizontalLayout_4->addWidget(label_12);
@@ -427,7 +427,7 @@ public:
 
         verticalLayout_7->addLayout(horizontalLayout_4);
 
-        tableWidget = new QTableWidget(widget);
+        tableWidget = new QTableWidget(layoutWidget);
         if (tableWidget->columnCount() < 5)
             tableWidget->setColumnCount(5);
         QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
@@ -511,13 +511,13 @@ public:
         tabWidget_data->addTab(tab_data, QString());
         tab = new QWidget();
         tab->setObjectName(QString::fromUtf8("tab"));
-        layoutWidget = new QWidget(tab);
-        layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
-        layoutWidget->setGeometry(QRect(31, 20, 721, 401));
-        verticalLayout_8 = new QVBoxLayout(layoutWidget);
+        layoutWidget1 = new QWidget(tab);
+        layoutWidget1->setObjectName(QString::fromUtf8("layoutWidget1"));
+        layoutWidget1->setGeometry(QRect(31, 20, 721, 401));
+        verticalLayout_8 = new QVBoxLayout(layoutWidget1);
         verticalLayout_8->setObjectName(QString::fromUtf8("verticalLayout_8"));
         verticalLayout_8->setContentsMargins(0, 0, 0, 0);
-        tabWidget_chart_2 = new QTabWidget(layoutWidget);
+        tabWidget_chart_2 = new QTabWidget(layoutWidget1);
         tabWidget_chart_2->setObjectName(QString::fromUtf8("tabWidget_chart_2"));
         QSizePolicy sizePolicy4(QSizePolicy::Preferred, QSizePolicy::Minimum);
         sizePolicy4.setHorizontalStretch(0);
@@ -531,7 +531,7 @@ public:
 
         verticalLayout_8->addWidget(tabWidget_chart_2);
 
-        tabWidget_chart = new QTabWidget(layoutWidget);
+        tabWidget_chart = new QTabWidget(layoutWidget1);
         tabWidget_chart->setObjectName(QString::fromUtf8("tabWidget_chart"));
         sizePolicy4.setHeightForWidth(tabWidget_chart->sizePolicy().hasHeightForWidth());
         tabWidget_chart->setSizePolicy(sizePolicy4);

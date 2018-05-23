@@ -468,7 +468,6 @@
    <addaction name="action_clearLog"/>
    <addaction name="action_cnt_com_failed"/>
    <addaction name="action_clearCnt"/>
-   <addaction name="action_auto_get_data"/>
   </widget>
   <action name="action_data">
    <property name="text">

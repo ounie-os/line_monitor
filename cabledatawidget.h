@@ -138,8 +138,6 @@ private slots:
 
     void on_pushButton_save_alarm_value_clicked();
 
-    //void on_checkBox_statistics_value_clicked(bool checked);
-
     void on_supperRootOperationPushButton_clicked();
 
     void on_channelControlSetPushButton_clicked();
@@ -157,22 +155,6 @@ private slots:
     void on_tab_mainCable_destroyed();
 
     void on_label_34_linkActivated(const QString &link);
-
-    void on_checkBox_alarm_value_clicked();
-
-    void on_spinBox_alarm_value_editingFinished();
-
-    void on_rtcReadDateTimeEdit_editingFinished();
-
-    void on_sampleSecSpinBox_editingFinished();
-
-    void on_thresholdTypeComboBox_activated(const QString &arg1);
-
-    void on_ctValueDoubleSpinBox_editingFinished();
-
-    void on_spinBox_alarm_value_destroyed();
-
-    void on_spinBox_alarm_value_valueChanged(const QString &arg1);
 
 private:
     Ui::CableDataWidget *ui;

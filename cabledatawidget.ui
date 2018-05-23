@@ -94,7 +94,7 @@ color: rgb(0, 0, 0);
            <item>
             <widget class="QLabel" name="label_IP">
              <property name="text">
-              <string>TextLabel</string>
+              <string/>
              </property>
             </widget>
            </item>
@@ -140,19 +140,19 @@ color: rgb(0, 0, 0);
                 <widget class="QWidget" name="layoutWidget">
                  <property name="geometry">
                   <rect>
-                   <x>21</x>
-                   <y>2</y>
+                   <x>22</x>
+                   <y>6</y>
                    <width>591</width>
-                   <height>471</height>
+                   <height>361</height>
                   </rect>
                  </property>
-                 <layout class="QVBoxLayout" name="verticalLayout_7" stretch="1,6">
+                 <layout class="QVBoxLayout" name="verticalLayout_7">
                   <item>
-                   <layout class="QVBoxLayout" name="verticalLayout_3" stretch="2,1">
+                   <layout class="QHBoxLayout" name="horizontalLayout_15">
                     <item>
-                     <layout class="QVBoxLayout" name="verticalLayout_2">
+                     <layout class="QVBoxLayout" name="verticalLayout_3">
                       <item>
-                       <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="1,2,1,2">
+                       <layout class="QHBoxLayout" name="horizontalLayout_14">
                         <item>
                          <widget class="QLabel" name="label_14">
                           <property name="text">
@@ -170,24 +170,10 @@ color: rgb(0, 0, 0);
                           </property>
                          </widget>
                         </item>
-                        <item>
-                         <widget class="QLabel" name="label_37">
-                          <property name="text">
-                           <string>UPS电压：</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item>
-                         <widget class="QLabel" name="label_38">
-                          <property name="text">
-                           <string/>
-                          </property>
-                         </widget>
-                        </item>
                        </layout>
                       </item>
                       <item>
-                       <layout class="QHBoxLayout" name="horizontalLayout_6">
+                       <layout class="QHBoxLayout" name="horizontalLayout_13">
                         <item>
                          <widget class="QLabel" name="label_43">
                           <property name="text">
@@ -216,6 +202,32 @@ color: rgb(0, 0, 0);
                           </property>
                          </widget>
                         </item>
+                       </layout>
+                      </item>
+                     </layout>
+                    </item>
+                    <item>
+                     <layout class="QVBoxLayout" name="verticalLayout_2">
+                      <item>
+                       <layout class="QHBoxLayout" name="horizontalLayout_5">
+                        <item>
+                         <widget class="QLabel" name="label_37">
+                          <property name="text">
+                           <string>UPS电压：</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QLabel" name="label_38">
+                          <property name="text">
+                           <string/>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </item>
+                      <item>
+                       <layout class="QHBoxLayout" name="horizontalLayout_6">
                         <item>
                          <widget class="QLabel" name="label_45">
                           <property name="text">
@@ -234,56 +246,56 @@ color: rgb(0, 0, 0);
                       </item>
                      </layout>
                     </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_4">
                     <item>
-                     <layout class="QHBoxLayout" name="horizontalLayout_4">
-                      <item>
-                       <widget class="QPushButton" name="pushButton_ReadRtData">
-                        <property name="text">
-                         <string>读取实时数据</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QCheckBox" name="checkBox">
-                        <property name="text">
-                         <string>自动获取实时数据</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QLabel" name="label_4">
-                        <property name="text">
-                         <string>    设置间隔时间</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QSpinBox" name="spinBox">
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="minimum">
-                         <number>1</number>
-                        </property>
-                        <property name="maximum">
-                         <number>99999</number>
-                        </property>
-                        <property name="value">
-                         <number>3</number>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QLabel" name="label_12">
-                        <property name="text">
-                         <string>秒</string>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
+                     <widget class="QPushButton" name="pushButton_ReadRtData">
+                      <property name="text">
+                       <string>读取实时数据</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QCheckBox" name="checkBox">
+                      <property name="text">
+                       <string>自动获取实时数据</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="label_4">
+                      <property name="text">
+                       <string>    设置间隔时间</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QSpinBox" name="spinBox">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimum">
+                       <number>1</number>
+                      </property>
+                      <property name="maximum">
+                       <number>99999</number>
+                      </property>
+                      <property name="value">
+                       <number>3</number>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="label_12">
+                      <property name="text">
+                       <string>秒</string>
+                      </property>
+                     </widget>
                     </item>
                    </layout>
                   </item>
@@ -302,10 +314,10 @@ color: rgb(0, 0, 0);
                      <number>0</number>
                     </property>
                     <attribute name="horizontalHeaderDefaultSectionSize">
-                     <number>115</number>
+                     <number>104</number>
                     </attribute>
                     <attribute name="verticalHeaderDefaultSectionSize">
-                     <number>35</number>
+                     <number>30</number>
                     </attribute>
                     <row>
                      <property name="text">
@@ -367,15 +379,20 @@ color: rgb(0, 0, 0);
                       <string>C相</string>
                      </property>
                     </column>
+                    <column>
+                     <property name="text">
+                      <string>N相</string>
+                     </property>
+                    </column>
                     <item row="0" column="0">
                      <property name="text">
                       <string/>
                      </property>
                      <property name="textAlignment">
-                      <set>AlignLeft|AlignVCenter</set>
+                      <set>AlignLeading|AlignVCenter</set>
                      </property>
                      <property name="background">
-                      <brush brushstyle="FDiagPattern">
+                      <brush brushstyle="NoBrush">
                        <color alpha="255">
                         <red>0</red>
                         <green>0</green>
@@ -426,7 +443,7 @@ color: rgb(0, 0, 0);
                       </font>
                      </property>
                      <property name="background">
-                      <brush brushstyle="FDiagPattern">
+                      <brush brushstyle="NoBrush">
                        <color alpha="255">
                         <red>0</red>
                         <green>0</green>
@@ -435,7 +452,7 @@ color: rgb(0, 0, 0);
                       </brush>
                      </property>
                      <property name="foreground">
-                      <brush brushstyle="FDiagPattern">
+                      <brush brushstyle="NoBrush">
                        <color alpha="255">
                         <red>0</red>
                         <green>0</green>
@@ -449,7 +466,7 @@ color: rgb(0, 0, 0);
                       <string/>
                      </property>
                      <property name="background">
-                      <brush brushstyle="FDiagPattern">
+                      <brush brushstyle="NoBrush">
                        <color alpha="255">
                         <red>0</red>
                         <green>0</green>
@@ -458,7 +475,7 @@ color: rgb(0, 0, 0);
                       </brush>
                      </property>
                      <property name="foreground">
-                      <brush brushstyle="FDiagPattern">
+                      <brush brushstyle="NoBrush">
                        <color alpha="255">
                         <red>0</red>
                         <green>0</green>
@@ -561,8 +578,8 @@ color: rgb(0, 0, 0);
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>438</width>
-                  <height>91</height>
+                  <width>970</width>
+                  <height>490</height>
                  </rect>
                 </property>
                 <layout class="QHBoxLayout" name="horizontalLayout_26">

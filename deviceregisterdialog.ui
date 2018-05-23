@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>创建设备</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -19,7 +19,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Device ID:</string>
+        <string>设备 ID:</string>
        </property>
       </widget>
      </item>
@@ -33,7 +33,7 @@
      <item>
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Device Name:</string>
+        <string>设备名:</string>
        </property>
       </widget>
      </item>
@@ -53,7 +53,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Device User:</string>
+        <string>设备用户:</string>
        </property>
       </widget>
      </item>
@@ -87,14 +87,14 @@
      <item>
       <widget class="QPushButton" name="createPushButton">
        <property name="text">
-        <string>Create</string>
+        <string>创建</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="removePushButton">
        <property name="text">
-        <string>Remove</string>
+        <string>移除</string>
        </property>
       </widget>
      </item>
