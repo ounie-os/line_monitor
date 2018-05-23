@@ -333,6 +333,7 @@ void MonitorMainWindow::on_action_connect_485_triggered()
         this->comDevice->quit();
         this->com_485_Flag = false;
         this->ui->action_connect_network->setEnabled(true);
+        this->ui->action_connet_server->setEnabled(true);
     }else
     {
         comSettingDialog *dialog = new comSettingDialog(this);
@@ -365,10 +366,12 @@ void MonitorMainWindow::on_action_connect_485_triggered()
             }
             this->com_485_Flag = true;
             this->ui->action_connect_network->setEnabled(false);
+            this->ui->action_connet_server->setEnabled(false);
         }else
         {
             this->ui->action_connect_485->setText(tr("485通讯连接"));
             this->ui->action_connect_network->setEnabled(true);
+            this->ui->action_connet_server->setEnabled(true);
         }
         dialog->close();
         delete dialog;
@@ -917,6 +920,7 @@ void MonitorMainWindow::hcSocketConnectedToServer()
     emit signal_send_ip_to_monitor(this->hcIPAddress);
     this->b_reconnect = false;
     this->timer_auto_connect->start(3000);
+    this->ui->action_connect_485->setEnabled(false);
 }
 
 void MonitorMainWindow::hcSocketDisconnectedFromServer()
@@ -927,6 +931,7 @@ void MonitorMainWindow::hcSocketDisconnectedFromServer()
     this->ui->action_connet_server->setText("远端服务器连接");
     emit signal_remote_server(false);
     emit signal_send_ip_to_monitor(" ");
+    this->ui->action_connect_485->setEnabled(true);
 }
 /*!
  * \brief MonitorMainWindow::sendDataToServer_slot
