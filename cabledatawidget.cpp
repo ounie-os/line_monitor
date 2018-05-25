@@ -805,8 +805,8 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
 #define FRAME_GROUND_CURRENT_A_OFFSET (33) // A相接地电流
 #define FRAME_GROUND_CURRENT_B_OFFSET (37) // B相接地电流
 #define FRAME_GROUND_CURRENT_C_OFFSET (41) // C相接地电流
-#define FRAME_GROUND_CURRENT_ALL_OFFSET (45) // N相接地电流
-#define FRAME_OP_CURRENT_OFFSET       (49) // 主缆电流
+#define FRAME_GROUND_CURRENT_ALL_OFFSET (49) // N相接地电流
+#define FRAME_OP_CURRENT_OFFSET       (45) // 主缆电流
 #define FRAME_ENVTEMP_OFFSET (53) // 环境温度
 #define FRAME_CONNECTOR_TEMP_A_OFFSET (61) // A相接头温度
 #define FRAME_CONNECTOR_TEMP_B_OFFSET (71) // B相接头温度
