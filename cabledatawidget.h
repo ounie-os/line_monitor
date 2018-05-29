@@ -53,6 +53,7 @@ public:
     void item_time_table(uint row,uint col,QDateTime data);
     void init_para();
     float calc_current_rate(float new_current, float old_currnet);
+    void update_alarm(QString value, QString threshold, uint row, uint col);
 signals:
     void sendDataToDevice(int clientID,QByteArray data);
     void sendDataToDevice(QByteArray data);
@@ -132,7 +133,7 @@ private slots:
 
     void on_checkBox_alarm_value_clicked(bool checked);
 
-    void on_spinBox_alarm_value_valueChanged(int arg1);
+//    void on_spinBox_alarm_value_valueChanged(int arg1);
 
     void on_pushButton_clear_alarm_value_clicked();
 
@@ -184,6 +185,12 @@ private:
     float phase_B_cable_eleCur_ThresholdValue;
     float phase_C_cable_eleCur_ThresholdValue;
     float phase_N_cable_eleCur_ThresholdValue;
+
+    float phase_Main_cable_eleCurRate_ThresholdValue;
+    float phase_A_cable_eleCurRate_ThresholdValue;
+    float phase_B_cable_eleCurRate_ThresholdValue;
+    float phase_C_cable_eleCurRate_ThresholdValue;
+    float phase_N_cable_eleCurRate_ThresholdValue;
 
     float phase_Main_cable_temp_ThresholdValue;
     float phase_A_cable_temp_ThresholdValue;

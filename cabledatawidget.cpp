@@ -250,7 +250,7 @@ void CableDataWidget::cableThreshold_init()
 void CableDataWidget::setDeviceID(CableMonitorDevice ID)
 {
     this->deviceID = ID;
-    cableThreshold_init();
+//    cableThreshold_init();
 }
 /*!
  * \brief CableDataWidget::getDeviceID
@@ -856,6 +856,12 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
             uint_op_current = data_tmp[FRAME_OP_CURRENT_OFFSET] | (data_tmp[FRAME_OP_CURRENT_OFFSET+1] << 8) | (data_tmp[FRAME_OP_CURRENT_OFFSET+2] << 16) | (data_tmp[FRAME_OP_CURRENT_OFFSET+3] << 24);
             qDebug() << "主缆电流： " << op_current;
 
+            this->update_alarm(QString::number(op_current, 'f', 2), QString::number(this->phase_Main_cable_eleCur_ThresholdValue, 'f', 2), 0, 0);
+            this->update_alarm(QString::number(ground_current_A, 'f', 2), QString::number(this->phase_A_cable_eleCur_ThresholdValue, 'f', 2), 0, 1);
+            this->update_alarm(QString::number(ground_current_B, 'f', 2), QString::number(this->phase_B_cable_eleCur_ThresholdValue, 'f', 2), 0, 2);
+            this->update_alarm(QString::number(ground_current_C, 'f', 2), QString::number(this->phase_C_cable_eleCur_ThresholdValue, 'f', 2), 0, 3);
+            this->update_alarm(QString::number(ground_current_ALL, 'f', 2), QString::number(this->phase_N_cable_eleCur_ThresholdValue, 'f', 2), 0, 4);
+
             if (this->ui->checkBox->isChecked())
             {
                 float current_A_rate = this->calc_current_rate(ground_current_A, this->ground_current_A);
@@ -874,6 +880,13 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
                 this->ui->tableWidget->item(2,2)->setText(QString::number(current_B_rate, 'f', 3)+" A/S");
                 this->ui->tableWidget->item(2,3)->setText(QString::number(current_C_rate, 'f', 3)+" A/S");
                 this->ui->tableWidget->item(2,4)->setText(QString::number(current_ALL_rate, 'f', 3)+" A/S");
+
+                this->update_alarm(QString::number(current_OP_rate, 'f', 2), QString::number(this->phase_Main_cable_eleCurRate_ThresholdValue, 'f', 2), 2, 0);
+                this->update_alarm(QString::number(current_A_rate, 'f', 2), QString::number(this->phase_A_cable_eleCurRate_ThresholdValue, 'f', 2), 2, 1);
+                this->update_alarm(QString::number(current_B_rate, 'f', 2), QString::number(this->phase_B_cable_eleCurRate_ThresholdValue, 'f', 2), 2, 2);
+                this->update_alarm(QString::number(current_C_rate, 'f', 2), QString::number(this->phase_C_cable_eleCurRate_ThresholdValue, 'f', 2), 2, 3);
+                this->update_alarm(QString::number(current_ALL_rate, 'f', 2), QString::number(this->phase_N_cable_eleCurRate_ThresholdValue, 'f', 2), 2, 4);
+
             }
             
             this->uint_ground_current_A = uint_ground_current_A;
@@ -915,6 +928,10 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
             qDebug() << "B相接头温度： " << this->connector_temp_B;
             this->connector_temp_C = (float)(((data_tmp[FRAME_CONNECTOR_TEMP_C_OFFSET] << 8) | data_tmp[FRAME_CONNECTOR_TEMP_C_OFFSET+1]) - 2731) / 10;
             qDebug() << "C相接头温度： " << this->connector_temp_C;
+
+            this->update_alarm(QString::number(connector_temp_A, 'f', 2), QString::number(this->phase_A_cable_temp_ThresholdValue, 'f', 2), 1, 1);
+            this->update_alarm(QString::number(connector_temp_B, 'f', 2), QString::number(this->phase_B_cable_temp_ThresholdValue, 'f', 2), 1, 2);
+            this->update_alarm(QString::number(connector_temp_B, 'f', 2), QString::number(this->phase_B_cable_temp_ThresholdValue, 'f', 2), 1, 3);
 
             this->ui->tab_groundCable_2->addData(0, frameTime, this->connector_temp_A);
             this->ui->tab_groundCable_2->addData(1, frameTime, this->connector_temp_B);
@@ -1548,7 +1565,8 @@ void CableDataWidget::itemFault(uint row, uint col)
 
 void CableDataWidget::itemNormal(uint row, uint col)
 {
-    this->ui->tableWidget->item(row,col)->setBackgroundColor(Qt::green);
+    QColor normal(85, 170, 255);
+    this->ui->tableWidget->item(row,col)->setBackgroundColor(normal);
 }
 
 void CableDataWidget::item_fault_table(uint row, uint col)
@@ -1711,6 +1729,10 @@ void CableDataWidget::sendData_slot()
         QString str;
         str.sprintf("%d 天 %d 小时 %d 分 %d 秒", day, hour, minute, second);
         this->ui->label_34->setText(str);
+
+        if (!this->ui->checkBox->isChecked())
+            for (int i=0; i<5; i++) // 电流变化率背景色还原
+                this->itemNormal(2, i);
     }
 
 }
@@ -1956,55 +1978,63 @@ void CableDataWidget::init_para()
     {
     }else
     {
-        settingFile->setValue("phase_Main_cable_eleCur_ThresholdValue",100);
+        settingFile->setValue("phase_Main_cable_eleCur_ThresholdValue",0);
     }
+    this->phase_Main_cable_eleCur_ThresholdValue = settingFile->value("phase_Main_cable_eleCur_ThresholdValue").toFloat();
     if(settingFile->contains("phase_A_cable_eleCur_ThresholdValue"))
     {
     }else
     {
-        settingFile->setValue("phase_A_cable_eleCur_ThresholdValue",50);
+        settingFile->setValue("phase_A_cable_eleCur_ThresholdValue",0);
     }
+    this->phase_A_cable_eleCur_ThresholdValue = settingFile->value("phase_A_cable_eleCur_ThresholdValue").toFloat();
     if(settingFile->contains("phase_B_cable_eleCur_ThresholdValue"))
     {
     }else
     {
-        settingFile->setValue("phase_B_cable_eleCur_ThresholdValue",50);
+        settingFile->setValue("phase_B_cable_eleCur_ThresholdValue",0);
     }
+    this->phase_B_cable_eleCur_ThresholdValue = settingFile->value("phase_B_cable_eleCur_ThresholdValue").toFloat();
     if(settingFile->contains("phase_C_cable_eleCur_ThresholdValue"))
     {
     }else
     {
-        settingFile->setValue("phase_C_cable_eleCur_ThresholdValue",50);
+        settingFile->setValue("phase_C_cable_eleCur_ThresholdValue",0);
     }
+    this->phase_C_cable_eleCur_ThresholdValue = settingFile->value("phase_C_cable_eleCur_ThresholdValue").toFloat();
     if(settingFile->contains("phase_N_cable_eleCur_ThresholdValue"))
     {
     }else
     {
-        settingFile->setValue("phase_N_cable_eleCur_ThresholdValue",50);
+        settingFile->setValue("phase_N_cable_eleCur_ThresholdValue",0);
     }
+    this->phase_N_cable_eleCur_ThresholdValue = settingFile->value("phase_N_cable_eleCur_ThresholdValue").toFloat();
     if(settingFile->contains("phase_A_cable_temp_ThresholdValue"))
     {
     }else
     {
-        settingFile->setValue("phase_A_cable_temp_ThresholdValue",50);
+        settingFile->setValue("phase_A_cable_temp_ThresholdValue",0);
     }
+    this->phase_A_cable_temp_ThresholdValue = settingFile->value("phase_A_cable_temp_ThresholdValue").toFloat();
     if(settingFile->contains("phase_B_cable_temp_ThresholdValue"))
     {
     }else
     {
-        settingFile->setValue("phase_B_cable_temp_ThresholdValue",50);
+        settingFile->setValue("phase_B_cable_temp_ThresholdValue",0);
     }
+    this->phase_B_cable_temp_ThresholdValue = settingFile->value("phase_B_cable_temp_ThresholdValue").toFloat();
     if(settingFile->contains("phase_C_cable_temp_ThresholdValue"))
     {
     }else
     {
-        settingFile->setValue("phase_C_cable_temp_ThresholdValue",50);
+        settingFile->setValue("phase_C_cable_temp_ThresholdValue",0);
     }
+    this->phase_C_cable_temp_ThresholdValue = settingFile->value("phase_C_cable_temp_ThresholdValue").toFloat();
     if(settingFile->contains("phase_N_cable_temp_ThresholdValue"))
     {
     }else
     {
-        settingFile->setValue("phase_N_cable_temp_ThresholdValue",50);
+        settingFile->setValue("phase_N_cable_temp_ThresholdValue",0);
     }
     if(settingFile->contains("cur_change_cycle"))
     {
@@ -2013,31 +2043,41 @@ void CableDataWidget::init_para()
         settingFile->setValue("cur_change_cycle",10);
     }
 
+    if(settingFile->contains("phase_Main_cur_change_rate_threshold_value"))
+    {
+    }else
+    {
+        settingFile->setValue("phase_Main_cur_change_rate_threshold_value",0);
+    }
+    this->phase_Main_cable_eleCurRate_ThresholdValue = settingFile->value("phase_Main_cur_change_rate_threshold_value").toFloat();
     if(settingFile->contains("phase_A_cur_change_rate_threshold_value"))
     {
     }else
     {
         settingFile->setValue("phase_A_cur_change_rate_threshold_value",0);
     }
+    this->phase_A_cable_eleCurRate_ThresholdValue = settingFile->value("phase_A_cur_change_rate_threshold_value").toFloat();
     if(settingFile->contains("phase_B_cur_change_rate_threshold_value"))
     {
     }else
     {
         settingFile->setValue("phase_B_cur_change_rate_threshold_value",0);
     }
+    this->phase_B_cable_eleCurRate_ThresholdValue = settingFile->value("phase_B_cur_change_rate_threshold_value").toFloat();
     if(settingFile->contains("phase_C_cur_change_rate_threshold_value"))
     {
     }else
     {
         settingFile->setValue("phase_C_cur_change_rate_threshold_value",0);
     }
+    this->phase_C_cable_eleCurRate_ThresholdValue = settingFile->value("phase_C_cur_change_rate_threshold_value").toFloat();
     if(settingFile->contains("phase_N_cur_change_rate_threshold_value"))
     {
     }else
     {
         settingFile->setValue("phase_N_cur_change_rate_threshold_value",0);
     }
-
+    this->phase_N_cable_eleCurRate_ThresholdValue = settingFile->value("phase_N_cur_change_rate_threshold_value").toFloat();
     if(settingFile->contains("phase_A_vibrate_threshold_value"))
     {
     }else
@@ -2311,13 +2351,41 @@ void CableDataWidget::on_statisticArgumentReadPushButton_clicked()
  */
 void CableDataWidget::on_thresholdSetPushButton_clicked()
 {
-//    this->ui->thresholdSetPushButton->setEnabled(false);
+    this->ui->thresholdSetPushButton->setEnabled(false);
 //    this->setDataFlag = true;
 //    this->sendDataFrame(comProtocol::assembleThresholdFrame(this->deviceID.getDeviceId(),
 //                                                            this->ui->thresholdTypeComboBox->currentIndex()+ MainCable_Alarm_Threhold,
 //                                                            this->ui->thresholdValueDoubleSpinBox->text().toFloat()*1000));
-//    myHelper::Delay_MSec(200);
-//    this->ui->thresholdSetPushButton->setEnabled(true);
+
+    switch (this->ui->thresholdTypeComboBox->currentIndex())
+    {
+        case 0:
+            this->phase_Main_cable_eleCur_ThresholdValue = this->ui->thresholdValueDoubleSpinBox->text().toFloat();
+            change_para("phase_Main_cable_eleCur_ThresholdValue", QString::number(this->phase_Main_cable_eleCur_ThresholdValue));
+            break;
+        case 1:
+            this->phase_A_cable_eleCur_ThresholdValue = this->ui->thresholdValueDoubleSpinBox->text().toFloat();
+            change_para("phase_A_cable_eleCur_ThresholdValue", QString::number(this->phase_A_cable_eleCur_ThresholdValue));
+            break;
+        case 2:
+            this->phase_B_cable_eleCur_ThresholdValue = this->ui->thresholdValueDoubleSpinBox->text().toFloat();
+            change_para("phase_B_cable_eleCur_ThresholdValue", QString::number(this->phase_B_cable_eleCur_ThresholdValue));
+            break;
+        case 3:
+            this->phase_C_cable_eleCur_ThresholdValue = this->ui->thresholdValueDoubleSpinBox->text().toFloat();
+            change_para("phase_C_cable_eleCur_ThresholdValue", QString::number(this->phase_C_cable_eleCur_ThresholdValue));
+            break;
+        case 4:
+            this->phase_N_cable_eleCur_ThresholdValue = this->ui->thresholdValueDoubleSpinBox->text().toFloat();
+            change_para("phase_N_cable_eleCur_ThresholdValue", QString::number(this->phase_N_cable_eleCur_ThresholdValue));
+            break;
+        default:
+            break;
+    }
+
+    myHelper::Delay_MSec(200);
+    qDebug() << "设置成功";
+    this->ui->thresholdSetPushButton->setEnabled(true);
 }
 /*!
  * \brief CableDataWidget::on_thresholdReadPushButton_clicked
@@ -2328,17 +2396,56 @@ void CableDataWidget::on_thresholdReadPushButton_clicked()
 //    this->setDataFlag = true;
 //    this->sendDataFrame(comProtocol::assembleConfigReadFrame(this->deviceID.getDeviceId(),
 //                                                             this->ui->thresholdTypeComboBox->currentIndex()+MainCable_Alarm_Threhold));
+    switch (this->ui->thresholdTypeComboBox->currentIndex())
+    {
+        case 0:
+            this->ui->thresholdValueDoubleSpinBox->setValue(this->phase_Main_cable_eleCur_ThresholdValue);
+            break;
+        case 1:
+            this->ui->thresholdValueDoubleSpinBox->setValue(this->phase_A_cable_eleCur_ThresholdValue);
+            break;
+        case 2:
+            this->ui->thresholdValueDoubleSpinBox->setValue(this->phase_B_cable_eleCur_ThresholdValue);
+            break;
+        case 3:
+            this->ui->thresholdValueDoubleSpinBox->setValue(this->phase_C_cable_eleCur_ThresholdValue);
+            break;
+        case 4:
+            this->ui->thresholdValueDoubleSpinBox->setValue(this->phase_N_cable_eleCur_ThresholdValue);
+            break;
+        default:
+            break;
+    }    
 }
 
 void CableDataWidget::on_pushButton_setTempThreashold_clicked()
 {
-//    this->ui->pushButton_setTempThreashold->setEnabled(false);
+    this->ui->pushButton_setTempThreashold->setEnabled(false);
 //    this->setDataFlag = true;
 //    this->sendDataFrame(comProtocol::assembleThresholdFrame(this->deviceID.getDeviceId(),
 //                                                            this->ui->comboBox_TempThresholdType->currentIndex()+ GroundCablePhaseATemperature_Alarm_Threshold,
 //                                                            this->ui->doubleSpinBox_Temp_Threshold->text().toFloat()*100));
-//    myHelper::Delay_MSec(200);
-//    this->ui->pushButton_setTempThreashold->setEnabled(true);
+    switch (this->ui->comboBox_TempThresholdType->currentIndex())
+    {
+        case 0:
+            this->phase_A_cable_temp_ThresholdValue = this->ui->doubleSpinBox_Temp_Threshold->text().toFloat();
+            change_para("phase_A_cable_temp_ThresholdValue", QString::number(this->phase_A_cable_temp_ThresholdValue));
+            break;
+        case 1:
+            this->phase_B_cable_temp_ThresholdValue = this->ui->doubleSpinBox_Temp_Threshold->text().toFloat();
+            change_para("phase_B_cable_temp_ThresholdValue", QString::number(this->phase_B_cable_temp_ThresholdValue));
+            break;
+        case 2:
+            this->phase_C_cable_temp_ThresholdValue = this->ui->doubleSpinBox_Temp_Threshold->text().toFloat();
+            change_para("phase_C_cable_temp_ThresholdValue", QString::number(this->phase_C_cable_temp_ThresholdValue));
+            break;
+        default:
+            break;
+    }
+
+    myHelper::Delay_MSec(200);
+    qDebug() << "设置成功";
+    this->ui->pushButton_setTempThreashold->setEnabled(true);
 }
 
 void CableDataWidget::on_pushButton_readTempThreshold_clicked()
@@ -2346,6 +2453,23 @@ void CableDataWidget::on_pushButton_readTempThreshold_clicked()
 //    this->setDataFlag = true;
 //    this->sendDataFrame(comProtocol::assembleConfigReadFrame(this->deviceID.getDeviceId(),
 //                                                             this->ui->comboBox_TempThresholdType->currentIndex()+GroundCablePhaseATemperature_Alarm_Threshold));
+    switch (this->ui->comboBox_TempThresholdType->currentIndex())
+    {
+        case 0:
+            this->ui->doubleSpinBox_Temp_Threshold->setValue(this->phase_A_cable_temp_ThresholdValue);
+            break;
+        case 1:
+            this->ui->doubleSpinBox_Temp_Threshold->setValue(this->phase_B_cable_temp_ThresholdValue);
+            break;
+        case 2:
+            this->ui->doubleSpinBox_Temp_Threshold->setValue(this->phase_C_cable_temp_ThresholdValue);
+            break;
+        case 3:
+            this->ui->doubleSpinBox_Temp_Threshold->setValue(0.0);
+            break;
+        default:
+            break;
+    }
 }
 
 void CableDataWidget::sendDataToClient_slot()
@@ -2455,16 +2579,42 @@ void CableDataWidget::on_pushButton_Set_VibrateStatisticTime_clicked()
 //    this->ui->pushButton_Set_VibrateStatisticTime->setEnabled(true);
 }
 
-
+// 改变电流变化率阈值
 void CableDataWidget::on_pushButton_SetCurChangeRate_Threshold_clicked()
 {
-//    this->ui->pushButton_SetCurChangeRate_Threshold->setEnabled(false);
+    this->ui->pushButton_SetCurChangeRate_Threshold->setEnabled(false);
 //    this->setDataFlag = true;
 //    this->sendDataFrame(comProtocol::assembleSetCurChangerateThreshildFrame(this->deviceID.getDeviceId(),
 //                                                                      this->ui->comboBox_CurChangeRate_Threshold->currentIndex() + GroundCablePhaseAChangeRate_Alarm_Threshold,
 //                                                                      this->ui->doubleSpinBox_CurChangeRate_Threshold->text().toFloat()));
-//    myHelper::Delay_MSec(200);
-//    this->ui->pushButton_SetCurChangeRate_Threshold->setEnabled(true);
+    switch (this->ui->comboBox_CurChangeRate_Threshold->currentIndex())
+    {
+        case 0:
+            this->phase_Main_cable_eleCurRate_ThresholdValue = this->ui->doubleSpinBox_CurChangeRate_Threshold->text().toFloat();
+            change_para("phase_Main_cur_change_rate_threshold_value", QString::number(this->phase_Main_cable_eleCurRate_ThresholdValue));
+            break;
+        case 1:
+            this->phase_A_cable_eleCurRate_ThresholdValue = this->ui->doubleSpinBox_CurChangeRate_Threshold->text().toFloat();
+            change_para("phase_A_cur_change_rate_threshold_value", QString::number(this->phase_A_cable_eleCurRate_ThresholdValue));
+            break;
+        case 2:
+            this->phase_B_cable_eleCurRate_ThresholdValue = this->ui->doubleSpinBox_CurChangeRate_Threshold->text().toFloat();
+            change_para("phase_B_cur_change_rate_threshold_value", QString::number(this->phase_B_cable_eleCurRate_ThresholdValue));
+            break;
+        case 3:
+            this->phase_C_cable_eleCurRate_ThresholdValue = this->ui->doubleSpinBox_CurChangeRate_Threshold->text().toFloat();
+            change_para("phase_C_cur_change_rate_threshold_value", QString::number(this->phase_C_cable_eleCurRate_ThresholdValue));
+            break;
+        case 4:
+            this->phase_N_cable_eleCurRate_ThresholdValue = this->ui->doubleSpinBox_CurChangeRate_Threshold->text().toFloat();
+            change_para("phase_N_cur_change_rate_threshold_value", QString::number(this->phase_N_cable_eleCurRate_ThresholdValue));
+            break;
+        default:
+            break;
+    }
+    myHelper::Delay_MSec(200);
+    qDebug() << "设置成功";
+    this->ui->pushButton_SetCurChangeRate_Threshold->setEnabled(true);
 }
 
 void CableDataWidget::on_pushButton_ReadCurChangeRate_Threshold_clicked()
@@ -2472,6 +2622,26 @@ void CableDataWidget::on_pushButton_ReadCurChangeRate_Threshold_clicked()
 //    this->setDataFlag = true;
 //    this->sendDataFrame(comProtocol::assembleConfigReadFrame(this->deviceID.getDeviceId(),
 //                                                                  this->ui->comboBox_CurChangeRate_Threshold->currentIndex() + GroundCablePhaseAChangeRate_Alarm_Threshold));
+    switch (this->ui->comboBox_CurChangeRate_Threshold->currentIndex())
+    {
+        case 0:
+            this->ui->doubleSpinBox_CurChangeRate_Threshold->setValue(this->phase_Main_cable_eleCurRate_ThresholdValue);
+            break;
+        case 1:
+            this->ui->doubleSpinBox_CurChangeRate_Threshold->setValue(this->phase_A_cable_eleCurRate_ThresholdValue);
+            break;
+        case 2:
+            this->ui->doubleSpinBox_CurChangeRate_Threshold->setValue(this->phase_B_cable_eleCurRate_ThresholdValue);
+            break;
+        case 3:
+            this->ui->doubleSpinBox_CurChangeRate_Threshold->setValue(this->phase_C_cable_eleCurRate_ThresholdValue);
+            break;
+        case 4:
+            this->ui->doubleSpinBox_CurChangeRate_Threshold->setValue(this->phase_N_cable_eleCurRate_ThresholdValue);
+            break;
+        default:
+            break;
+    }
 }
 
 void CableDataWidget::on_pushButton_Set_CurChangerateCycle_clicked()
@@ -2491,10 +2661,10 @@ void CableDataWidget::on_pushButton_Read_CurChangerateCycle_clicked()
 //    this->sendDataFrame(comProtocol::assembleConfigReadFrame(this->deviceID.getDeviceId(),SetChangeRateStatistical));
 }
 
-void CableDataWidget::on_spinBox_alarm_value_valueChanged(int arg1)
-{
+//void CableDataWidget::on_spinBox_alarm_value_valueChanged()
+//{
 //    this->autoGetAlarmDataTimer->setInterval(arg1*1000);
-}
+//}
 
 void CableDataWidget::on_pushButton_clear_alarm_value_clicked()
 {
@@ -2778,3 +2948,25 @@ void CableDataWidget::get_server_ip(QString ip)
 {
     this->setLabelIP(ip);
 }
+
+void CableDataWidget::update_alarm(QString value, QString threshold, uint row, uint col)
+{
+    if (value > threshold)
+    {
+        this->itemAlarm(row, col);
+    }
+    else
+    {
+        this->itemNormal(row, col);
+    }
+}
+
+//void CableDataWidget::on_thresholdValueDoubleSpinBox_valueChanged(double arg1)
+//{
+
+//}
+
+//void CableDataWidget::on_thresholdValueDoubleSpinBox_editingFinished()
+//{
+
+//}

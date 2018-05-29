@@ -1631,6 +1631,7 @@ public:
         label_28->setText(QApplication::translate("CableDataWidget", "\347\224\265\346\265\201\345\217\230\345\214\226\347\216\207\351\230\200\345\200\274\357\274\232", 0, QApplication::UnicodeUTF8));
         comboBox_CurChangeRate_Threshold->clear();
         comboBox_CurChangeRate_Threshold->insertItems(0, QStringList()
+         << QApplication::translate("CableDataWidget", "\344\270\273\347\274\206", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("CableDataWidget", "A\347\233\270", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("CableDataWidget", "B\347\233\270", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("CableDataWidget", "C\347\233\270", 0, QApplication::UnicodeUTF8)
