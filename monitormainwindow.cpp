@@ -67,6 +67,8 @@ MonitorMainWindow::MonitorMainWindow(QWidget *parent) :
     colorList.append(Qt::darkCyan);
     colorList.append(Qt::darkMagenta);
     colorList.append(Qt::darkYellow);
+    colorList.append(Qt::darkGray);
+    colorList.append(Qt::white);
     this->currentColorIndex = 0;
 //    this->ui->textBrowser->document()->setMaximumBlockCount(1000);
     CNT_COM = 0;
@@ -826,6 +828,9 @@ void MonitorMainWindow::on_queryPushButton_clicked()
 
     this->ui->widget_historyPlot->addDataCurve(datalist, this->ui->queryDevicceIdComboBox->currentText() + " " + this->ui->queryDataTypeComboBox->currentText(),
                                         this->colorList.value(currentColorIndex++));
+    if (currentColorIndex == 8)
+        currentColorIndex = 0;
+
 }
 
 void MonitorMainWindow::on_clearCurvesPushButton_clicked()
