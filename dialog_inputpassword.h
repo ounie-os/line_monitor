@@ -1,6 +1,6 @@
 #ifndef DIALOG_INPUTPASSWORD_H
 #define DIALOG_INPUTPASSWORD_H
-#define PASSWORD "LangKai"
+#define PASSWORD "ZhenTai"
 #include <QDialog>
 
 namespace Ui {

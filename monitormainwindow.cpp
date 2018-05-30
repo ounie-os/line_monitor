@@ -840,7 +840,20 @@ void MonitorMainWindow::on_clearCurvesPushButton_clicked()
 
 void MonitorMainWindow::on_clearDBPushButton_clicked()
 {
-    emit signal_DBdel();
+    Dialog_InputPassWord * dialog = new Dialog_InputPassWord(this);
+    dialog->show();
+    if(dialog->exec())
+    {
+        qDebug() << "密码正确";
+        emit signal_DBdel();
+    }
+    else
+    {
+        qDebug() << "密码错误";
+    }
+
+    dialog->close();
+    delete dialog;
 }
 
 void MonitorMainWindow::on_action_set_map_triggered()
