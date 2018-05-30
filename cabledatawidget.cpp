@@ -881,11 +881,11 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
                 this->ui->tableWidget->item(2,3)->setText(QString::number(current_C_rate, 'f', 3)+" A/S");
                 this->ui->tableWidget->item(2,4)->setText(QString::number(current_ALL_rate, 'f', 3)+" A/S");
 
-                this->update_alarm(QString::number(current_OP_rate, 'f', 2), QString::number(this->phase_Main_cable_eleCurRate_ThresholdValue, 'f', 2), 2, 0);
-                this->update_alarm(QString::number(current_A_rate, 'f', 2), QString::number(this->phase_A_cable_eleCurRate_ThresholdValue, 'f', 2), 2, 1);
-                this->update_alarm(QString::number(current_B_rate, 'f', 2), QString::number(this->phase_B_cable_eleCurRate_ThresholdValue, 'f', 2), 2, 2);
-                this->update_alarm(QString::number(current_C_rate, 'f', 2), QString::number(this->phase_C_cable_eleCurRate_ThresholdValue, 'f', 2), 2, 3);
-                this->update_alarm(QString::number(current_ALL_rate, 'f', 2), QString::number(this->phase_N_cable_eleCurRate_ThresholdValue, 'f', 2), 2, 4);
+                this->update_alarm(QString::number(qAbs(current_OP_rate), 'f', 3), QString::number(this->phase_Main_cable_eleCurRate_ThresholdValue, 'f', 3), 2, 0);
+                this->update_alarm(QString::number(qAbs(current_A_rate), 'f', 3), QString::number(this->phase_A_cable_eleCurRate_ThresholdValue, 'f', 3), 2, 1);
+                this->update_alarm(QString::number(qAbs(current_B_rate), 'f', 3), QString::number(this->phase_B_cable_eleCurRate_ThresholdValue, 'f', 3), 2, 2);
+                this->update_alarm(QString::number(qAbs(current_C_rate), 'f', 3), QString::number(this->phase_C_cable_eleCurRate_ThresholdValue, 'f', 3), 2, 3);
+                this->update_alarm(QString::number(qAbs(current_ALL_rate), 'f', 3), QString::number(this->phase_N_cable_eleCurRate_ThresholdValue, 'f', 3), 2, 4);
 
             }
             
@@ -929,9 +929,9 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
             this->connector_temp_C = (float)(((data_tmp[FRAME_CONNECTOR_TEMP_C_OFFSET] << 8) | data_tmp[FRAME_CONNECTOR_TEMP_C_OFFSET+1]) - 2731) / 10;
             qDebug() << "C相接头温度： " << this->connector_temp_C;
 
-            this->update_alarm(QString::number(connector_temp_A, 'f', 2), QString::number(this->phase_A_cable_temp_ThresholdValue, 'f', 2), 1, 1);
-            this->update_alarm(QString::number(connector_temp_B, 'f', 2), QString::number(this->phase_B_cable_temp_ThresholdValue, 'f', 2), 1, 2);
-            this->update_alarm(QString::number(connector_temp_B, 'f', 2), QString::number(this->phase_B_cable_temp_ThresholdValue, 'f', 2), 1, 3);
+            this->update_alarm(QString::number(connector_temp_A, 'f', 3), QString::number(this->phase_A_cable_temp_ThresholdValue, 'f', 3), 1, 1);
+            this->update_alarm(QString::number(connector_temp_B, 'f', 3), QString::number(this->phase_B_cable_temp_ThresholdValue, 'f', 3), 1, 2);
+            this->update_alarm(QString::number(connector_temp_B, 'f', 3), QString::number(this->phase_B_cable_temp_ThresholdValue, 'f', 3), 1, 3);
 
             this->ui->tab_groundCable_2->addData(0, frameTime, this->connector_temp_A);
             this->ui->tab_groundCable_2->addData(1, frameTime, this->connector_temp_B);
