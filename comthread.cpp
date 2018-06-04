@@ -10,10 +10,10 @@ comThread::comThread(QObject *parent) :
     this->comPort = new Win_QextSerialPort("COM1", QextSerialBase::EventDriven);
     this->setting = new comSetting();
     this->sendData.clear();
-//    timeBreak = new QTimer(this);
-//    timeBreak->setInterval(5000);
+    timeBreak = new QTimer(this);
+    timeBreak->setInterval(1500);
     connect(this->comPort, SIGNAL(readyRead()), this, SLOT(comReadSlot()));
-//    connect(this->timeBreak,SIGNAL(timeout()),this,SLOT(checkComBreak()));
+    
 }
 
 comThread::~comThread()
@@ -182,6 +182,7 @@ void comThread::comReadSlot()
     {
         ushort crc16 = 0;
         uchar  len   = 0;
+        this->timeBreak->stop();
         QByteArray data = this->comPort->readAll();
         this->readBufferArray.append(data);
         qDebug()<<"485端口接收数据："+myHelper::ByteArrayToHexStr(this->readBufferArray);
@@ -255,6 +256,13 @@ void comThread::sendDataToDevice_slot(QByteArray data)
 
 void comThread::checkComBreak()
 {
+    QDebug(QtCriticalMsg) << "接收超时";
+    this->timeBreak->stop();
+}
+
+void comThread::timeout_timer_start()
+{
+    this->timeBreak->start();
 }
 
 QString comThread::showByteArray(QByteArray array)
@@ -269,4 +277,9 @@ QString comThread::showByteArray(QByteArray array)
     }
 
     return showstr;
+}
+
+void comThread::get_timeout_value(int data)
+{
+    this->timeBreak->setInterval((data * 1000) >> 1);
 }

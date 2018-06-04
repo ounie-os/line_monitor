@@ -189,6 +189,8 @@ void MonitorMainWindow::init()
             this,SLOT(receiveDataFromDevice_slot(QByteArray)));
     connect(this->comDevice,SIGNAL(destroyed(QObject*)),
             comDeviceThread,SLOT(quit()));
+    connect(this->comDevice->timeBreak,SIGNAL(timeout()),this->comDevice, SLOT(checkComBreak()));
+    connect(this, SIGNAL(signal_start_time_out()), this->comDevice, SLOT(timeout_timer_start()));
 
     comDeviceThread->start();
     //============转发数据xml==============
@@ -473,6 +475,8 @@ void MonitorMainWindow::insertCableDevice(CableMonitorDevice device)
     connect(this, SIGNAL(signal_remote_server(bool)), widget, SLOT(connect_server_status(bool)));
 
     connect(this, SIGNAL(signal_send_ip_to_monitor(QString)), widget, SLOT(get_server_ip(QString)));
+
+    connect(widget, SIGNAL(signal_send_timeout_value_to_com(int)), this->comDevice, SLOT(get_timeout_value(int)));
     
 }
 /*!
@@ -537,6 +541,7 @@ void MonitorMainWindow::sendDataToDevice_slot(QByteArray data)
     if(this->com_485_Flag)
     {
         emit sendDataToDevice_signal(data);
+        emit signal_start_time_out();
     }
 }
 /*!

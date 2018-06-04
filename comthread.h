@@ -35,7 +35,8 @@ private slots:
     void sendDataToDevice_slot(QByteArray data);
     void checkComBreak();
 public slots:
-
+    void get_timeout_value(int data);
+    void timeout_timer_start();
 private:
     QByteArray readBufferArray;
     Win_QextSerialPort *comPort;

@@ -2516,6 +2516,7 @@ void CableDataWidget::on_spinBox_valueChanged(const QString &arg1)
     if(ok)
     {
         this->autoGetDataTimer->setInterval(tmp*1000);
+        emit signal_send_timeout_value_to_com(tmp);
     }
 }
 

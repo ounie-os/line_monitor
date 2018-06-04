@@ -63,6 +63,7 @@ signals:
     void sendDataToServer(deviceIdType ID,electricCableMetaData data);
     void sendDataToXml(deviceIdType ID,electricCableMetaData data);
     void signal_export_execel(int row,QString path,QStringList str_data);
+    void signal_send_timeout_value_to_com(int data);
 private slots:
     void receiveDataFromDevice(QByteArray data);
     void connect_server_status(bool flag);

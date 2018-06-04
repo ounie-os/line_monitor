@@ -64,6 +64,7 @@ signals:
     void signal_remote_server(bool flag);
     void signal_DBdel(void);
     void signal_send_ip_to_monitor(QString ip);
+    void signal_start_time_out();
 private slots:
     void printDebug(int type, QString text);
 
