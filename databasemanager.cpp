@@ -1,6 +1,7 @@
 #include "databasemanager.h"
 #include <QSqlRecord>
 #include <QDebug>
+#include "qt_windows.h"
 DataBaseManager::DataBaseManager(QObject *parent) :
     QThread(parent)
 {
@@ -22,6 +23,13 @@ DataBaseManager::DataBaseManager(QObject *parent) :
     connect(this,SIGNAL(destroyed(QObject*)),this->dbSelfCheckTimer,SLOT(deleteLater()));
     this->dbSelfCheckTimer->start(3600 * 1000); //检测数据库中表的行数不超过5000行
     this->dataTableSelfCheck();
+
+    this->export_execel = new Export_Execel();
+    QThread * thread_export = new QThread();
+    connect(export_execel,SIGNAL(destroyed(QObject*)),thread_export,SLOT(quit()));
+    connect(thread_export,SIGNAL(finished()),thread_export,SLOT(deleteLater()));
+    export_execel->moveToThread(thread_export);
+    thread_export->start();
 }
 
 DataBaseManager::~DataBaseManager()
@@ -43,6 +51,22 @@ void DataBaseManager::initTables()
     bool connectoratbexit = false;
     bool connectorbtbexit = false;
     bool connectorctbexit = false;
+
+    bool main_cable_alarm_exit = false;
+    bool a_cable_alarm_exit = false;
+    bool b_cable_alarm_exit = false;
+    bool c_cable_alarm_exit = false;
+    bool n_cable_alarm_exit = false;
+
+    bool connectora_alarm_exit = false;
+    bool connectorb_alarm_exit = false;
+    bool connectorc_alarm_exit = false;
+
+    bool main_cable_rate_alarm_exit = false;
+    bool a_cable_rate_alarm_exit = false;
+    bool b_cable_rate_alarm_exit = false;
+    bool c_cable_rate_alarm_exit = false;
+    bool n_cable_rate_alarm_exit = false;
 
     if(this->db.isOpen() == false)
         return;
@@ -100,6 +124,71 @@ void DataBaseManager::initTables()
             qDebug() << "协议映射表已建立";
             systemmappingtbexit = true;
         }
+        else if(query.value(0).toString() == MAINCABLE_ALARM_TABLE)
+        {
+            qDebug() << "主缆电流报警数据表已建立";
+            main_cable_alarm_exit = true;
+        }
+        else if(query.value(0).toString() == GROUNDCABLE_A_ALARM_TABLE)
+        {
+            qDebug() << "A相电流报警数据表已建立";
+            a_cable_alarm_exit = true;
+        }
+        else if(query.value(0).toString() == GROUNDCABLE_B_ALARM_TABLE)
+        {
+            qDebug() << "B相电流报警数据表已建立";
+            b_cable_alarm_exit = true;
+        }
+        else if(query.value(0).toString() == GROUNDCABLE_C_ALARM_TABLE)
+        {
+            qDebug() << "C相电流报警数据表已建立";
+            c_cable_alarm_exit = true;
+        }
+        else if(query.value(0).toString() == GROUNDCABLE_N_ALARM_TABLE)
+        {
+            qDebug() << "N相电流报警数据表已建立";
+            n_cable_alarm_exit = true;
+        }
+        else if(query.value(0).toString() == CONNECTOR_A_ALARM_TABLE)
+        {
+            qDebug() << "A接头报警温度表已建立";
+            connectora_alarm_exit = true;
+        }
+        else if(query.value(0).toString() == CONNECTOR_B_ALARM_TABLE)
+        {
+            qDebug() << "B接头报警温度表已建立";
+            connectorb_alarm_exit = true;
+        }
+        else if(query.value(0).toString() == CONNECTOR_C_ALARM_TABLE)
+        {
+            qDebug() << "C接头报警温度表已建立";
+            connectorc_alarm_exit = true;
+        }
+        else if(query.value(0).toString() == MAINCABLE_RATE_ALARM_TABLE)
+        {
+            qDebug() << "主缆电流变化率报警数据表已建立";
+            main_cable_rate_alarm_exit = true;
+        }
+        else if(query.value(0).toString() == GROUNDCABLE_RATE_A_ALARM_TABLE)
+        {
+            qDebug() << "A相电流变化率报警数据表已建立";
+            a_cable_rate_alarm_exit = true;
+        }
+        else if(query.value(0).toString() == GROUNDCABLE_RATE_B_ALARM_TABLE)
+        {
+            qDebug() << "B相电流变化率报警数据表已建立";
+            b_cable_rate_alarm_exit = true;
+        }
+        else if(query.value(0).toString() == GROUNDCABLE_RATE_C_ALARM_TABLE)
+        {
+            qDebug() << "C相电流变化率报警数据表已建立";
+            c_cable_rate_alarm_exit = true;
+        }
+        else if(query.value(0).toString() == GROUNDCABLE_RATE_N_ALARM_TABLE)
+        {
+            qDebug() << "N相电流变化率报警数据表已建立";
+            n_cable_rate_alarm_exit = true;
+        }
     }
 
     if(maincabletbexist == false)
@@ -156,6 +245,72 @@ void DataBaseManager::initTables()
     {
         qDebug() << "创建协议映射表";
         createSystemMappingTable(SYSTEM_MAPPING_TABLE);
+    }
+
+    if(main_cable_alarm_exit == false)
+    {
+        qDebug() << "创建主缆电流报警数据表";
+        createDataTable(MAINCABLE_ALARM_TABLE);
+    }
+    if(a_cable_alarm_exit == false)
+    {
+        qDebug() << "创建A相电流报警数据表";
+        createDataTable(GROUNDCABLE_A_ALARM_TABLE);
+    }
+    if(b_cable_alarm_exit == false)
+    {
+        qDebug() << "创建B相电流报警数据表";
+        createDataTable(GROUNDCABLE_B_ALARM_TABLE);
+    }
+    if(c_cable_alarm_exit == false)
+    {
+        qDebug() << "创建C相电流报警数据表";
+        createDataTable(GROUNDCABLE_C_ALARM_TABLE);
+    }
+    if(n_cable_alarm_exit == false)
+    {
+        qDebug() << "创建N相电流报警数据表";
+        createDataTable(GROUNDCABLE_N_ALARM_TABLE);
+    }
+    if(connectora_alarm_exit == false)
+    {
+        qDebug() << "创建A接头报警温度数据表";
+        createDataTable(CONNECTOR_A_ALARM_TABLE);
+    }
+    if(connectorb_alarm_exit == false)
+    {
+        qDebug() << "创建B接头报警温度数据表";
+        createDataTable(CONNECTOR_B_ALARM_TABLE);
+    }
+    if(connectorc_alarm_exit == false)
+    {
+        qDebug() << "创建C接头报警温度数据表";
+        createDataTable(CONNECTOR_C_ALARM_TABLE);
+    }
+    if(main_cable_rate_alarm_exit == false)
+    {
+        qDebug() << "创建主缆电流变化率报警数据表";
+        createDataTable(MAINCABLE_RATE_ALARM_TABLE);
+    }
+    if(a_cable_rate_alarm_exit == false)
+    {
+        qDebug() << "创建A相电流变化率报警数据表";
+        createDataTable(GROUNDCABLE_RATE_A_ALARM_TABLE);
+    }
+    if(b_cable_rate_alarm_exit == false)
+    {
+        qDebug() << "创建B相电流变化率报警数据表";
+        createDataTable(GROUNDCABLE_RATE_B_ALARM_TABLE);
+    }
+    if(c_cable_rate_alarm_exit == false)
+    {
+        qDebug() << "创建C相电流变化率报警数据表";
+        createDataTable(GROUNDCABLE_RATE_C_ALARM_TABLE);
+    }
+    if(n_cable_rate_alarm_exit == false)
+    {
+        qDebug() << "创建N相电流变化率报警数据表";
+        createDataTable(GROUNDCABLE_RATE_N_ALARM_TABLE);
     }
 }
 
@@ -623,6 +778,71 @@ void DataBaseManager::dataSave(CableMonitorDevice devid, CableCurrent data)
             tablename = CONNECTOR_C_TABLE;
             break;
         }
+        case GroundCable_A_Alarm:
+        {
+            tablename = GROUNDCABLE_A_ALARM_TABLE;
+            break;
+        }
+        case GroundCable_B_Alarm:
+        {
+            tablename = GROUNDCABLE_B_ALARM_TABLE;
+            break;
+        }
+        case GroundCable_C_Alarm:
+        {
+            tablename = GROUNDCABLE_C_ALARM_TABLE;
+            break;
+        }
+        case GroundCable_N_Alarm:
+        {
+            tablename = GROUNDCABLE_N_ALARM_TABLE;
+            break;
+        }
+        case GroundCable_Main_Alarm:
+        {
+            tablename = MAINCABLE_ALARM_TABLE;
+            break;
+        }
+        case GroundCablePhaseA_Rate_Alarm:
+        {
+            tablename = GROUNDCABLE_RATE_A_ALARM_TABLE;
+            break;
+        }
+        case GroundCablePhaseB_Rate_Alarm:
+        {
+            tablename = GROUNDCABLE_RATE_B_ALARM_TABLE;
+            break;
+        }
+        case GroundCablePhaseC_Rate_Alarm:
+        {
+            tablename = GROUNDCABLE_RATE_C_ALARM_TABLE;
+            break;
+        }
+        case GroundCablePhaseN_Rate_Alarm:
+        {
+            tablename = GROUNDCABLE_RATE_N_ALARM_TABLE;
+            break;
+        }
+        case GroundCablePhaseMain_Rate_Alarm:
+        {
+            tablename = MAINCABLE_RATE_ALARM_TABLE;
+            break;
+        }
+        case ConnectorATemp_Alarm:
+        {
+            tablename = CONNECTOR_A_ALARM_TABLE;
+            break;
+        }
+        case ConnectorBTemp_Alarm:
+        {
+            tablename = CONNECTOR_B_ALARM_TABLE;
+            break;
+        }
+        case ConnectorCTemp_Alarm:
+        {
+            tablename = CONNECTOR_C_ALARM_TABLE;
+            break;
+        }
         default:
             break;
     }
@@ -839,5 +1059,241 @@ void DataBaseManager::dataTableDelete(QString table)
     {
         qDebug() << query.lastError();
     }
+}
+
+void DataBaseManager::DBDel_alarm(void)
+{
+    this->dataTableDelete(MAINCABLE_ALARM_TABLE);
+    this->dataTableDelete(GROUNDCABLE_A_ALARM_TABLE);
+    this->dataTableDelete(GROUNDCABLE_B_ALARM_TABLE);
+    this->dataTableDelete(GROUNDCABLE_C_ALARM_TABLE);
+    this->dataTableDelete(GROUNDCABLE_N_ALARM_TABLE);
+    this->dataTableDelete(MAINCABLE_RATE_ALARM_TABLE);
+    this->dataTableDelete(GROUNDCABLE_RATE_A_ALARM_TABLE);
+    this->dataTableDelete(GROUNDCABLE_RATE_B_ALARM_TABLE);
+    this->dataTableDelete(GROUNDCABLE_RATE_C_ALARM_TABLE);
+    this->dataTableDelete(GROUNDCABLE_RATE_N_ALARM_TABLE);
+    this->dataTableDelete(CONNECTOR_A_ALARM_TABLE);
+    this->dataTableDelete(CONNECTOR_B_ALARM_TABLE);
+    this->dataTableDelete(CONNECTOR_C_ALARM_TABLE);
+    qDebug() << "删除完毕";
+}
+
+void DataBaseManager::save_alarm_data_to_file(QList<CableCurrent> datalist, QString type, CableMonitorDevice devid)
+{
+    QDir tmp;
+    QString filePath = QString("/data/设备%1").arg(devid.getDeviceId().toString());
+    filePath = QCoreApplication::applicationDirPath() + filePath;
+    if(tmp.exists(filePath))
+    {
+    }else
+    {
+        if(!tmp.mkdir(filePath))
+        {
+            //QMessageBox::warning(tr("错误信息"),tr("创建目录%1失败").arg(filePath),tr("确认"));
+            return;
+        }
+    }
+    QString str_time = QDateTime::currentDateTime().toString("yyyy-MM-dd hh-mm-ss");
+    filePath = filePath + QString("/报警数据%1").arg(str_time) + QString(" ")+ type + QString(".xlsx");
+    filePath = filePath.replace("/", "\\");//路径需要’\’反斜杠
+    HRESULT r = OleInitialize(0);
+    if (r != S_OK && r != S_FALSE)
+    {
+        qWarning("Qt: Could not initialize OLE (error %x)", (unsigned int)r);
+    }
+    QAxObject *work_book = NULL;
+    QAxObject excel("Excel.Application");
+    excel.setProperty("Visible", false);
+    excel.setProperty("DisplayAlerts", false);//不显示任何警告信息
+    QAxObject *work_books = excel.querySubObject("WorkBooks");
+    QFile xlsFile(filePath);
+    if (xlsFile.exists()) {
+        work_book = work_books->querySubObject("Open(const QString &)", filePath);
+    }
+    else {
+        work_books->dynamicCall("Add");
+        work_book = excel.querySubObject("ActiveWorkBook");
+    }
+    QAxObject *work_sheets = work_book->querySubObject("Sheets");
+    QAxObject *first_sheet = work_sheets->querySubObject("Item(int)", 1);
+    QAxObject *cell = first_sheet->querySubObject("Cells(int,int)", 1, 1);
+    cell->setProperty("Value", "报警值");
+    cell = first_sheet->querySubObject("Cells(int,int)", 1, 2);
+    cell->setProperty("Value", "报警时间");
+
+    for (int i=0; i < datalist.length(); i++)
+    {
+        cell = first_sheet->querySubObject("Cells(int,int)", 2+i, 1);
+        cell->setProperty("Value", QString::number(datalist.at(i).ground_current));
+        cell->setProperty("ColumnWidth", 15);  //设置单元格列宽
+        cell = first_sheet->querySubObject("Cells(int,int)", 2+i, 2);
+        cell->setProperty("Value", datalist.at(i).time.toString("yyyy-MM-dd hh:mm:ss"));
+        cell->setProperty("ColumnWidth", 25);  //设置单元格列宽
+    }
+
+    work_book->dynamicCall("SaveAs(const QString &)", QDir::toNativeSeparators(filePath)); //转换路径不可少，否则会崩溃
+    work_book->dynamicCall("Close(Boolean)", false);  //关闭文件
+    excel.dynamicCall("Quit(void)");  //退出
+    OleUninitialize();
+}
+
+void DataBaseManager::_collect_alarm_data(CableMonitorDevice devid, enum current_type type)
+{
+    QList<CableCurrent> list;
+    if(this->db.isOpen() == false)
+        return ;
+
+    QString tablename;
+    QString type_name;
+
+    switch (type)
+    {
+        case GroundCable_A_Alarm:
+        {
+            tablename = GROUNDCABLE_A_ALARM_TABLE;
+            type_name = "A相电流报警值";
+            break;
+        }
+        case GroundCable_B_Alarm:
+        {
+            tablename = GROUNDCABLE_B_ALARM_TABLE;
+            type_name = "B相电流报警值";
+            break;
+        }
+        case GroundCable_C_Alarm:
+        {
+            tablename = GROUNDCABLE_C_ALARM_TABLE;
+            type_name = "C相电流报警值";
+            break;
+        }
+        case GroundCable_N_Alarm:
+        {
+            tablename = GROUNDCABLE_N_ALARM_TABLE;
+            type_name = "N相电流报警值";
+            break;
+        }
+        case GroundCable_Main_Alarm:
+        {
+            tablename = MAINCABLE_ALARM_TABLE;
+            type_name = "主缆电流报警值";
+            break;
+        }
+        case GroundCablePhaseA_Rate_Alarm:
+        {
+            tablename = GROUNDCABLE_RATE_A_ALARM_TABLE;
+            type_name = "A相电流变化率报警值";
+            break;
+        }
+        case GroundCablePhaseB_Rate_Alarm:
+        {
+            tablename = GROUNDCABLE_RATE_B_ALARM_TABLE;
+            type_name = "B相电流变化率报警值";
+            break;
+        }
+        case GroundCablePhaseC_Rate_Alarm:
+        {
+            tablename = GROUNDCABLE_RATE_C_ALARM_TABLE;
+            type_name = "C相电流变化率报警值";
+            break;
+        }
+        case GroundCablePhaseN_Rate_Alarm:
+        {
+            tablename = GROUNDCABLE_RATE_N_ALARM_TABLE;
+            type_name = "N相电流变化率报警值";
+            break;
+        }
+        case GroundCablePhaseMain_Rate_Alarm:
+        {
+            tablename = MAINCABLE_RATE_ALARM_TABLE;
+            type_name = "主缆电流变化率报警值";
+            break;
+        }
+        case ConnectorATemp_Alarm:
+        {
+            tablename = CONNECTOR_A_ALARM_TABLE;
+            type_name = "A相温度报警值";
+            break;
+        }
+        case ConnectorBTemp_Alarm:
+        {
+            tablename = CONNECTOR_B_ALARM_TABLE;
+            type_name = "B相温度报警值";
+            break;
+        }
+        case ConnectorCTemp_Alarm:
+        {
+            tablename = CONNECTOR_C_ALARM_TABLE;
+            type_name = "C相温度报警值";
+            break;
+        }
+        default:
+            break;
+    }
+
+    QDateTime frameTime;
+    frameTime = QDateTime::currentDateTime();
+    QString beginTimeStr = "datetime('1970-01-01 00:00:00')";
+    QString endTimeStr = "datetime('" + frameTime.toString("yyyy-MM-dd hh:mm:ss") + "')";
+    
+    QString sqlCmd = "select  * from " + tablename + " where datetime >= " + beginTimeStr
+                + " and datetime <= " + endTimeStr +
+                " and deviceid = " + "'" + devid.getDeviceId().toString() + "'"  +
+                " and datatype = " +  QString::number(type)  + " order by id";
+
+    QSqlQuery query(this->db);
+    if(query.exec(sqlCmd))
+    {
+        while(query.next())
+        {
+            QSqlRecord record = query.record();
+            CableCurrent data;
+
+            data.time = QDateTime::fromString(record.value("datetime").toString(),"yyyy-MM-dd hh:mm:ss");
+            data.ground_current = record.value("value").toFloat();
+            data.type = (enum current_type)(record.value("datatype").toInt());
+            list.append(data);
+        }
+    }
+    else
+    {
+        qCritical() << query.lastError().text();
+
+    }
+
+    save_alarm_data_to_file(list, type_name, devid);
+    //emit signal_send_alarm_data(list);
+}
+
+void DataBaseManager::collect_alarm_data(CableMonitorDevice devid)
+{
+    _collect_alarm_data(devid, GroundCable_A_Alarm);
+    qDebug() << "A相电流报警值保存成功";
+    _collect_alarm_data(devid, GroundCable_B_Alarm);
+    qDebug() << "B相电流报警值保存成功";
+    _collect_alarm_data(devid, GroundCable_C_Alarm);
+    qDebug() << "C相电流报警值保存成功";
+    _collect_alarm_data(devid, GroundCable_N_Alarm);
+    qDebug() << "N相电流报警值保存成功";
+    _collect_alarm_data(devid, GroundCable_Main_Alarm);
+    qDebug() << "主缆电流报警值保存成功";
+    _collect_alarm_data(devid, GroundCablePhaseA_Rate_Alarm);
+    qDebug() << "A相电流变化率报警值保存成功";
+    _collect_alarm_data(devid, GroundCablePhaseB_Rate_Alarm);
+    qDebug() << "B相电流变化率报警值保存成功";
+    _collect_alarm_data(devid, GroundCablePhaseC_Rate_Alarm);
+    qDebug() << "C相电流变化率报警值保存成功";
+    _collect_alarm_data(devid, GroundCablePhaseN_Rate_Alarm);
+    qDebug() << "N相电流变化率报警值保存成功";
+    _collect_alarm_data(devid, GroundCablePhaseMain_Rate_Alarm);
+    qDebug() << "主缆电流变化率报警值保存成功";
+    _collect_alarm_data(devid, ConnectorATemp_Alarm);
+    qDebug() << "A相温度报警值保存成功";
+    _collect_alarm_data(devid, ConnectorBTemp_Alarm);
+    qDebug() << "B相温度报警值保存成功";
+    _collect_alarm_data(devid, ConnectorCTemp_Alarm);
+    qDebug() << "C相温度报警值保存成功";
+    QDebug(QtCriticalMsg) << "全部报警数据保存完毕";
+    emit signal_alarm_save_done();
 }
 

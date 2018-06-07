@@ -452,7 +452,10 @@ void MonitorMainWindow::insertCableDevice(CableMonitorDevice device)
     connect(widget,SIGNAL(DBsave(CableMonitorDevice,electricCableMetaData)),
             this->DBManager,SLOT(dataSave(CableMonitorDevice,electricCableMetaData)));
     connect(widget,SIGNAL(DBsave(CableMonitorDevice,CableCurrent)),
-            this->DBManager,SLOT(dataSave(CableMonitorDevice,CableCurrent)));    
+            this->DBManager,SLOT(dataSave(CableMonitorDevice,CableCurrent)));
+
+    connect(widget, SIGNAL(signal_query_alarm_history_data(CableMonitorDevice)), this->DBManager, SLOT(collect_alarm_data(CableMonitorDevice)));
+    connect(this->DBManager, SIGNAL(signal_alarm_save_done()), widget, SLOT(enable_save_alarm_button()));
 //    connect(widget,SIGNAL(DBsave(deviceIdType,electricCableMetaData)),
 //            this->DBManager,SLOT(dataSave(deviceIdType,electricCableMetaData)),Qt::DirectConnection);
 
@@ -477,6 +480,8 @@ void MonitorMainWindow::insertCableDevice(CableMonitorDevice device)
     connect(this, SIGNAL(signal_send_ip_to_monitor(QString)), widget, SLOT(get_server_ip(QString)));
 
     connect(widget, SIGNAL(signal_send_timeout_value_to_com(int)), this->comDevice, SLOT(get_timeout_value(int)));
+
+    connect(widget, SIGNAL(signal_DBdel_alarm()), this->DBManager, SLOT(DBDel_alarm()));
     
 }
 /*!

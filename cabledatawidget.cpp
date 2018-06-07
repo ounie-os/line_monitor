@@ -856,11 +856,11 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
             uint_op_current = data_tmp[FRAME_OP_CURRENT_OFFSET] | (data_tmp[FRAME_OP_CURRENT_OFFSET+1] << 8) | (data_tmp[FRAME_OP_CURRENT_OFFSET+2] << 16) | (data_tmp[FRAME_OP_CURRENT_OFFSET+3] << 24);
             qDebug() << "主缆电流： " << op_current;
 
-            this->update_alarm(QString::number(op_current, 'f', 2), QString::number(this->phase_Main_cable_eleCur_ThresholdValue, 'f', 2), 0, 0);
-            this->update_alarm(QString::number(ground_current_A, 'f', 2), QString::number(this->phase_A_cable_eleCur_ThresholdValue, 'f', 2), 0, 1);
-            this->update_alarm(QString::number(ground_current_B, 'f', 2), QString::number(this->phase_B_cable_eleCur_ThresholdValue, 'f', 2), 0, 2);
-            this->update_alarm(QString::number(ground_current_C, 'f', 2), QString::number(this->phase_C_cable_eleCur_ThresholdValue, 'f', 2), 0, 3);
-            this->update_alarm(QString::number(ground_current_ALL, 'f', 2), QString::number(this->phase_N_cable_eleCur_ThresholdValue, 'f', 2), 0, 4);
+            this->update_alarm(QString::number(op_current, 'f', 3), QString::number(this->phase_Main_cable_eleCur_ThresholdValue, 'f', 3), 0, 0, GroundCable_Main_Alarm);
+            this->update_alarm(QString::number(ground_current_A, 'f', 3), QString::number(this->phase_A_cable_eleCur_ThresholdValue, 'f', 3), 0, 1, GroundCable_A_Alarm);
+            this->update_alarm(QString::number(ground_current_B, 'f', 3), QString::number(this->phase_B_cable_eleCur_ThresholdValue, 'f', 3), 0, 2, GroundCable_B_Alarm);
+            this->update_alarm(QString::number(ground_current_C, 'f', 3), QString::number(this->phase_C_cable_eleCur_ThresholdValue, 'f', 3), 0, 3, GroundCable_C_Alarm);
+            this->update_alarm(QString::number(ground_current_ALL, 'f', 3), QString::number(this->phase_N_cable_eleCur_ThresholdValue, 'f', 3), 0, 4, GroundCable_N_Alarm);
 
             if (this->ui->checkBox->isChecked())
             {
@@ -881,11 +881,11 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
                 this->ui->tableWidget->item(2,3)->setText(QString::number(current_C_rate, 'f', 3)+" A/S");
                 this->ui->tableWidget->item(2,4)->setText(QString::number(current_ALL_rate, 'f', 3)+" A/S");
 
-                this->update_alarm(QString::number(qAbs(current_OP_rate), 'f', 3), QString::number(this->phase_Main_cable_eleCurRate_ThresholdValue, 'f', 3), 2, 0);
-                this->update_alarm(QString::number(qAbs(current_A_rate), 'f', 3), QString::number(this->phase_A_cable_eleCurRate_ThresholdValue, 'f', 3), 2, 1);
-                this->update_alarm(QString::number(qAbs(current_B_rate), 'f', 3), QString::number(this->phase_B_cable_eleCurRate_ThresholdValue, 'f', 3), 2, 2);
-                this->update_alarm(QString::number(qAbs(current_C_rate), 'f', 3), QString::number(this->phase_C_cable_eleCurRate_ThresholdValue, 'f', 3), 2, 3);
-                this->update_alarm(QString::number(qAbs(current_ALL_rate), 'f', 3), QString::number(this->phase_N_cable_eleCurRate_ThresholdValue, 'f', 3), 2, 4);
+                this->update_alarm(QString::number(qAbs(current_OP_rate), 'f', 3), QString::number(this->phase_Main_cable_eleCurRate_ThresholdValue, 'f', 3), 2, 0, GroundCablePhaseMain_Rate_Alarm);
+                this->update_alarm(QString::number(qAbs(current_A_rate), 'f', 3), QString::number(this->phase_A_cable_eleCurRate_ThresholdValue, 'f', 3), 2, 1, GroundCablePhaseA_Rate_Alarm);
+                this->update_alarm(QString::number(qAbs(current_B_rate), 'f', 3), QString::number(this->phase_B_cable_eleCurRate_ThresholdValue, 'f', 3), 2, 2, GroundCablePhaseB_Rate_Alarm);
+                this->update_alarm(QString::number(qAbs(current_C_rate), 'f', 3), QString::number(this->phase_C_cable_eleCurRate_ThresholdValue, 'f', 3), 2, 3, GroundCablePhaseC_Rate_Alarm);
+                this->update_alarm(QString::number(qAbs(current_ALL_rate), 'f', 3), QString::number(this->phase_N_cable_eleCurRate_ThresholdValue, 'f', 3), 2, 4, GroundCablePhaseN_Rate_Alarm);
 
             }
             
@@ -929,9 +929,9 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
             this->connector_temp_C = (float)(((data_tmp[FRAME_CONNECTOR_TEMP_C_OFFSET] << 8) | data_tmp[FRAME_CONNECTOR_TEMP_C_OFFSET+1]) - 2731) / 10;
             qDebug() << "C相接头温度： " << this->connector_temp_C;
 
-            this->update_alarm(QString::number(connector_temp_A, 'f', 3), QString::number(this->phase_A_cable_temp_ThresholdValue, 'f', 3), 1, 1);
-            this->update_alarm(QString::number(connector_temp_B, 'f', 3), QString::number(this->phase_B_cable_temp_ThresholdValue, 'f', 3), 1, 2);
-            this->update_alarm(QString::number(connector_temp_B, 'f', 3), QString::number(this->phase_B_cable_temp_ThresholdValue, 'f', 3), 1, 3);
+            this->update_alarm(QString::number(connector_temp_A, 'f', 3), QString::number(this->phase_A_cable_temp_ThresholdValue, 'f', 3), 1, 1, ConnectorATemp_Alarm);
+            this->update_alarm(QString::number(connector_temp_B, 'f', 3), QString::number(this->phase_B_cable_temp_ThresholdValue, 'f', 3), 1, 2, ConnectorBTemp_Alarm);
+            this->update_alarm(QString::number(connector_temp_B, 'f', 3), QString::number(this->phase_B_cable_temp_ThresholdValue, 'f', 3), 1, 3, ConnectorCTemp_Alarm);
 
             this->ui->tab_groundCable_2->addData(0, frameTime, this->connector_temp_A);
             this->ui->tab_groundCable_2->addData(1, frameTime, this->connector_temp_B);
@@ -990,6 +990,7 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
         }
     }
 }
+#if 0
 /*!
  * \brief CableDataWidget::upData_UI
  * \param data
@@ -1551,6 +1552,7 @@ void CableDataWidget::upData_UI(electricCableMetaData data)
         break;*/
     }
 }
+#endif
 
 void CableDataWidget::itemAlarm(uint row, uint col)
 {
@@ -1709,9 +1711,11 @@ void CableDataWidget::sendData_slot()
     {
         this->autogetAlarmDataFlag = false;
         this->autogetDataFlag = false;
+#if 0
         this->sendDataFrame(comProtocol::assembleAlarmDataRequestFrame(this->deviceID.getDeviceId()));
-//        myHelper::Delay_MSec(100);
+        myHelper::Delay_MSec(100);
         this->sendDataFrame(comProtocol::assembleAlarmData1RequestFrame(this->deviceID.getDeviceId()));
+#endif /* 0 */
     }
     if (this->start_recv_rt_data)
     {
@@ -2670,12 +2674,28 @@ void CableDataWidget::on_pushButton_Read_CurChangerateCycle_clicked()
 void CableDataWidget::on_pushButton_clear_alarm_value_clicked()
 {
 //    clear_alarm_data();
+    Dialog_InputPassWord * dialog = new Dialog_InputPassWord(this);
+    dialog->show();
+    if(dialog->exec())
+    {
+        qDebug() << "密码正确";
+        emit signal_DBdel_alarm();
+    }
+    else
+    {
+        qDebug() << "密码错误";
+    }
+
+    dialog->close();
+    delete dialog;
 }
 
 
 void CableDataWidget::on_pushButton_save_alarm_value_clicked()
 {
 //    save_Alarm_data();
+    emit signal_query_alarm_history_data(this->deviceID);
+    this->ui->pushButton_save_alarm_value->setEnabled(false);
 }
 
 /*void CableDataWidget::on_checkBox_statistics_value_clicked(bool checked)
@@ -2950,16 +2970,87 @@ void CableDataWidget::get_server_ip(QString ip)
     this->setLabelIP(ip);
 }
 
-void CableDataWidget::update_alarm(QString value, QString threshold, uint row, uint col)
+void CableDataWidget::update_alarm(QString value, QString threshold, uint row, uint col, enum current_type data_type)
 {
+    QDateTime curTime;
+    curTime = QDateTime::currentDateTime();
+
+    CableCurrent data;
+    data.time = curTime;
+
     if (value > threshold)
     {
         this->itemAlarm(row, col);
+        
+        data.type = data_type;
+        data.ground_current = value.toFloat();
+        emit DBsave(this->deviceID, data);
+
+        switch (data_type)
+        {
+        case GroundCable_A_Alarm:
+            this->ui->tableWidget_alarm_value->item(1,0)->setText(value+" A");
+            this->ui->tableWidget_alarm_value->item(1,1)->setText(curTime.toString("yyyy-MM-dd hh:mm:ss"));
+            break;
+        case GroundCable_B_Alarm:
+            this->ui->tableWidget_alarm_value->item(2,0)->setText(value+" A");
+            this->ui->tableWidget_alarm_value->item(2,1)->setText(curTime.toString("yyyy-MM-dd hh:mm:ss"));
+            break;
+        case GroundCable_C_Alarm:
+            this->ui->tableWidget_alarm_value->item(3,0)->setText(value+" A");
+            this->ui->tableWidget_alarm_value->item(3,1)->setText(curTime.toString("yyyy-MM-dd hh:mm:ss"));
+            break;
+        case GroundCable_N_Alarm:
+            this->ui->tableWidget_alarm_value->item(4,0)->setText(value+" A");
+            this->ui->tableWidget_alarm_value->item(4,1)->setText(curTime.toString("yyyy-MM-dd hh:mm:ss"));
+            break;
+        case GroundCable_Main_Alarm:
+            this->ui->tableWidget_alarm_value->item(0,0)->setText(value+" A");
+            this->ui->tableWidget_alarm_value->item(0,1)->setText(curTime.toString("yyyy-MM-dd hh:mm:ss"));
+            break;
+        case GroundCablePhaseA_Rate_Alarm:
+            this->ui->tableWidget_alarm_value->item(22,0)->setText(value+" A/S");
+            this->ui->tableWidget_alarm_value->item(22,1)->setText(curTime.toString("yyyy-MM-dd hh:mm:ss"));
+            break;
+        case GroundCablePhaseB_Rate_Alarm:
+            this->ui->tableWidget_alarm_value->item(23,0)->setText(value+" A/S");
+            this->ui->tableWidget_alarm_value->item(23,1)->setText(curTime.toString("yyyy-MM-dd hh:mm:ss"));
+            break;
+        case GroundCablePhaseC_Rate_Alarm:
+            this->ui->tableWidget_alarm_value->item(24,0)->setText(value+" A/S");
+            this->ui->tableWidget_alarm_value->item(24,1)->setText(curTime.toString("yyyy-MM-dd hh:mm:ss"));
+            break;
+        case GroundCablePhaseN_Rate_Alarm:
+            this->ui->tableWidget_alarm_value->item(25,0)->setText(value+" A/S");
+            this->ui->tableWidget_alarm_value->item(25,1)->setText(curTime.toString("yyyy-MM-dd hh:mm:ss"));
+            break;
+        case GroundCablePhaseMain_Rate_Alarm:
+            this->ui->tableWidget_alarm_value->item(21,0)->setText(value+" A/S");
+            this->ui->tableWidget_alarm_value->item(21,1)->setText(curTime.toString("yyyy-MM-dd hh:mm:ss"));
+            break;
+        case ConnectorATemp_Alarm:
+            this->ui->tableWidget_alarm_value->item(5,0)->setText(value+" ℃");
+            this->ui->tableWidget_alarm_value->item(5,1)->setText(curTime.toString("yyyy-MM-dd hh:mm:ss"));
+            break;
+        case ConnectorBTemp_Alarm:
+            this->ui->tableWidget_alarm_value->item(6,0)->setText(value+" ℃");
+            this->ui->tableWidget_alarm_value->item(6,1)->setText(curTime.toString("yyyy-MM-dd hh:mm:ss"));
+            break;
+        case ConnectorCTemp_Alarm:
+            this->ui->tableWidget_alarm_value->item(7,0)->setText(value+" ℃");
+            this->ui->tableWidget_alarm_value->item(7,1)->setText(curTime.toString("yyyy-MM-dd hh:mm:ss"));
+            break;
+        }
     }
     else
     {
         this->itemNormal(row, col);
     }
+}
+
+void CableDataWidget::enable_save_alarm_button(void)
+{
+    this->ui->pushButton_save_alarm_value->setEnabled(true);
 }
 
 //void CableDataWidget::on_thresholdValueDoubleSpinBox_valueChanged(double arg1)

@@ -210,6 +210,19 @@ enum current_type
     ConnectorATemp,            // A接头温度
     ConnectorBTemp,            // B接头温度
     ConnectorCTemp,            // C接头温度
+    GroundCable_A_Alarm, // A相接地电流报警
+    GroundCable_B_Alarm, // B相接地电流报警
+    GroundCable_C_Alarm, // C相接地电流报警
+    GroundCable_N_Alarm, // N相接地电流报警
+    GroundCable_Main_Alarm, // 主缆接地电流报警
+    GroundCablePhaseA_Rate_Alarm, // A相接地电流变化率报警
+    GroundCablePhaseB_Rate_Alarm, // B相接地电流变化率报警
+    GroundCablePhaseC_Rate_Alarm, // C相接地电流变化率报警
+    GroundCablePhaseN_Rate_Alarm, // N相接地电流变化率报警
+    GroundCablePhaseMain_Rate_Alarm, // 主缆接地电流变化率报警
+    ConnectorATemp_Alarm,            // A接头温度报警
+    ConnectorBTemp_Alarm,            // B接头温度报警
+    ConnectorCTemp_Alarm,            // C接头温度报警
 };
 
 

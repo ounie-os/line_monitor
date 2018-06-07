@@ -1,7 +1,7 @@
 #include "dialog_versions.h"
 #include "ui_dialog_versions.h"
-#define Version  "0.1.4.0227"
-#define Datatime "2018-02-27"
+#define Version  "1.0"
+#define Datatime "2018-06-07"
 #include <QDateTime>
 
 Dialog_Versions::Dialog_Versions(QWidget *parent) :

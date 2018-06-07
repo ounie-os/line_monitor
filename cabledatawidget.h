@@ -43,7 +43,7 @@ public:
     void setClientIP(QString IP);
     QString getClientIP();
     void sendDataFrame(QByteArray data);
-    void upData_UI(electricCableMetaData data);
+//    void upData_UI(electricCableMetaData data);
     void itemAlarm(uint row,uint col);
     void itemFault(uint row,uint col);
     void itemNormal(uint row,uint col);
@@ -53,7 +53,7 @@ public:
     void item_time_table(uint row,uint col,QDateTime data);
     void init_para();
     float calc_current_rate(float new_current, float old_currnet);
-    void update_alarm(QString value, QString threshold, uint row, uint col);
+    void update_alarm(QString value, QString threshold, uint row, uint col, enum current_type data_type);
 signals:
     void sendDataToDevice(int clientID,QByteArray data);
     void sendDataToDevice(QByteArray data);
@@ -64,6 +64,8 @@ signals:
     void sendDataToXml(deviceIdType ID,electricCableMetaData data);
     void signal_export_execel(int row,QString path,QStringList str_data);
     void signal_send_timeout_value_to_com(int data);
+    void signal_query_alarm_history_data(CableMonitorDevice devid);
+    void signal_DBdel_alarm();
 private slots:
     void receiveDataFromDevice(QByteArray data);
     void connect_server_status(bool flag);
@@ -157,6 +159,8 @@ private slots:
     void on_tab_mainCable_destroyed();
 
     void on_label_34_linkActivated(const QString &link);
+
+    void enable_save_alarm_button(void);
 
 private:
     Ui::CableDataWidget *ui;
