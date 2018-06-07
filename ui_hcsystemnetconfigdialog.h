@@ -116,7 +116,7 @@ public:
 
     void retranslateUi(QDialog *hcSystemNetConfigDialog)
     {
-        hcSystemNetConfigDialog->setWindowTitle(QApplication::translate("hcSystemNetConfigDialog", "Dialog", 0, QApplication::UnicodeUTF8));
+        hcSystemNetConfigDialog->setWindowTitle(QApplication::translate("hcSystemNetConfigDialog", "\350\277\234\347\253\257\346\234\215\345\212\241\345\231\250\350\277\236\346\216\245", 0, QApplication::UnicodeUTF8));
         label_5->setText(QApplication::translate("hcSystemNetConfigDialog", "IP \345\234\260\345\235\200:", 0, QApplication::UnicodeUTF8));
         label_6->setText(QApplication::translate("hcSystemNetConfigDialog", "\347\253\257\345\217\243:", 0, QApplication::UnicodeUTF8));
         okPushButton->setText(QApplication::translate("hcSystemNetConfigDialog", "OK", 0, QApplication::UnicodeUTF8));

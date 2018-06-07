@@ -92,7 +92,7 @@ public:
 
     void retranslateUi(QDialog *hcSystemMappingRegisterDialog)
     {
-        hcSystemMappingRegisterDialog->setWindowTitle(QApplication::translate("hcSystemMappingRegisterDialog", "Dialog", 0, QApplication::UnicodeUTF8));
+        hcSystemMappingRegisterDialog->setWindowTitle(QApplication::translate("hcSystemMappingRegisterDialog", "\350\256\276\347\275\256\346\230\240\345\260\204\350\241\250", 0, QApplication::UnicodeUTF8));
         phaseComboBox->clear();
         phaseComboBox->insertItems(0, QStringList()
          << QApplication::translate("hcSystemMappingRegisterDialog", "\344\270\273\347\274\206\347\224\265\346\265\201\345\256\236\346\227\266\345\200\274", 0, QApplication::UnicodeUTF8)

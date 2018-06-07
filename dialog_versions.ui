@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>关于CableMonitor</string>
+   <string>关于HCCMonitor</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_4">
    <item>
@@ -34,7 +34,7 @@
        <item>
         <widget class="QLabel" name="label_3">
          <property name="text">
-          <string>CalbleMonitor Verision</string>
+          <string>HCCMonitor Verision</string>
          </property>
         </widget>
        </item>

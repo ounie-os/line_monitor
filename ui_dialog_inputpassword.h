@@ -66,7 +66,7 @@ public:
 
     void retranslateUi(QDialog *Dialog_InputPassWord)
     {
-        Dialog_InputPassWord->setWindowTitle(QApplication::translate("Dialog_InputPassWord", "Dialog", 0, QApplication::UnicodeUTF8));
+        Dialog_InputPassWord->setWindowTitle(QApplication::translate("Dialog_InputPassWord", "\345\257\206\347\240\201\346\241\206", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("Dialog_InputPassWord", "\350\276\223\345\205\245\345\257\206\347\240\201\357\274\232", 0, QApplication::UnicodeUTF8));
         pushButton_inputPassWord->setText(QApplication::translate("Dialog_InputPassWord", "\347\241\256\350\256\244", 0, QApplication::UnicodeUTF8));
     } // retranslateUi

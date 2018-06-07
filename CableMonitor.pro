@@ -8,7 +8,7 @@ QT       += core gui network sql xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = CableMonitor_0.1.3.1202
+TARGET = CableMonitor_1.0
 TEMPLATE = app
 
 #win32:LIBS += C:/Qwt-6.1.2/lib/libqwtd.a
@@ -85,7 +85,10 @@ FORMS += \
     dialog_set_interval_time.ui
 
 DISTFILES += \
-    config.ini
+    config.ini \
+    ICON.rc
+
+RC_FILE = ICON.rc
 
 HEADERS += \
     cabledatawidget.h \
@@ -122,4 +125,14 @@ HEADERS += \
     dialog_inputpassword.h \
     dialog_versions.h \
     myapp.rc \
-    dialog_set_interval_time.h
+    dialog_set_interval_time.h \
+    ui_cabledatawidget.h \
+    ui_cablehistorydatawidget.h \
+    ui_comsettingdialog.h \
+    ui_deviceregisterdialog.h \
+    ui_dialog_inputpassword.h \
+    ui_dialog_set_interval_time.h \
+    ui_dialog_versions.h \
+    ui_hcsystemmappingregisterdialog.h \
+    ui_hcsystemnetconfigdialog.h \
+    ui_monitormainwindow.h

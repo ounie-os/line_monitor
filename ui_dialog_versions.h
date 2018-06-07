@@ -126,8 +126,8 @@ public:
 
     void retranslateUi(QDialog *Dialog_Versions)
     {
-        Dialog_Versions->setWindowTitle(QApplication::translate("Dialog_Versions", "\345\205\263\344\272\216CableMonitor", 0, QApplication::UnicodeUTF8));
-        label_3->setText(QApplication::translate("Dialog_Versions", "CalbleMonitor Verision", 0, QApplication::UnicodeUTF8));
+        Dialog_Versions->setWindowTitle(QApplication::translate("Dialog_Versions", "\345\205\263\344\272\216HCCMonitor", 0, QApplication::UnicodeUTF8));
+        label_3->setText(QApplication::translate("Dialog_Versions", "HCCMonitor Verision", 0, QApplication::UnicodeUTF8));
         label_Verision->setText(QApplication::translate("Dialog_Versions", "0.1.2", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("Dialog_Versions", "\344\277\256\346\224\271\346\227\245\346\234\237\357\274\232", 0, QApplication::UnicodeUTF8));
         label_data_change->setText(QApplication::translate("Dialog_Versions", "2017-11-3", 0, QApplication::UnicodeUTF8));

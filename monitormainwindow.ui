@@ -532,7 +532,7 @@
   </action>
   <action name="action_CableMonitor">
    <property name="text">
-    <string>关于CableMonitor</string>
+    <string>关于HCCMonitor</string>
    </property>
   </action>
   <action name="action_auto_get_data">

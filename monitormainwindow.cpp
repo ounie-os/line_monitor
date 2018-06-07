@@ -342,6 +342,7 @@ void MonitorMainWindow::on_action_connect_485_triggered()
     {
         comSettingDialog *dialog = new comSettingDialog(this);
         dialog->setWindowFlags(Qt::Dialog);
+        dialog->setWindowTitle(QString("485通讯连接"));
         dialog->setWindowModality(Qt::ApplicationModal);
         dialog->setupComSetting(this->comDevice->getComSetting());
         dialog->show();

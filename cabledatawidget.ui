@@ -1385,7 +1385,7 @@ color: rgb(0, 0, 0);
                 <item>
                  <widget class="QLabel" name="label_8">
                   <property name="text">
-                   <string>电流阀值：</string>
+                   <string>电流阈值：</string>
                   </property>
                  </widget>
                 </item>
@@ -1420,6 +1420,9 @@ color: rgb(0, 0, 0);
                 </item>
                 <item>
                  <widget class="QDoubleSpinBox" name="thresholdValueDoubleSpinBox">
+                  <property name="decimals">
+                   <number>3</number>
+                  </property>
                   <property name="maximum">
                    <double>999999.989999999990687</double>
                   </property>
@@ -1466,7 +1469,7 @@ color: rgb(0, 0, 0);
                 <item>
                  <widget class="QLabel" name="label_19">
                   <property name="text">
-                   <string>温度阀值：</string>
+                   <string>温度阈值：</string>
                   </property>
                  </widget>
                 </item>
@@ -1496,6 +1499,9 @@ color: rgb(0, 0, 0);
                 </item>
                 <item>
                  <widget class="QDoubleSpinBox" name="doubleSpinBox_Temp_Threshold">
+                  <property name="decimals">
+                   <number>3</number>
+                  </property>
                   <property name="maximum">
                    <double>99999.990000000005239</double>
                   </property>
@@ -1600,12 +1606,17 @@ color: rgb(0, 0, 0);
                 <item>
                  <widget class="QLabel" name="label_28">
                   <property name="text">
-                   <string>电流变化率阀值：</string>
+                   <string>电流变化率阈值：</string>
                   </property>
                  </widget>
                 </item>
                 <item>
                  <widget class="QComboBox" name="comboBox_CurChangeRate_Threshold">
+                  <item>
+                   <property name="text">
+                    <string>主缆</string>
+                   </property>
+                  </item>
                   <item>
                    <property name="text">
                     <string>A相</string>
@@ -1629,7 +1640,11 @@ color: rgb(0, 0, 0);
                  </widget>
                 </item>
                 <item>
-                 <widget class="QDoubleSpinBox" name="doubleSpinBox_CurChangeRate_Threshold"/>
+                 <widget class="QDoubleSpinBox" name="doubleSpinBox_CurChangeRate_Threshold">
+                  <property name="decimals">
+                   <number>3</number>
+                  </property>
+                 </widget>
                 </item>
                 <item>
                  <widget class="QLabel" name="label_39">
@@ -1672,7 +1687,7 @@ color: rgb(0, 0, 0);
                 <item>
                  <widget class="QLabel" name="label_29">
                   <property name="text">
-                   <string>振动阀值：</string>
+                   <string>振动阈值：</string>
                   </property>
                  </widget>
                 </item>

@@ -415,7 +415,7 @@ public:
 
     void retranslateUi(QMainWindow *MonitorMainWindow)
     {
-        MonitorMainWindow->setWindowTitle(QApplication::translate("MonitorMainWindow", "MonitorMainWindow", 0, QApplication::UnicodeUTF8));
+        MonitorMainWindow->setWindowTitle(QApplication::translate("MonitorMainWindow", "HCCMonitor", 0, QApplication::UnicodeUTF8));
         action_data->setText(QApplication::translate("MonitorMainWindow", "\345\256\236\346\227\266\346\225\260\346\215\256\346\230\276\347\244\272", 0, QApplication::UnicodeUTF8));
         action_history->setText(QApplication::translate("MonitorMainWindow", "\345\216\206\345\217\262\346\225\260\346\215\256\346\230\276\347\244\272", 0, QApplication::UnicodeUTF8));
         action_register_device->setText(QApplication::translate("MonitorMainWindow", "\346\263\250\345\206\214\350\256\276\345\244\207", 0, QApplication::UnicodeUTF8));
@@ -430,7 +430,7 @@ public:
         action_clearLog->setText(QApplication::translate("MonitorMainWindow", "\346\270\205\351\231\244\346\227\245\345\277\227", 0, QApplication::UnicodeUTF8));
         action_cnt_com_failed->setText(QApplication::translate("MonitorMainWindow", "\351\200\232\344\277\241\345\244\261\350\264\245\350\256\241\346\225\2600\346\254\241", 0, QApplication::UnicodeUTF8));
         action_clearCnt->setText(QApplication::translate("MonitorMainWindow", "\346\270\205\351\231\244\350\256\241\346\225\260", 0, QApplication::UnicodeUTF8));
-        action_CableMonitor->setText(QApplication::translate("MonitorMainWindow", "\345\205\263\344\272\216CableMonitor", 0, QApplication::UnicodeUTF8));
+        action_CableMonitor->setText(QApplication::translate("MonitorMainWindow", "\345\205\263\344\272\216HCCMonitor", 0, QApplication::UnicodeUTF8));
         action_auto_get_data->setText(QApplication::translate("MonitorMainWindow", "\350\207\252\345\212\250\350\216\267\345\217\226\346\225\260\346\215\256", 0, QApplication::UnicodeUTF8));
         groupBox_2->setTitle(QApplication::translate("MonitorMainWindow", "\350\256\276\345\244\207\344\277\241\346\201\257\346\230\276\347\244\272", 0, QApplication::UnicodeUTF8));
         QTreeWidgetItem *___qtreewidgetitem = treeWidget_deviceList->headerItem();
