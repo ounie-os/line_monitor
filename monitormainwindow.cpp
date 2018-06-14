@@ -106,8 +106,8 @@ MonitorMainWindow::MonitorMainWindow(QWidget *parent) :
             return;
         }
     }
-    this->ui->treeWidget_deviceList->setColumnWidth(0,220);
-    this->ui->treeWidget_deviceList->setColumnWidth(1,10);
+    this->ui->treeWidget_deviceList->setColumnWidth(0,160);
+    this->ui->treeWidget_deviceList->setColumnWidth(1,30);
 }
 
 MonitorMainWindow::~MonitorMainWindow()
@@ -143,7 +143,9 @@ MonitorMainWindow::~MonitorMainWindow()
     this->DBManager->deleteLater();
     delete this->timer_save_log;
     delete this->Timer_check_comFailed;
+#if 0
     delete timer_led;
+#endif /* 0 */
 }
 /*!
  * \brief MonitorMainWindow::init
@@ -191,6 +193,8 @@ void MonitorMainWindow::init()
             comDeviceThread,SLOT(quit()));
     connect(this->comDevice->timeBreak,SIGNAL(timeout()),this->comDevice, SLOT(checkComBreak()));
     connect(this, SIGNAL(signal_start_time_out()), this->comDevice, SLOT(timeout_timer_start()));
+
+    connect(this->comDevice, SIGNAL(signal_data_received(bool)), this, SLOT(change_device_online_status(bool)));
 
     comDeviceThread->start();
     //============转发数据xml==============
@@ -280,10 +284,12 @@ void MonitorMainWindow::init()
     this->Timer_check_comFailed->setInterval(100);
     this->Timer_check_comFailed->start();
     connect(this->Timer_check_comFailed,SIGNAL(timeout()),this,SLOT(cnt_comFailed_slot()));
+#if 0
     this->timer_led = new QTimer();
     this->timer_led->setInterval(1000);
     connect(this->timer_led,SIGNAL(timeout()),this,SLOT(slot_close_led()));
     this->timer_led->start();
+#endif /* 0 */
     //============自动连接==============
     this->network_Flag = false;
     this->b_reconnect  = false;
@@ -338,6 +344,7 @@ void MonitorMainWindow::on_action_connect_485_triggered()
         this->com_485_Flag = false;
         this->ui->action_connect_network->setEnabled(true);
         this->ui->action_connet_server->setEnabled(true);
+        this->change_device_online_status(false);
     }else
     {
         comSettingDialog *dialog = new comSettingDialog(this);
@@ -362,12 +369,13 @@ void MonitorMainWindow::on_action_connect_485_triggered()
             if(this->comDevice->comConnect() !=true)
             {
                QMessageBox::warning(this,tr("端口打开失败"),tr("请检查端口"),tr("确定"));
+               this->change_device_online_status(false);
             }else
             {
                 this->ui->action_connect_485->setText(tr("485通讯断开"));
                 this->comDevice->start();
                 //                this->comDevice->timeBreak->start();
-                qDebug()<<"485通讯连接成功";  
+                qDebug()<<"485通讯连接成功";
             }
             this->com_485_Flag = true;
             this->ui->action_connect_network->setEnabled(false);
@@ -377,6 +385,7 @@ void MonitorMainWindow::on_action_connect_485_triggered()
             this->ui->action_connect_485->setText(tr("485通讯连接"));
             this->ui->action_connect_network->setEnabled(true);
             this->ui->action_connet_server->setEnabled(true);
+            this->change_device_online_status(false);
         }
         dialog->close();
         delete dialog;
@@ -950,6 +959,7 @@ void MonitorMainWindow::hcSocketConnectedToServer()
     this->b_reconnect = false;
     this->timer_auto_connect->start(3000);
     this->ui->action_connect_485->setEnabled(false);
+    this->change_device_online_status(true);
 }
 
 void MonitorMainWindow::hcSocketDisconnectedFromServer()
@@ -961,6 +971,7 @@ void MonitorMainWindow::hcSocketDisconnectedFromServer()
     emit signal_remote_server(false);
     emit signal_send_ip_to_monitor(" ");
     this->ui->action_connect_485->setEnabled(true);
+    this->change_device_online_status(false);
 }
 /*!
  * \brief MonitorMainWindow::sendDataToServer_slot
@@ -1257,4 +1268,35 @@ void MonitorMainWindow::on_page_2_destroyed()
 void MonitorMainWindow::on_page_3_destroyed()
 {
 
+}
+
+void MonitorMainWindow::change_device_online_status(bool b_connected)
+{
+    QTreeWidgetItem *p_item;
+    //QColor red(255,0,0);
+    //QColor green(0,255,0);
+
+    for(int i=0;i<this->ui->treeWidget_deviceList->topLevelItemCount();i++)
+    {
+        if(this->ui->treeWidget_deviceList->topLevelItem(i)->backgroundColor(0) != Qt::white)
+        {
+            this->ui->treeWidget_deviceList->topLevelItem(i)->setBackgroundColor(0,Qt::white) ;
+        }
+    }
+
+    p_item = this->cableMonitorWidgetTable->key((CableDataWidget *)this->ui->stackedWidget_device->currentWidget());
+    
+    if (NULL == p_item)
+        return ;
+    
+    if (b_connected == false)
+    {
+        //p_item->setBackgroundColor(0, red);
+        p_item->setText(1, " ");
+    }
+    else
+    {
+        //p_item->setBackgroundColor(0, green);
+        p_item->setText(1, "设备上线");
+    }
 }

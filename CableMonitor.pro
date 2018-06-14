@@ -8,7 +8,7 @@ QT       += core gui network sql xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = CableMonitor_1.0
+TARGET = HCCMonitor_1.1
 TEMPLATE = app
 
 #win32:LIBS += C:/Qwt-6.1.2/lib/libqwtd.a
@@ -136,3 +136,6 @@ HEADERS += \
     ui_hcsystemmappingregisterdialog.h \
     ui_hcsystemnetconfigdialog.h \
     ui_monitormainwindow.h
+
+RESOURCES += \
+    qr.qrc

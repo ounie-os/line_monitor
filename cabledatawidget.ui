@@ -116,7 +116,7 @@ color: rgb(0, 0, 0);
          <item>
           <widget class="QTabWidget" name="tabWidget_data">
            <property name="currentIndex">
-            <number>0</number>
+            <number>3</number>
            </property>
            <widget class="QWidget" name="tab_data">
             <attribute name="title">

@@ -9,8 +9,8 @@ Dialog_Versions::Dialog_Versions(QWidget *parent) :
     ui(new Ui::Dialog_Versions)
 {
     ui->setupUi(this);
-    this->ui->label_Verision->setText(Version);
-    this->ui->label_data_change->setText(Datatime);
+    //this->ui->label_Verision->setText(Version);
+    //this->ui->label_data_change->setText(Datatime);
 }
 
 Dialog_Versions::~Dialog_Versions()

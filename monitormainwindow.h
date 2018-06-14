@@ -129,6 +129,8 @@ private slots:
 
     void on_page_3_destroyed();
 
+    void change_device_online_status(bool b_connected);
+
 private:
     Ui::MonitorMainWindow *ui;
     QList<QColor> colorList;
@@ -170,7 +172,9 @@ private:
     //===========================通信失败计数=====================================
     QTimer *Timer_check_comFailed;
     //============================显示通信灯=====================================
+#if 0
     QTimer *timer_led;
+#endif /* 0 */
     //============================自动连接=====================================
     QTimer *timer_auto_connect;
 };

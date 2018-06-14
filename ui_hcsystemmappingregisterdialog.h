@@ -42,7 +42,7 @@ public:
     {
         if (hcSystemMappingRegisterDialog->objectName().isEmpty())
             hcSystemMappingRegisterDialog->setObjectName(QString::fromUtf8("hcSystemMappingRegisterDialog"));
-        hcSystemMappingRegisterDialog->resize(650, 210);
+        hcSystemMappingRegisterDialog->resize(538, 425);
         verticalLayout = new QVBoxLayout(hcSystemMappingRegisterDialog);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         horizontalLayout_13 = new QHBoxLayout();

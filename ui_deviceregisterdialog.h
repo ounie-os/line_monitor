@@ -49,7 +49,8 @@ public:
     {
         if (deviceRegisterDialog->objectName().isEmpty())
             deviceRegisterDialog->setObjectName(QString::fromUtf8("deviceRegisterDialog"));
-        deviceRegisterDialog->resize(625, 388);
+        deviceRegisterDialog->resize(539, 428);
+        deviceRegisterDialog->setStyleSheet(QString::fromUtf8(""));
         verticalLayout = new QVBoxLayout(deviceRegisterDialog);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         horizontalLayout = new QHBoxLayout();
