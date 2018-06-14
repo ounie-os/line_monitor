@@ -295,6 +295,8 @@ void MonitorMainWindow::init()
     this->b_reconnect  = false;
     this->timer_auto_connect = new QTimer();
     connect(this->timer_auto_connect,  SIGNAL(timeout()), this, SLOT(slot_auto_connect()));
+
+    this->com_485_Flag = false;
     
 
 }
