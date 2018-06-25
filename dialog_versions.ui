@@ -6,30 +6,16 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>658</width>
-    <height>419</height>
+    <width>541</width>
+    <height>311</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>HCCMonitor</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">image: url(:/ADD file/2018061310063525666.jpg);
-</string>
+   <string notr="true">image: url(:/ad/20180625161448.png);</string>
   </property>
-  <widget class="QPushButton" name="pushButton">
-   <property name="geometry">
-    <rect>
-     <x>570</x>
-     <y>390</y>
-     <width>75</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>关闭</string>
-   </property>
-  </widget>
  </widget>
  <resources/>
  <connections/>

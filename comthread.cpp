@@ -183,7 +183,7 @@ void comThread::comReadSlot()
         ushort crc16 = 0;
         uchar  len   = 0;
         this->timeBreak->stop();
-        emit signal_data_received(true);
+        
         QByteArray data = this->comPort->readAll();
         this->readBufferArray.append(data);
         qDebug()<<"485端口接收数据："+myHelper::ByteArrayToHexStr(this->readBufferArray);
@@ -259,7 +259,7 @@ void comThread::checkComBreak()
 {
     QDebug(QtCriticalMsg) << "接收超时";
     this->timeBreak->stop();
-    emit signal_data_received(false);
+    emit signal_data_received(false, NULL);
 }
 
 void comThread::timeout_timer_start()

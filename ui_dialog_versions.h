@@ -15,24 +15,19 @@
 #include <QtGui/QButtonGroup>
 #include <QtGui/QDialog>
 #include <QtGui/QHeaderView>
-#include <QtGui/QPushButton>
 
 QT_BEGIN_NAMESPACE
 
 class Ui_Dialog_Versions
 {
 public:
-    QPushButton *pushButton;
 
     void setupUi(QDialog *Dialog_Versions)
     {
         if (Dialog_Versions->objectName().isEmpty())
             Dialog_Versions->setObjectName(QString::fromUtf8("Dialog_Versions"));
-        Dialog_Versions->resize(453, 264);
-        Dialog_Versions->setStyleSheet(QString::fromUtf8("image: url(:/ADD file/2018061310063525666.jpg);"));
-        pushButton = new QPushButton(Dialog_Versions);
-        pushButton->setObjectName(QString::fromUtf8("pushButton"));
-        pushButton->setGeometry(QRect(360, 230, 75, 23));
+        Dialog_Versions->resize(541, 311);
+        Dialog_Versions->setStyleSheet(QString::fromUtf8("image: url(:/ad/20180625161448.png);"));
 
         retranslateUi(Dialog_Versions);
 
@@ -42,7 +37,6 @@ public:
     void retranslateUi(QDialog *Dialog_Versions)
     {
         Dialog_Versions->setWindowTitle(QApplication::translate("Dialog_Versions", "HCCMonitor", 0, QApplication::UnicodeUTF8));
-        pushButton->setText(QApplication::translate("Dialog_Versions", "\345\205\263\351\227\255", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

@@ -66,6 +66,7 @@ signals:
     void signal_send_timeout_value_to_com(int data);
     void signal_query_alarm_history_data(CableMonitorDevice devid);
     void signal_DBdel_alarm();
+    void signal_device_online(bool flag, QByteArray data);
 private slots:
     void receiveDataFromDevice(QByteArray data);
     void connect_server_status(bool flag);

@@ -987,6 +987,7 @@ void CableDataWidget::receiveDataFromDevice(QByteArray data)
             this->ui->tableWidget->item(6,3)->setText(QString::number(c_z_axis));
 
             this->start_recv_rt_data = 1;
+            emit signal_device_online(true, data);
         }
     }
 }

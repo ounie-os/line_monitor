@@ -194,7 +194,7 @@ void MonitorMainWindow::init()
     connect(this->comDevice->timeBreak,SIGNAL(timeout()),this->comDevice, SLOT(checkComBreak()));
     connect(this, SIGNAL(signal_start_time_out()), this->comDevice, SLOT(timeout_timer_start()));
 
-    connect(this->comDevice, SIGNAL(signal_data_received(bool)), this, SLOT(change_device_online_status(bool)));
+    connect(this->comDevice, SIGNAL(signal_data_received(bool, QByteArray)), this, SLOT(change_device_online_status(bool, QByteArray)));
 
     comDeviceThread->start();
     //============转发数据xml==============
@@ -346,7 +346,7 @@ void MonitorMainWindow::on_action_connect_485_triggered()
         this->com_485_Flag = false;
         this->ui->action_connect_network->setEnabled(true);
         this->ui->action_connet_server->setEnabled(true);
-        this->change_device_online_status(false);
+        this->change_device_online_status(false, NULL);
     }else
     {
         comSettingDialog *dialog = new comSettingDialog(this);
@@ -371,7 +371,7 @@ void MonitorMainWindow::on_action_connect_485_triggered()
             if(this->comDevice->comConnect() !=true)
             {
                QMessageBox::warning(this,tr("端口打开失败"),tr("请检查端口"),tr("确定"));
-               this->change_device_online_status(false);
+               this->change_device_online_status(false, NULL);
             }else
             {
                 this->ui->action_connect_485->setText(tr("485通讯断开"));
@@ -387,7 +387,7 @@ void MonitorMainWindow::on_action_connect_485_triggered()
             this->ui->action_connect_485->setText(tr("485通讯连接"));
             this->ui->action_connect_network->setEnabled(true);
             this->ui->action_connet_server->setEnabled(true);
-            this->change_device_online_status(false);
+            this->change_device_online_status(false, NULL);
         }
         dialog->close();
         delete dialog;
@@ -494,6 +494,8 @@ void MonitorMainWindow::insertCableDevice(CableMonitorDevice device)
     connect(widget, SIGNAL(signal_send_timeout_value_to_com(int)), this->comDevice, SLOT(get_timeout_value(int)));
 
     connect(widget, SIGNAL(signal_DBdel_alarm()), this->DBManager, SLOT(DBDel_alarm()));
+
+    connect(widget, SIGNAL(signal_device_online(bool, QByteArray)), this, SLOT(change_device_online_status(bool, QByteArray)));
     
 }
 /*!
@@ -961,7 +963,6 @@ void MonitorMainWindow::hcSocketConnectedToServer()
     this->b_reconnect = false;
     this->timer_auto_connect->start(3000);
     this->ui->action_connect_485->setEnabled(false);
-    this->change_device_online_status(true);
 }
 
 void MonitorMainWindow::hcSocketDisconnectedFromServer()
@@ -973,7 +974,7 @@ void MonitorMainWindow::hcSocketDisconnectedFromServer()
     emit signal_remote_server(false);
     emit signal_send_ip_to_monitor(" ");
     this->ui->action_connect_485->setEnabled(true);
-    this->change_device_online_status(false);
+    this->change_device_online_status(false, NULL);
 }
 /*!
  * \brief MonitorMainWindow::sendDataToServer_slot
@@ -1272,33 +1273,32 @@ void MonitorMainWindow::on_page_3_destroyed()
 
 }
 
-void MonitorMainWindow::change_device_online_status(bool b_connected)
+void MonitorMainWindow::change_device_online_status(bool b_connected, QByteArray data)
 {
     QTreeWidgetItem *p_item;
-    //QColor red(255,0,0);
-    //QColor green(0,255,0);
+    CableDataWidget *p_cablewidget;
 
     for(int i=0;i<this->ui->treeWidget_deviceList->topLevelItemCount();i++)
-    {
-        if(this->ui->treeWidget_deviceList->topLevelItem(i)->backgroundColor(0) != Qt::white)
-        {
-            this->ui->treeWidget_deviceList->topLevelItem(i)->setBackgroundColor(0,Qt::white) ;
-        }
-    }
+    {       
+        this->ui->treeWidget_deviceList->topLevelItem(i)->setBackgroundColor(0,Qt::white) ;
 
-    p_item = this->cableMonitorWidgetTable->key((CableDataWidget *)this->ui->stackedWidget_device->currentWidget());
-    
-    if (NULL == p_item)
-        return ;
-    
-    if (b_connected == false)
-    {
-        //p_item->setBackgroundColor(0, red);
-        p_item->setText(1, " ");
-    }
-    else
-    {
-        //p_item->setBackgroundColor(0, green);
-        p_item->setText(1, "设备上线");
+        p_cablewidget = (CableDataWidget *)this->ui->stackedWidget_device->currentWidget();
+
+        p_item = this->cableMonitorWidgetTable->key(p_cablewidget);
+
+        if (NULL == p_item)
+            continue ;
+
+        if ((data != NULL) && (data.mid(20,4) == p_cablewidget->getDeviceID().getDeviceId().toByteArray()))
+        {
+            p_item->setText(1, "设备上线");
+        }
+        else
+        {
+            if (b_connected == false)
+            {
+                this->ui->treeWidget_deviceList->topLevelItem(i)->setText(1, " ");
+            }
+        }
     }
 }

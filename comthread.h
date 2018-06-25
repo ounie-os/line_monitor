@@ -27,7 +27,7 @@ public:
 
 signals:
     void receiveDataFromDevice(QByteArray data);
-    void signal_data_received(bool b_received);
+    void signal_data_received(bool b_received, QByteArray data);
 protected:
     void run();
 private slots:

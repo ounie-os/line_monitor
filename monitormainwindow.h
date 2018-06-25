@@ -129,7 +129,7 @@ private slots:
 
     void on_page_3_destroyed();
 
-    void change_device_online_status(bool b_connected);
+    void change_device_online_status(bool b_connected, QByteArray data);
 
 private:
     Ui::MonitorMainWindow *ui;
